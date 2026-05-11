@@ -1,0 +1,125 @@
+# /project-documentation
+
+Operator documentation for the `/project-documentation` skill in the han plugin. This document helps humans decide *when* and *how* to use the skill. For what the skill does internally, read the skill definition at [`plugins/han/skills/project-documentation/SKILL.md`](../../skills/project-documentation/SKILL.md).
+
+> See also: [Plugin landing page — han](../../README.md) · [All skills](./README.md) · [All agents](../agents/README.md)
+
+## TL;DR
+
+- **What it does:** Creates and maintains project documentation for features, systems, and components; discovers project structure dynamically to work across stacks.
+- **When to use it:** You want a feature, system, or component documented — or you want to update an existing doc to match what the code actually does now.
+- **What you get back:** A new or updated `docs/{feature-name}.md` following the project's template conventions, with real code examples, cross-references, and a reference added to `CLAUDE.md`.
+
+## Key Concepts
+
+- **Guard check.** If the topic is really an architectural decision, the skill suggests [`/architectural-decision-record`](./architectural-decision-record.md) instead. If it is a convention, it suggests [`/coding-standard`](./coding-standard.md). Only real feature or system documentation proceeds.
+- **Codebase exploration in parallel.** Two or three `codebase-explorer` agents run in parallel — entry points and core logic, data models and config, tests and existing docs — and merge into a unified numbered discovery summary (D1, D2, D3…).
+- **Real code, real paths.** Examples come from actual source files. Paths are absolute from the repo root.
+- **Content audit when updating.** When updating a doc or migrating content from elsewhere, the skill dispatches `content-auditor` to classify every fact as Present / Correctly Removed / Missing, then restores missing facts.
+- **Information-architecture review before verification.** An `information-architect` agent audits the written doc for findability, scannability, and whether the section order matches the likely reading path — applied edits tighten the doc before it ships.
+- **Bidirectional cross-references.** If the new doc references another doc, the other doc gets a reference back where it adds value.
+
+## When to Use It
+
+**Invoke when:**
+
+- A feature or subsystem exists in the codebase but is not yet documented.
+- A doc has gone stale after a refactor, rename, or behavioral change — the skill re-explores the code and updates accordingly.
+- Content needs to migrate out of CLAUDE.md or out of a pile of ad-hoc files into a proper feature doc — the content-audit step ensures nothing gets lost.
+- A new feature has landed and you want its doc written before memory fades.
+
+**Do not invoke for:**
+
+- **Technology stack discovery.** Use [`/project-discovery`](./project-discovery.md) to detect languages, frameworks, and tooling.
+- **Architectural decisions.** Use [`/architectural-decision-record`](./architectural-decision-record.md).
+- **Coding conventions.** Use [`/coding-standard`](./coding-standard.md).
+- **PR descriptions.** Use [`/update-pr-description`](./update-pr-description.md).
+
+## How to Invoke It
+
+Run `/project-documentation` with a feature name or document path.
+
+Give it:
+
+1. **The feature or system to document.** "The authentication system," "event-driven notification flow," "the webhook retry mechanism."
+2. **A file path, optional.** If updating, point at the existing doc. If creating, the skill derives the filename from the feature name in kebab-case.
+3. **Known entry points, optional.** If you already know where the feature lives in the code, mention it. The skill's explorer agents find it anyway, but starting hints speed the pass.
+
+Example prompts:
+
+- `/project-documentation` — "Document the authentication system."
+- `/project-documentation` — "Update the payments documentation to reflect the new Stripe integration."
+- `/project-documentation` — "Create documentation for the event-driven notification system. Entry point is `src/notifications/dispatcher.ts`."
+- `/project-documentation docs/webhooks.md` — "Update this doc — the retry logic changed."
+
+## What You Get Back
+
+A feature doc under the project's documentation root plus integration:
+
+- **`docs/{feature-name}.md`** — the feature doc, following the template at [`references/template.md`](../../skills/project-documentation/references/template.md). Structural sections: title + one-sentence description, Overview, Key Files, Behavior, Configuration, Error Handling, Testing, and Related Documentation. Template sections marked CONDITIONAL are omitted when they do not apply.
+- **Absolute file paths** from the repo root in every code example.
+- **Concrete, annotated code examples** (10–30 lines) drawn from real files.
+- **Language-specific code fences** matching the project's actual language.
+- **`CLAUDE.md` / `AGENTS.md` reference** — a line added in the section most relevant to the feature.
+- **Bidirectional cross-references** to related docs.
+- **Content audit summary** (when updating) — facts checked, facts present, facts correctly removed, facts missing (and restored).
+
+## How to Get the Most Out of It
+
+- **Run `/project-discovery` first.** The skill uses the discovery reference to find the docs directory and to align code-fence languages with the project's actual stack.
+- **Name entry points if you know them.** The explorer agents find them anyway, but seed paths make the exploration faster.
+- **Let the content audit run.** When updating a doc, the audit catches facts the new version silently dropped. Facts that should have been removed need a codebase justification; the agent flags ones that look like accidental drops.
+- **Skim the merged discovery summary.** The skill produces a unified D1/D2/D3 list from parallel explorers. If the list misses a file you know is relevant, say so — that's faster than letting the doc miss it.
+- **Pair with `/architectural-decision-record`** if the documentation surfaces a decision that was never recorded.
+- **Pair with `/coding-standard`** if the documentation surfaces a pattern that should become a rule.
+
+## Cost and Latency
+
+The skill dispatches two to three `codebase-explorer` agents in parallel (Step 2), one `content-auditor` agent in update mode (Step 6), and one `information-architect` agent before verification (Step 7). All run on their default models. For a medium-size feature, expect a few minutes total. The skill is built for per-feature cadence; avoid tight-loop iteration on the same doc without changes.
+
+## In more detail
+
+The skill walks an eight-step process:
+
+1. **Evaluate and gather context.** Guard check for ADR/coding-standard topics, resolve the docs directory, derive the target filename, resolve author info, flag whether the content audit will run.
+2. **Explore the codebase.** Two to three `codebase-explorer` agents in parallel; merge into a unified D1/D2/D3 discovery summary.
+3. **Write the documentation.** Follow the template; absolute paths; concrete code examples; language-specific fences; conditional sections omitted; update mode preserves existing structure and flags provisional removals.
+4. **Update agent configuration files.** Add the `CLAUDE.md` / `AGENTS.md` reference in the right section with the project's existing pattern.
+5. **Cross-reference.** Grep for the feature name across existing docs; add bidirectional references.
+6. **Content audit** (when updating). Dispatch `content-auditor`; restore facts classified Missing.
+7. **Information-architecture review.** Dispatch `information-architect` against the written doc; apply findability, scannability, and ordering edits.
+8. **Verification.** Template followed, no placeholders, paths valid, cross-references valid, IA edits applied.
+
+## Sources
+
+The skill's practice is grounded in established technical-documentation convention.
+
+### Stripe — Engineering Documentation Best Practices
+
+Stripe's public-facing writing about the engineering-docs discipline — that every reader should land with enough orientation to act, that examples must be real and runnable, that docs are peer-reviewed — shapes the skill's bias toward concrete examples and bidirectional cross-referencing.
+
+URL: https://stripe.com/blog/writing-documentation
+
+### Write the Docs Community — Technical Writing Handbook
+
+The Write the Docs community's catalog of conventions — topic-based authoring, progressive disclosure, minimalism — shaped the skill's CONDITIONAL-sections pattern and the preference for concrete paths over prose generalities.
+
+URL: https://www.writethedocs.org/guide/
+
+### JoAnn Hackos — Information Development
+
+Hackos's work on topic-based authoring and DITA concept/task/reference distinctions underlies the template's structure: an Overview section is concept, a Behavior section is task-like, Configuration and Key Files are reference.
+
+URL: https://en.wikipedia.org/wiki/Darwin_Information_Typing_Architecture
+
+## Related Documentation
+
+- [Plugin landing page — han](../../README.md) — The front door. Start here if you arrived from outside the docs tree.
+- [Skills Index](./README.md) — All 15 skills, grouped by purpose.
+- [`/project-discovery`](./project-discovery.md) — Run first. The documentation skill reads the discovery reference to find the docs directory and stack language.
+- [`/architectural-decision-record`](./architectural-decision-record.md) — Use for decisions rather than system documentation.
+- [`/coding-standard`](./coding-standard.md) — Use for rules rather than descriptions.
+- [`codebase-explorer`](../agents/codebase-explorer.md) — Dispatched in parallel for code discovery.
+- [`content-auditor`](../agents/content-auditor.md) — Dispatched in update mode to ensure no facts are lost.
+- [`information-architect`](../agents/information-architect.md) — Dispatched before verification to audit findability, scannability, and section ordering.
+- [`SKILL.md` for /project-documentation](../../skills/project-documentation/SKILL.md) — The internal process definition.

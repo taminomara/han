@@ -1,0 +1,91 @@
+# Agents
+
+All agents in the han plugin, grouped by role. Each entry is a one-sentence scent line and a link — to the long-form doc when one exists, or to the agent definition directly when it does not.
+
+> See also: [Plugin landing page — han](../../README.md) · [Concepts](../concepts.md) · [Quickstart](../quickstart.md) · [All skills](../skills/README.md) · [Sizing](../sizing.md) · [YAGNI](../yagni.md)
+
+## New here?
+
+Most agents are dispatched *for you* by skills — you do not usually invoke them directly. Read [Concepts](../concepts.md) for the skill-vs-agent model before browsing this list. If you are looking to dispatch one directly, use the `Agent` tool with `subagent_type: han:{agent-name}`.
+
+## Planning & facilitation
+
+Agents that coordinate the work of other agents during planning and design.
+
+- **[`project-manager`](./project-manager.md)** — Facilitates multi-specialist discussions, enforces evidence-based claims, and synthesizes final plans. Dispatched by `/plan-a-feature` and `/plan-implementation`; can be dispatched directly when a planning conversation needs a facilitator.
+- **[`junior-developer`](./junior-developer.md)** — Generalist stress-tester (three to five years of experience) that asks the clarifying questions hidden assumptions and muddied scope beg for. Always included in planning review rounds.
+
+## Adversarial reviewers
+
+Specialist reviewers whose default posture is adversarial toward the artifact under review, never toward the author.
+
+- **[`adversarial-security-analyst`](../../agents/adversarial-security-analyst.md)** — Assumes all code is insecure; produces exploit-path evidence, not theoretical risks. Dispatched by `/code-review`.
+- **[`adversarial-validator`](../../agents/adversarial-validator.md)** — Assumes investigation evidence is wrong and the proposed fix will fail. Searches for counter-evidence and unhandled edge cases. Dispatched by `/investigate` and by planning skills.
+- **[`devops-engineer`](./devops-engineer.md)** — Assumes the code will break in production. Audits against DORA, Twelve-Factor, Four Golden Signals, SLO discipline, and named production failure modes.
+- **[`data-engineer`](./data-engineer.md)** — Assumes the data design is over-normalized, under-normalized, and indexed for the wrong workload. Audits schemas, migrations, queries, and pipelines.
+- **[`information-architect`](./information-architect.md)** — Assumes the documentation is harder to find, orient in, and comprehend than it needs to be. Audits documentation sets against established IA frameworks. Dispatched by [`/plan-a-phased-build`](../skills/plan-a-phased-build.md) at runtime against every rendered build-phase outline; can be dispatched directly when any documentation surface needs an IA audit.
+- **[`user-experience-designer`](./user-experience-designer.md)** — Adversarial UX review against Nielsen heuristics, WCAG 2.2, universal design, and dark-pattern detection.
+
+## Investigation & evidence
+
+Agents that gather concrete evidence about a codebase.
+
+- **[`evidence-based-investigator`](../../agents/evidence-based-investigator.md)** — Gathers file paths, line numbers, code snippets, error messages, git history, and test coverage. Dispatched by `/investigate`.
+- **[`codebase-explorer`](../../agents/codebase-explorer.md)** — Discovers implementation details for a specific feature — entry points, core logic, data models, configuration, tests.
+- **[`project-scanner`](../../agents/project-scanner.md)** — Scans repository attributes (languages, frameworks, tooling, configuration). Optimized for config and structure, not deep code tracing. Dispatched by `/project-discovery`.
+
+## Architecture & risk
+
+Agents that analyze the static and dynamic shape of a module or subsystem.
+
+- **[`structural-analyst`](../../agents/structural-analyst.md)** — Module boundaries, coupling, dependency direction, abstractions, duplication.
+- **[`behavioral-analyst`](../../agents/behavioral-analyst.md)** — Data flow, error propagation, state management, integration boundaries.
+- **[`concurrency-analyst`](../../agents/concurrency-analyst.md)** — Race conditions, shared resource contention, deadlock potential, async error handling.
+- **[`risk-analyst`](../../agents/risk-analyst.md)** — Assesses risk of inaction for architectural findings across likelihood, severity, blast radius, and reversibility. Consumes findings from the three analysts above.
+- **[`software-architect`](./software-architect.md)** — Adversarial toward the intra-codebase structure; assumes it is too coupled, too scattered, missing an abstraction, or over-abstracted until evidence says otherwise. Synthesizes structural, behavioral, concurrency, and risk findings into recommended changes aligned with SOLID, high cohesion, and loose coupling. Produces pseudocode sketches for proposed modules, interfaces, and boundaries inside a single codebase or bounded context.
+- **[`system-architect`](./system-architect.md)** — Adversarial toward the cross-service topology; assumes bounded contexts leak, integrations are sync-by-default, data ownership is contested, and failure domains are uncontained until evidence says otherwise. Synthesizes boundary-crossing findings (including `devops-engineer` and `data-engineer` when available) into context-map relationships, integration patterns, data ownership, and failure-domain containment. Operates where the unit of design is a service or bounded context, not a class or module.
+
+`/architectural-analysis` dispatches `structural-analyst`, `behavioral-analyst`, `concurrency-analyst`, `risk-analyst`, and `software-architect` (five agents). `system-architect` is dispatched separately — by the user directly or by `/plan-implementation` — when the work crosses a service or bounded-context seam.
+
+## Testing
+
+Agents that plan tests; neither writes test code.
+
+- **[`test-engineer`](../../agents/test-engineer.md)** — Plans tests focused on observable behavior (inputs, outputs, collaborator interactions). Recommends test doubles for isolation; produces a prioritized test plan.
+- **[`edge-case-explorer`](../../agents/edge-case-explorer.md)** — Systematically discovers and catalogs edge cases — boundary values, type coercion traps, state-dependent failures. Defaults to focused mode; request "exhaustive exploration" for comprehensive analysis.
+
+Both are dispatched by `/test-planning` and `/code-review`.
+
+## Gap & content
+
+Agents that compare artifacts and preserve meaning across documentation moves.
+
+- **[`gap-analyzer`](../../agents/gap-analyzer.md)** — Finds what is missing, incomplete, conflicting, or assumed when comparing a current state against a desired state (code vs. spec, implementation vs. PRD). Dispatched by [`/gap-analysis`](../skills/gap-analysis.md), which renders the agent's structured output as a plain-language, stakeholder-readable report.
+- **[`content-auditor`](../../agents/content-auditor.md)** — Validates that documentation updates preserved the important facts from the original source. Flags removals that were not justified by the codebase.
+
+---
+
+## How agents get dispatched
+
+Agents enter the workflow two ways:
+
+1. **Dispatched by a skill.** The normal path. Run a skill and it chooses the right agents. You see their findings folded into the skill's output — you do not see the agent dispatch itself.
+2. **Dispatched directly.** You invoke the `Agent` tool with `subagent_type: han:{agent-name}`. Most useful when the judgment you want is narrower than any slash command, or when you want a second opinion on something a skill just produced.
+
+See [Concepts](../concepts.md) for more on skill/agent composition.
+
+## What survives a review: YAGNI
+
+Several agents apply an evidence-based YAGNI rule to the artifacts they review or produce — `project-manager` (the Evidence Gate protocol), `junior-developer` (the Evidence Sweep protocol), `software-architect` and `system-architect` (architectural recommendations require change-history or seam-crossing evidence), `test-engineer` (the Speculative Test rule), `edge-case-explorer` (the Speculative Edge Case rule), `data-engineer` (the Speculative Data Machinery rule), and `devops-engineer` (the Premature Operational Machinery rule).
+
+See [YAGNI](../yagni.md) for the two gates, the acceptable-evidence list, the named anti-patterns, and the per-agent application table.
+
+## Missing a long-form doc?
+
+Many agents in this list link directly to their agent definition rather than to a long-form doc. That is by design — the [coverage rule](../templates/coverage-rule.md) says not every agent needs one. If an agent is mostly dispatched by skills and has a single operating mode, a rich Agents Index entry plus the definition is enough.
+
+If you think a specific agent crosses the coverage threshold and deserves a long-form doc, open an issue or a PR.
+
+## Adding an agent?
+
+See [Contributing](../contributing.md) and [the agent template](../templates/agent-long-form-template.md).

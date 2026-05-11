@@ -1,0 +1,20 @@
+.DS_Store
+.claude/settings.local.json
+dist/code/
+dist/cowork/
+dist/.cowork-staging/
+dist/.gist-staging/
+# dist/claude-marketplace/ is NOT ignored — committed to git, required for marketplace resolution
+*.zip
+.env
+tests/output/
+tests/analytics/
+node_modules/
+tests/harness-web
+tests/harness
+tests/duckdb.node
+tests/libduckdb.dylib
+
+# ralph loop progress tracking
+progress.txt
+deferred.txt
