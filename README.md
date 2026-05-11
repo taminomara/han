@@ -50,3 +50,13 @@ Add the Test Double skills marketplace to Claude Code, then install the plugin:
 - [YAGNI](./docs/yagni.md) — The evidence-based "You Aren't Gonna Need It" rule every planning, review, and architecture skill applies.
 - [Contributing](./CONTRIBUTING.md) — Adding or editing skills, agents, and documentation.
 - [Release Notes](./release-notes.md) — What's new in each version of the plugin.
+
+## Maintainers
+
+Han is owned by [Test Double](https://testdouble.com), and maintained by the following people:
+
+- [River Lynn Bailey](https://github.com/mxriverlynn): Creator, and primary maintainer
+
+## LEGAL NOTICES
+
+Copyright 2026 Test Double, Inc. Distributed under the [MIT license](./LICENSE).
