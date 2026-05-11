@@ -88,8 +88,8 @@
 Add the Test Double skills marketplace to Claude Code, then install the plugin:
 
 ```
-/plugin marketplace add testdouble/skills-internal
-/plugin install {plugin-name}@testdouble-skills-internal
+/plugin marketplace add testdouble/han
+/plugin install {plugin-name}@testdouble-han
 ```
 
 ## Skills Reference

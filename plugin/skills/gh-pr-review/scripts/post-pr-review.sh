@@ -5,7 +5,7 @@ set -euo pipefail
 #
 # Usage: post-pr-review.sh <owner/repo> <pr_number> <commit_id> <event> <body_file>
 #
-#   owner/repo  — e.g. testdouble/skills-internal
+#   owner/repo  — e.g. testdouble/han
 #   pr_number   — the PR number, e.g. 42
 #   commit_id   — the head SHA of the PR
 #   event       — REQUEST_CHANGES or COMMENT

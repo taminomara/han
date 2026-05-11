@@ -77,8 +77,8 @@ Not sure which category fits your situation? The [Quickstart](./docs/quickstart.
 Add the Test Double skills marketplace to Claude Code, then install the plugin:
 
 ```
-/plugin marketplace add testdouble/skills-internal
-/plugin install han@testdouble-skills-internal
+/plugin marketplace add testdouble/han
+/plugin install han@han
 ```
 
 ## Documentation

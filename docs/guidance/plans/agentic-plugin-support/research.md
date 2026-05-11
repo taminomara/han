@@ -28,7 +28,7 @@ The `SKILL.md` file format has emerged as a **de facto cross-tool standard**. Cl
 ### Key Takeaways
 
 1. **All five tools support true plugin bundles through their CLI surface.** A single manifest can ship skills + MCP at minimum, and usually more. The formats are structurally parallel (kebab-case manifest + entity subdirectories).
-2. **Copilot CLI explicitly supports `.claude-plugin/` as a manifest location** — this repo's existing Claude Code plugins are candidates for direct install via `copilot plugin install testdouble/skills-internal`, pending validation that entity paths resolve identically.
+2. **Copilot CLI explicitly supports `.claude-plugin/` as a manifest location** — this repo's existing Claude Code plugins are candidates for direct install via `copilot plugin install testdouble/han`, pending validation that entity paths resolve identically.
 3. **Copilot IDE / cloud agent surfaces still require per-primitive publishing** to the well-known `.github/...` paths. The bundled plugin story is CLI-first.
 4. **Skill-level portability is broad.** Cursor, Gemini CLI, Copilot, and Codex all explicitly read from `.claude/skills/` or `.agents/skills/` in addition to their native paths. Same `SKILL.md` content works everywhere.
 5. **Custom-agent portability is weaker.** Claude Code, Cursor, and Copilot use Markdown+YAML; Codex uses TOML; Gemini CLI's custom-agent support is preview. Cross-tool agents need format shims.
@@ -45,8 +45,8 @@ The `SKILL.md` file format has emerged as a **de facto cross-tool standard**. Cl
 Users add a marketplace and install plugins by name:
 
 ```
-/plugin marketplace add testdouble/skills-internal
-/plugin install han@testdouble-skills-internal
+/plugin marketplace add testdouble/han
+/plugin install han@testdouble-han
 /plugin marketplace update
 ```
 
@@ -58,7 +58,7 @@ Source: <https://code.claude.com/docs/en/plugins-reference>
 
 The marketplace root is a git repo (or local path) with `.claude-plugin/marketplace.json` containing `name`, `owner`, `metadata.description`, and a `plugins[]` array where each entry has `name`, `source`, `description`, and `version`.
 
-Evidence: `/Users/mxriverlynn/dev/testdouble/skills-internal/.claude-plugin/marketplace.json`.
+Evidence: `/Users/mxriverlynn/dev/testdouble/han/.claude-plugin/marketplace.json`.
 
 #### C3 — Plugin on-disk structure
 
@@ -644,7 +644,7 @@ OpenAI explicitly lists 5 complementary layers at <https://developers.openai.com
 ## Implications for This Repository
 
 1. **Skills are already broadly portable.** The existing `SKILL.md` files in `plugins/*/skills/` and `skills/` should work as-is in Claude Code, Cursor, Gemini CLI, GitHub Copilot, and OpenAI Codex given the shared `.agents/skills` / `.claude/skills` discovery conventions.
-2. **Claude Code plugins may install directly in Copilot CLI.** Because Copilot CLI reads `.claude-plugin/plugin.json` as a valid manifest location, plugins in `plugins/` may be usable via `copilot plugin install testdouble/skills-internal:plugins/han` (or similar). Worth validating with a single plugin end-to-end; the agent filename convention is `*.agent.md` for Copilot vs `*.md` for Claude Code, so that rename (or dual-filename) is the likely gap.
+2. **Claude Code plugins may install directly in Copilot CLI.** Because Copilot CLI reads `.claude-plugin/plugin.json` as a valid manifest location, plugins in `plugins/` may be usable via `copilot plugin install testdouble/han:plugins/han` (or similar). Worth validating with a single plugin end-to-end; the agent filename convention is `*.agent.md` for Copilot vs `*.md` for Claude Code, so that rename (or dual-filename) is the likely gap.
 3. **Cursor 2.5+ is a new distribution target.** Cursor's plugin marketplace launched Feb 2026; the same skills + agents + MCP + hooks bundle structure this repo already produces maps closely to Cursor's spec (<https://github.com/cursor/plugins>).
 4. **Codex needs format adaptation for custom agents.** This repo's Markdown+frontmatter agents in `plugins/han/agents/*.md` would need TOML wrappers to work as Codex subagents.
 5. **Gemini CLI is a near-drop-in target** once a `gemini-extension.json` manifest is generated — skill and hook formats are already compatible, custom agents are preview but otherwise shape-aligned.
