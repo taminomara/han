@@ -139,7 +139,7 @@ URL: https://www.edge.org/conversation/daniel_kahneman-adversarial-collaboration
 
 ### Hunt and Thomas: The Pragmatic Programmer (Rubber-Duck Debugging)
 
-Andy Hunt and Dave Thomas introduced the "rubber duck" practice: explaining a problem out loud in plain language to surface the gaps in your own reasoning. The agent's Plain-Language Reframing protocol (Protocol 7) is the rubber duck applied to plans, designs, and standards documents. Restating the artifact in the thirty-second-whiteboard version often exposes the load-bearing jargon, the missing step, or the hidden assumption that the author could not see.
+Andy Hunt and Dave Thomas introduced the "rubber duck" practice: explaining a problem out loud in plain language to surface the gaps in your own reasoning. The agent's Plain-Language Reframing protocol (Protocol 8) is the rubber duck applied to plans, designs, and standards documents. Restating the artifact in the thirty-second-whiteboard version often exposes the load-bearing jargon, the missing step, or the hidden assumption that the author could not see.
 
 URL: https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/
 

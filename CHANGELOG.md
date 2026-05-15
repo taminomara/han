@@ -37,8 +37,10 @@ The `/code-review` skill is recalibrated so its first pass produces the output t
 
 ### Documentation
 
-- [`docs/skills/code-review.md`](./docs/skills/code-review.md) is updated to mirror the new step structure (Step 1.5, the Step 7 sub-steps, Step 9.0), the per-agent dispatcher tailoring, the size-based demotion model, and the YAGNI two-pass procedure.
+- [`docs/skills/code-review.md`](./docs/skills/code-review.md) is updated to mirror the new step structure (Step 1.5, the Step 7 sub-steps, Step 9.0), the per-agent dispatcher tailoring, the size-based demotion model, the YAGNI two-pass procedure, the full agent task ID format set, and the new YAGNI section in the output description.
 - The four affected agent docs ([`docs/agents/structural-analyst.md`](./docs/agents/structural-analyst.md), [`docs/agents/behavioral-analyst.md`](./docs/agents/behavioral-analyst.md), [`docs/agents/junior-developer.md`](./docs/agents/junior-developer.md), [`docs/agents/edge-case-explorer.md`](./docs/agents/edge-case-explorer.md)) each carry a one-paragraph note explaining the `/code-review` Step 3.5 dispatcher tailoring and confirming the agents' default behavior in other skills is unchanged.
+- [`docs/yagni.md`](./docs/yagni.md) `/code-review` table row is updated to reflect the two-pass procedure and the Mode B / Mode C YAGNI skip.
+- [`docs/skills/gh-pr-review.md`](./docs/skills/gh-pr-review.md) gains a Key Concept noting that the wrapped `/code-review` Step 1.5 plumbs the PR description into every agent's `$branch_context`.
 
 ### Deferred (YAGNI)
 
