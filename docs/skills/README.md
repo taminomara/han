@@ -21,6 +21,7 @@ Skills for specifying *what* a feature does, planning *how* to build it, and str
 
 Skills for finding out *why* something is broken, with evidence to back it.
 
+- **[`/issue-triage`](./issue-triage.md).** Classify a vague issue or bug report, identify missing information, assess severity and reproducibility, and recommend the right next skill to run.
 - **[`/investigate`](./investigate.md).** Evidence-based investigation of bugs, failures, and unexpected behavior, with adversarial validation of the proposed fix.
 
 ## Review & analysis
@@ -76,6 +77,7 @@ Most han skills dispatch agents to do their judgment-heavy work. The [Concepts](
 
 A few common compositions:
 
+- **Triage → investigate.** `/issue-triage` → `/investigate`.
 - **Plan → implement → iterate.** `/plan-a-feature` → `/plan-implementation` → `/iterative-plan-review`.
 - **Discover → document → standardize.** `/project-discovery` → `/project-documentation` → `/coding-standard`.
 - **Review locally → post to PR.** `/code-review` → `/gh-pr-review`.
