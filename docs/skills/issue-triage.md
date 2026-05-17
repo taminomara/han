@@ -31,9 +31,9 @@ Operator documentation for the `/issue-triage` skill in the han plugin. This doc
 
 **Do not invoke for:**
 
-- **Root cause analysis.** Use [`/investigate`](https://github.com/testdouble/han/blob/main/docs/skills/investigate.md) to trace symptoms to code-level evidence.
-- **Feature planning.** Use [`/plan-a-feature`](https://github.com/testdouble/han/blob/main/docs/skills/plan-a-feature.md) when the problem is well-defined and you are ready to spec the solution.
-- **Implementation planning.** Use [`/plan-implementation`](https://github.com/testdouble/han/blob/main/docs/skills/plan-implementation.md) when you have a feature spec and are ready to plan the build.
+- **Root cause analysis.** Use [`/investigate`](./investigate.md) to trace symptoms to code-level evidence.
+- **Feature planning.** Use [`/plan-a-feature`](./plan-a-feature.md) when the problem is well-defined and you are ready to spec the solution.
+- **Implementation planning.** Use [`/plan-implementation`](./plan-implementation.md) when you have a feature spec and are ready to plan the build.
 
 
 ## How to invoke it
@@ -61,7 +61,7 @@ A triage report file with these sections:
 - **Issue Type.** One of: Bug, Feature Request, Performance, Security, Regression, Question, Other.
 - **Reported Behavior.** What the reporter said happened, in their words or close paraphrase.
 - **Expected Behavior.** What the reporter said should happen, or Unknown if not stated.
-- **Missing Information.** A list of what is absent from the report but needed to proceed. States "None. Report has enough to proceed." when nothing is missing.
+- **Missing Information.** A list of what is absent from the report but needed to proceed. States "None - report has enough to proceed." when nothing is missing.
 - **Suspected Areas.** Code or system areas the issue plausibly touches, based on the report and project context. Omitted when nothing is inferable.
 - **Severity.** An estimate: Critical, High, Medium, Low, or Unknown.
 - **Reproducibility.** An estimate: Always, Intermittent, Rare, or Unknown.
@@ -90,7 +90,7 @@ This is the exact output contract the skill follows. It is intentionally strict 
 
 # Missing Information
 
-{bulleted list, or "None. Report has enough to proceed."}
+{bulleted list, or "None - report has enough to proceed."}
 
 # Suspected Areas
 
