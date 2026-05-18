@@ -72,7 +72,7 @@ See [YAGNI](../yagni.md) for the two gates, the acceptable-evidence list, and th
 ## Related documentation
 
 - [Plugin landing page](../../README.md). The front door. Start here if you arrived from outside the docs tree.
-- [Skills Index](./README.md). All 16 skills, grouped by purpose.
+- [Skills Index](./README.md). All 18 skills, grouped by purpose.
 - [`project-manager`](../agents/project-manager.md). Dispatched in Step 4 to draft the vertical slice breakdown.
 - [`/iterative-plan-review`](./iterative-plan-review.md). Pair upstream when splitting up an implementation plan you do not yet trust. Hardening the desired state makes breaking down into issues easier.
 - [`/plan-implementation`](./plan-implementation.md). Pair upstream when splitting up a simpler or more trusted implementation plan.

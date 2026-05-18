@@ -18,7 +18,7 @@ Current version: **2.2.0** (see [CHANGELOG.md](./CHANGELOG.md)).
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── agents/         # 21 agent definitions (.md with frontmatter)
-│   ├── skills/         # 15 skill directories, each with SKILL.md + references/
+│   ├── skills/         # 18 skill directories, each with SKILL.md + references/
 │   └── references/     # Cross-skill reference files (e.g. yagni-rule.md)
 ├── docs/               # Operator-facing documentation
 │   ├── writing-voice.md   # Voice profile every doc follows
@@ -27,7 +27,7 @@ Current version: **2.2.0** (see [CHANGELOG.md](./CHANGELOG.md)).
 │   ├── sizing.md
 │   ├── yagni.md
 │   ├── agents/         # Long-form docs for all 21 agents, plus README
-│   ├── skills/         # Long-form docs for all 16 skills, plus README
+│   ├── skills/         # Long-form docs for all 18 skills, plus README
 │   ├── guidance/       # Contributor-facing authoring guidance
 │   └── templates/      # Templates and coverage rule for long-form docs
 └── images/             # Banner and graphics for README
@@ -51,16 +51,19 @@ The plugin is shipped from `plugin/`; documentation lives in `docs/`. Long-form 
 
 - **[docs/concepts.md](./docs/concepts.md).** The skill-vs-agent model that runs through the whole plugin. Read once before doing anything else. Every other doc assumes this vocabulary.
 - **[docs/quickstart.md](./docs/quickstart.md).** Four path-based recipes (plan a feature, investigate a bug, review code, set up a project). Use when picking which skill to run for a specific situation.
-- **[docs/sizing.md](./docs/sizing.md).** The small / medium / large dispatch model used by the five swarming skills (`/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, `/plan-implementation`). Use when a swarming skill needs to decide team size, or when a user asks what `medium` / `large` mean.
+- **[docs/sizing.md](./docs/sizing.md).** The small / medium / large dispatch model used by the six swarming skills (`/architectural-analysis`, `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, `/plan-implementation`). Use when a swarming skill needs to decide team size, or when a user asks what `medium` / `large` mean.
 - **[docs/yagni.md](./docs/yagni.md).** The evidence-based "You Aren't Gonna Need It" rule every planning, review, and architecture skill applies before committing items to its artifact. Use when explaining why an item was deferred or rejected from a plan / review / ADR.
 
 ### Skill catalog (`docs/skills/`)
 
-- **[docs/skills/README.md](./docs/skills/README.md).** Index of all 16 skills grouped by purpose (planning, investigation, review, discovery, conventions, reporting). Start here when looking for the right slash command.
+- **[docs/skills/README.md](./docs/skills/README.md).** Index of all 18 skills grouped by purpose (planning, building, investigation, review, discovery, conventions, reporting). Start here when looking for the right slash command.
 - **[docs/skills/plan-a-feature.md](./docs/skills/plan-a-feature.md).** Spec a feature from scratch through an evidence-based interview that walks the design tree and dispatches specialist reviewers.
 - **[docs/skills/plan-implementation.md](./docs/skills/plan-implementation.md).** Turn a feature specification into an implementation plan through a project-manager-led team conversation.
 - **[docs/skills/plan-a-phased-build.md](./docs/skills/plan-a-phased-build.md).** Split a body of context (gap analysis, PRD, design doc) into a numbered sequence of vertical-slice phases, each independently demoable.
 - **[docs/skills/iterative-plan-review.md](./docs/skills/iterative-plan-review.md).** Stress-test an existing plan through multiple codebase-grounded review passes. Edits the plan in place and records every finding.
+- **[docs/skills/implementation-plan-to-issues.md](./docs/skills/implementation-plan-to-issues.md).** Break a trusted implementation plan into independently-grabbable, atomic work items with cross-repo dependency ordering.
+- **[docs/skills/tdd.md](./docs/skills/tdd.md).** Drive a feature or behavior through a BDD-framed red-green-refactor loop with an enforced observed-failure gate. The plugin's only execution skill: it writes code, applying coding standards and ADRs in green and refactor.
+- **[docs/skills/issue-triage.md](./docs/skills/issue-triage.md).** Classify a vague issue or bug report, identify missing information, assess severity and reproducibility, and recommend the right next skill.
 - **[docs/skills/investigate.md](./docs/skills/investigate.md).** Evidence-based investigation of bugs, failures, and unexpected behavior, with adversarial validation of the proposed fix.
 - **[docs/skills/code-review.md](./docs/skills/code-review.md).** Comprehensive code review of the current branch or specified files. Dispatches a domain-aware roster that scales with sizing.
 - **[docs/skills/gh-pr-review.md](./docs/skills/gh-pr-review.md).** Run `/code-review` against a GitHub PR and post the review as comments after a clarity check.
@@ -123,4 +126,4 @@ Subdirectories:
 - **Every long-form doc links up.** The first bullet of the "Related Documentation" section always points back to the README at the repo root.
 - **Voice is uniform.** Every doc follows [docs/writing-voice.md](./docs/writing-voice.md). No em-dashes, direct second person, no flattery or hype.
 - **YAGNI applies to docs too.** Don't add speculative sections, for-future-flexibility warnings, or examples for behavior the skill doesn't have. The same evidence rule that gates plan steps gates docs.
-- **Counts to verify when editing indexes.** 21 agents in `plugin/agents/`; 16 skills in `plugin/skills/`; 21 long-form agent docs in `docs/agents/`; 16 long-form skill docs in `docs/skills/`.
+- **Counts to verify when editing indexes.** 21 agents in `plugin/agents/`; 18 skills in `plugin/skills/`; 21 long-form agent docs in `docs/agents/`; 18 long-form skill docs in `docs/skills/`.

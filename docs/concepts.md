@@ -53,7 +53,7 @@ A few concrete pairings from the han plugin:
 
 - **`/plan-a-feature` dispatches `junior-developer` and `project-manager` plus three to five specialists.** The specialists are chosen based on what the feature touches. A data-heavy feature brings in `data-engineer`. A feature with a production surface brings in `devops-engineer`. A user-visible flow brings in `user-experience-designer`.
 - **`/code-review` always dispatches `junior-developer` and `adversarial-security-analyst`, plus the rest of the roster conditionally** (`test-engineer`, `edge-case-explorer`, `structural-analyst`, `behavioral-analyst`, `concurrency-analyst`, `data-engineer`, `devops-engineer`) based on what the changed files touch. The roster scales with the [size](./sizing.md): a small change runs the minimum roster; a large change runs the full conditional roster. Each agent reviews the branch changes from its own lens, and the skill classifies their findings into the review output.
-- **`/architectural-analysis` dispatches `structural-analyst`, `behavioral-analyst`, `concurrency-analyst`, `risk-analyst`, and `software-architect`.** The first four analyze; the last synthesizes their findings into recommended intra-codebase architectural changes. Cross-service and bounded-context concerns are deferred to `system-architect`, which you can dispatch separately.
+- **`/architectural-analysis` always dispatches a spine of `structural-analyst`, `behavioral-analyst`, `risk-analyst`, and `software-architect`, plus the rest of the roster by signal** (`concurrency-analyst` when concurrency primitives are present; `adversarial-security-analyst`, `data-engineer`, `devops-engineer` when the focus area touches auth/PII, data contracts, or operational surface; `codebase-explorer` for large unfamiliar areas; `system-architect` at large size when a cross-service or bounded-context seam is present). The roster scales with the [size](./sizing.md): small runs the spine plus concurrency; large runs every signalled specialist. The discovery analysts run first, `risk-analyst` scores their findings, and the architects synthesize. When `system-architect` is not dispatched, cross-service and bounded-context concerns are surfaced as deferred so you can dispatch it separately.
 - **`/investigate` dispatches `evidence-based-investigator` plus conditional specialists** (`concurrency-analyst`, `behavioral-analyst`, `data-engineer`) based on the symptom, and follows up with `adversarial-validator` to prove the proposed fix will fix the bug rather than mask it.
 - **`/gap-analysis` dispatches `gap-analyzer` once for the primary analysis, then fans out a validator-and-augmenter swarm by default.** `adversarial-validator` and `junior-developer` (running an explicit actor-perspective sweep across human users, API callers, AI agents, and other actor types) are required at every size; `evidence-based-investigator` is required when the current state is concrete; `project-manager` is required at medium and large to consolidate Section 4 of the report. Domain specialists (`adversarial-security-analyst`, `data-engineer`, `user-experience-designer`, and others) are added based on what the gaps touch. Reply `no swarm` to opt out and fall back to a lightweight gap-analyzer-only pass.
 - **`/plan-a-phased-build` dispatches `information-architect` once at runtime** against the rendered build-phase outline, to verify findability, EPPO standalone-ness of phase entries, and progressive comprehension before presenting the document to you. The skill applies plain-language leak findings as required edits, and structural findings when they preserve the document's contract.
@@ -66,7 +66,7 @@ Every skill that dispatches an agent swarm classifies the work as **small**, **m
 
 - **Default is small.** Every sizing-aware skill starts the classification at small and only escalates when concrete signals require it.
 - **Auto-classified, with a `$size` override.** Skills read signals (file count, subsystems touched, security/data/infra surface) and announce the chosen size with a one-line justification. Pass `small`, `medium`, or `large` as the first positional argument to override (`/code-review medium`, `/plan-a-feature large "describe the feature"`).
-- **Five sizing-aware skills.** [`/code-review`](./skills/code-review.md), [`/gap-analysis`](./skills/gap-analysis.md), [`/iterative-plan-review`](./skills/iterative-plan-review.md), [`/plan-a-feature`](./skills/plan-a-feature.md), [`/plan-implementation`](./skills/plan-implementation.md).
+- **Six sizing-aware skills.** [`/architectural-analysis`](./skills/architectural-analysis.md), [`/code-review`](./skills/code-review.md), [`/gap-analysis`](./skills/gap-analysis.md), [`/iterative-plan-review`](./skills/iterative-plan-review.md), [`/plan-a-feature`](./skills/plan-a-feature.md), [`/plan-implementation`](./skills/plan-implementation.md).
 
 Read the full [Sizing](./sizing.md) reference for the bands, the auto-classification process, and the per-skill rules.
 
@@ -92,7 +92,7 @@ Direct invocation uses the `Agent` tool with `subagent_type: han:{agent-name}` (
 
 ## What does the plugin include?
 
-- **16 skills.** The [skills index](./skills/README.md) groups them by purpose (planning, investigation, review, discovery, conventions, reporting).
+- **18 skills.** The [skills index](./skills/README.md) groups them by purpose (planning, building, investigation, review, discovery, conventions, reporting).
 - **21 agents.** The [agents index](./agents/README.md) groups them by role (planning and facilitation, adversarial reviewers, investigation, architecture, testing, gap and content).
 
 Skim the indexes after you read this page. Pick the one skill you need right now. Come back later to learn the rest.
@@ -108,6 +108,6 @@ Skim the indexes after you read this page. Pick the one skill you need right now
 
 ## Related reading
 
-- [`docs/plugin-entity-taxonomy.md`](./guidance/plugin-entity-taxonomy.md). The taxonomy this plugin follows. Applies across all plugins in this repo.
+- [`docs/guidance/plugin-entity-taxonomy.md`](./guidance/plugin-entity-taxonomy.md). The taxonomy this plugin follows. Applies across all plugins in this repo.
 - [Claude Code Skills reference](https://code.claude.com/docs/en/skills). How skills are defined and invoked in Claude Code itself.
 - [Claude Code Subagents reference](https://code.claude.com/docs/en/sub-agents). How agents are dispatched from inside skills.
