@@ -2,13 +2,13 @@
 
 <img src="images/han-banner.png">
 
-Han is a suite of AI skills and agents for solo (or small-team) product engineers. It combines evidence-based planning, full documentation maintenance, deep code review, and architectural analysis into a team of specialists you can dispatch from Claude Code.
+Han is a suite of AI skills and agents for solo (or small-team) product engineers. It combines evidence-based planning, test-driven implementation, full documentation maintenance, deep code review, and architectural analysis into a team of specialists you can dispatch from Claude Code.
 
 ## What this plugin does
 
-Han turns planning, review, and documentation work that would normally take a team into a set of deterministic skills you run from Claude Code. Each skill dispatches specialist agents (project managers, adversarial reviewers, investigators, architectural analysts, testing and security specialists) to do the judgment-heavy work, then folds their findings into an artifact you can trust.
+Han turns planning, implementation, review, and documentation work that would normally take a team into a set of deterministic skills you run from Claude Code. Each skill dispatches specialist agents (project managers, adversarial reviewers, investigators, architectural analysts, testing and security specialists) to do the judgment-heavy work, then folds their findings into an artifact you can trust.
 
-The skills are designed to compose. You can plan a feature, then plan its implementation, then iterate on the plan, then review the resulting code, then write the PR description. All through named skills that hand off to each other cleanly.
+The skills are designed to compose. You can plan a feature, then plan its implementation, then iterate on the plan, then build it test-first, then review the resulting code, then write the PR description. All through named skills that hand off to each other cleanly.
 
 Read [Concepts](./docs/concepts.md) for the skill-and-agent model that runs through the whole plugin.
 
@@ -17,7 +17,7 @@ Read [Concepts](./docs/concepts.md) for the skill-and-agent model that runs thro
 - **New to han?** → Start with [Concepts](./docs/concepts.md), then the [Quickstart](./docs/quickstart.md).
 - **Looking for a specific skill?** → [Skills Index](./docs/skills/README.md). 17 skills grouped by purpose.
 - **Looking for a specific agent?** → [Agents Index](./docs/agents/README.md). 21 agents grouped by role.
-- **Wondering how the agent swarms scale?** → [Sizing](./docs/sizing.md). The small / medium / large dispatch model used by `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, and `/plan-implementation`.
+- **Wondering how the agent swarms scale?** → [Sizing](./docs/sizing.md). The small / medium / large dispatch model used by `/architectural-analysis`, `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, and `/plan-implementation`.
 - **Wondering why a skill said "YAGNI"?** → [YAGNI](./docs/yagni.md). The evidence-based rule every planning, review, and architecture skill applies before committing items to an artifact.
 - **Writing or editing a skill or agent?** → [Contributing](./CONTRIBUTING.md).
 
@@ -44,7 +44,7 @@ Write the code, test-first, through a disciplined red-green-refactor loop.
 
 Find out *why* something is broken, with evidence to back it.
 
-- **[`/issue-triage`](docs/skills/issue-triage.md).** Classify a vague issue or bug report, identify missing information, assess severity and reproducibility, and recommend the right next skill.
+- **[`/issue-triage`](./docs/skills/issue-triage.md).** Classify a vague issue or bug report, identify missing information, assess severity and reproducibility, and recommend the right next skill.
 - **[`/investigate`](./docs/skills/investigate.md).** Evidence-based investigation of bugs, failures, and unexpected behavior, with adversarial validation of the proposed fix.
 
 ### Review & analysis
