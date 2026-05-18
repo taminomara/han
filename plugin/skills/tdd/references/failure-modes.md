@@ -99,7 +99,9 @@ an explicit artifact, so the list feels redundant.
 scenarios are appended and deferred, never implemented in the current loop.
 Speculative scenarios are deferred with a reopen trigger (YAGNI), not built.
 The list draining is the progress signal; the list ballooning past ~10 open
-items is a scope checkpoint, not a reason to keep grinding.
+items is a scope warning the skill flags and records in its summary while
+continuing autonomously, not a reason to keep silently grinding through
+unbounded scope.
 
 ## 8. Refactoring into speculative abstraction
 

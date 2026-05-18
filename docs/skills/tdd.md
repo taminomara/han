@@ -12,7 +12,7 @@ Operator documentation for the `/tdd` skill in the han plugin. This document hel
 
 ## Key concepts
 
-- **Execution skill.** Every other han skill produces a markdown document. This one modifies your source tree. It writes the tests and the production code. That is the point, and it is why the skill confirms scope and offers to branch before it starts.
+- **Execution skill.** Every other han skill produces a markdown document. This one modifies your source tree. It writes the tests and the production code. That is the point, and it is why the skill reports scope and recommends a branch before it starts, so a watching human can see what it will do.
 - **The observed-failure gate.** No production code changes unless a test has been run and watched to fail for the intended reason in that loop. A test that passes the first time it runs means red was never seen, which is a process violation, not a success.
 - **Two hats.** Making a test pass and improving structure are different jobs done at different times. The skill never refactors while a test is red. Make it run, then make it right.
 - **BDD framing.** Tests describe observable behavior, named in your project's existing convention, asserting outcomes through the public interface, never private state. For user-facing behavior the skill works outside-in: a failing acceptance test on the outside, red-green-refactor on the inside.
@@ -43,7 +43,7 @@ Give it:
 2. **Any context to respect.** A `feature-specification.md`, a linked issue, or a plan. The skill reads it as the source of behaviors for the test list.
 3. **Nothing about the test framework.** The skill resolves the test, lint, and build commands from your project itself (see *What you get back*). You do not need to pass them.
 
-Before the loop starts, the skill confirms scope once: the behavior to build, the resolved test, lint, and build commands, the standards and ADRs it found, and an offer to branch if you are on the default branch. That confirmation is the only interactive checkpoint. Once you approve it, the red-green-refactor loop runs to completion without per-cycle prompts, so review the scope carefully before you confirm.
+The skill runs autonomously after your initial request. Before the loop it reports scope (the behavior to build, the resolved test, lint, and build commands, the standards and ADRs it found, the current branch, a branch recommendation if you are on the default branch), then proceeds without waiting. That report is informational, not a gate. The one exception: if your request or the provided context explicitly says you want to review, verify, or approve the plan or test list before implementation, the skill builds the test list, presents it with the scope report, and waits for your approval before writing any code. The only input that can otherwise block it is a test command it cannot resolve or infer, because there is no way to run tests without one.
 
 Example prompts:
 
@@ -58,13 +58,13 @@ Code in your working tree, not a report. Specifically:
 - **Tests and production code**, grown one behavior per cycle. Each cycle shows you the real test-runner output for red (the test failing for the intended reason) and green (the new test passing, all prior tests still passing).
 - **A final summary**: behaviors implemented, the state of the test list including any deferred items with their reopen triggers, which coding standards and ADRs were applied and where, any YAGNI deferrals from refactor, and the final test, lint, and build status with output shown rather than asserted.
 
-The skill resolves your test, lint, and build commands from CLAUDE.md's `## Project Discovery` section, falling back to `project-discovery.md`, falling back to a one-time discovery script that infers them from your manifest files (package.json, pyproject.toml, go.mod, Cargo.toml, Gemfile, mix.exs, pom.xml, gradle, .csproj, or a Makefile test target). Commands the script infers are treated as best-effort suggestions, surfaced in the scope confirmation for you to correct, not trusted blindly. If none of those resolve the test command, the skill asks you for it before the loop starts, because the loop cannot run without it.
+The skill resolves your test, lint, and build commands from CLAUDE.md's `## Project Discovery` section, falling back to `project-discovery.md`, falling back to a one-time discovery script that infers them from your manifest files (package.json, pyproject.toml, go.mod, Cargo.toml, Gemfile, mix.exs, pom.xml, gradle, .csproj, or a Makefile test target). Commands the script infers are treated as best-effort suggestions, surfaced in the scope report so you can correct them if you are watching, not trusted blindly. If none of those resolve the test command, the skill asks you for it before the loop starts, because the loop cannot run without it. That is the only input that can block an otherwise autonomous run.
 
 ## How to get the most out of it
 
 - **Bring a specification when you have one.** `/tdd` builds a better test list from a `feature-specification.md` than from a one-line prompt, because the behaviors and edge cases are already named. Run [`/plan-a-feature`](./plan-a-feature.md) first for anything non-trivial.
 - **Have your standards and ADRs discoverable.** The green and refactor steps apply your coding standards and architectural decisions. If they live in `docs/coding-standards/` or `docs/adr/`, or are recorded by [`/coding-standard`](./coding-standard.md) and [`/architectural-decision-record`](./architectural-decision-record.md), the skill finds and applies them. If they do not exist, it infers conventions from surrounding code, which is weaker.
-- **Let the list be the scope signal.** If the open test list grows past about ten items, the skill pauses and asks whether to continue or split the session. Take that prompt seriously: a ballooning list usually means the feature wanted to be planned, not grown in one sitting.
+- **Let the list be the scope signal.** If the open test list grows past about ten items, the skill flags a scope warning and keeps going, then recommends splitting the work in its final summary. Take that warning seriously: a ballooning list usually means the feature wanted to be planned, not grown in one sitting.
 - **Read the red output.** The skill pastes real runner output for every red. Glancing at it is how you catch a test that fails for the wrong reason before it drives wrong code.
 - **Pair with `/code-review` next.** TDD produces self-testing code; it does not replace a second set of eyes. Run [`/code-review`](./code-review.md) on the branch when the list is empty.
 
@@ -79,7 +79,7 @@ The rule is enforcing in refactor (speculative structure is deferred by default)
 
 ## Cost and latency
 
-`/tdd` runs on the main agent. It dispatches no sub-agents and is not a sizing-aware skill, so there is no fan-out cost. The cost is the loop itself: a multi-turn, tight iteration where each behavior is three phases (red, green, refactor) and each phase runs your test command. The most expensive single factor is the number of test list items multiplied by your suite's runtime, since the full suite runs at green and after every refactor. This is a tight-loop skill built to run while you build, not an infrequent high-signal report. Keeping the test list scoped (the ~10-item checkpoint) is the main lever on total cost.
+`/tdd` runs on the main agent. It dispatches no sub-agents and is not a sizing-aware skill, so there is no fan-out cost. The cost is the loop itself: a multi-turn, tight iteration where each behavior is three phases (red, green, refactor) and each phase runs your test command. The most expensive single factor is the number of test list items multiplied by your suite's runtime, since the full suite runs at green and after every refactor. This is a tight-loop skill built to run while you build, not an infrequent high-signal report. Keeping the test list scoped (the skill flags lists past ~10 items) is the main lever on total cost.
 
 ## In more detail
 

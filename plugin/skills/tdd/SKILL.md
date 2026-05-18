@@ -77,16 +77,28 @@ fall back to `project-discovery.md`; fall back to Glob defaults (`docs/`,
 govern the green and refactor steps. If none exist, state that plainly and plan
 to infer conventions from the surrounding code instead.
 
-**Confirm scope (one human gate).** State to the user, in a few lines: the
-behavior or feature to be built, the resolved test/lint/build commands, the
-standards and ADRs found (or that none were), and that this skill will write
-code in a red-green-refactor loop. If `current branch` from Project Context is
-the repository's default branch (`main` or `master`), offer to create a working
-branch first. Proceed once the user confirms. This is the only mandatory
-checkpoint; the loop itself runs without per-cycle prompts.
+**Report scope, then proceed (no gate).** This skill runs autonomously after
+the initial request: it does not stop for confirmation. State to the user, in a
+few lines: the behavior or feature to be built, the resolved test/lint/build
+commands, the standards and ADRs found (or that none were), the current branch,
+and that the skill will now write code in a red-green-refactor loop. If
+`current branch` from Project Context is the repository's default branch
+(`main` or `master`), recommend working on a branch, but do not wait for an
+answer. This is a report the user reads while the work runs, not a gate.
+Continue immediately to Step 2 without waiting for a response.
 
-If the test command could not be resolved from any source, ask the user for it
-directly before continuing. The loop cannot run without it.
+**The one exception.** If the initial request or the provided context
+explicitly states the human wants to review, verify, or approve the plan or
+test list before implementation, then this becomes a gate: build the test list
+in Step 2, present it together with this scope report, and wait for approval
+before starting the Step 3 loop. Absent an explicit request like that, the
+skill runs to completion without further human input.
+
+The one input that can still block is a missing test command: if it could not
+be resolved from CLAUDE.md, `project-discovery.md`, the discovery script, or
+manifest inference, ask the user for it, because TDD is impossible without a
+way to run tests. Exhaust inference before asking; this is a hard dependency,
+not a discretionary checkpoint.
 
 ## Step 2: Build the BDD Test List
 
@@ -113,7 +125,10 @@ that breaks, a regulation, a real incident). Scenarios that fail the evidence
 test go to a deferred list with the trigger that would reopen them. Do not pad
 the list for symmetry or completeness.
 
-Show the user the test list before entering the loop.
+Report the test list to the user. Unless the verify-plan exception from Step 1
+applies, continue to Step 3 immediately without waiting for approval. When that
+exception applies, present the test list together with the Step 1 scope report
+and wait for approval before entering the loop.
 
 ## Step 3: The Red-Green-Refactor Loop
 
@@ -187,10 +202,11 @@ refactor that changes behavior is a defect, not a refactor.
 
 Cross the completed item off the list. Append any scenarios you discovered
 while implementing (deferred, with their reopen trigger if speculative), but do
-not implement them now. If the open list has grown past roughly ten items,
-pause and ask the user whether to continue the session or split the remaining
-list into a follow-up — a runaway list is a scope signal, not a reason to keep
-grinding.
+not implement them now. If the open list has grown past roughly ten items, do
+not stop for input: flag it prominently as a scope warning, keep going, and
+record in the final summary that the work exceeded the recommended size and
+should be split next time. A runaway list is a scope signal, not a reason to
+pause for a human.
 
 Return to the top of Step 3 with the next item. Continue until the list is
 empty.
@@ -216,4 +232,6 @@ Summarize for the user:
   deferred items with their reopen triggers).
 - Which coding standards and ADRs were applied, and where they shaped the code.
 - Any YAGNI deferrals from refactor, each with its reopen trigger.
+- A scope warning if the test list exceeded roughly ten open items, with a
+  recommendation to split future work.
 - The final test, lint, and build status, with output shown, not asserted.
