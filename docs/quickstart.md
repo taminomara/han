@@ -1,12 +1,12 @@
 # Quickstart
 
-New to the han plugin? Pick the path that matches what you are trying to do right now. Each path is a short sequence (two or three skills) that compose into a useful result. You can follow one path end to end, or jump off at any step.
+New to the han plugin? Pick the path that matches what you are trying to do right now. Each path is a short sequence (a few skills) that compose into a useful result. You can follow one path end to end, or jump off at any step.
 
 > See also: [Plugin landing page](../README.md) · [Concepts](./concepts.md) · [Skills](./skills/README.md) · [Agents](./agents/README.md) · [Sizing](./sizing.md) · [YAGNI](./yagni.md)
 
 ## Which path are you on?
 
-- **[Plan a new feature](#path-a--plan-a-new-feature).** You have an idea for a feature and need to figure out what it should do and how to build it.
+- **[Plan a new feature](#path-a--plan-a-new-feature).** You have an idea for a feature and need to figure out what it should do, how to build it, and then build it test-first.
 - **[Investigate a bug or failure](#path-b--investigate-a-bug-or-failure).** Something is broken or behaving oddly and you need a root cause.
 - **[Review code or architecture](#path-c--review-code-or-architecture).** You want a second set of eyes on a branch, a PR, or an existing module.
 - **[Set up a project for everything else](#path-d--set-up-a-project-for-everything-else).** You want to document your project, formalize standards, and give every other skill richer context.

@@ -76,7 +76,7 @@ if [ -z "$TEST_CMD" ] && { [ -f build.gradle ] || [ -f build.gradle.kts ]; }; th
   BUILD_CMD="gradle build"
 fi
 
-if [ -z "$TEST_CMD" ] && ls ./*.csproj &>/dev/null; then
+if [ -z "$TEST_CMD" ] && [ -n "$(find . -maxdepth 3 -name '*.csproj' -print -quit 2>/dev/null)" ]; then
   echo "manifest: dotnet (.csproj)"
   TEST_CMD="dotnet test"
   BUILD_CMD="dotnet build"

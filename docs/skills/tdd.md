@@ -43,6 +43,8 @@ Give it:
 2. **Any context to respect.** A `feature-specification.md`, a linked issue, or a plan. The skill reads it as the source of behaviors for the test list.
 3. **Nothing about the test framework.** The skill resolves the test, lint, and build commands from your project itself (see *What you get back*). You do not need to pass them.
 
+Before the loop starts, the skill confirms scope once: the behavior to build, the resolved test, lint, and build commands, the standards and ADRs it found, and an offer to branch if you are on the default branch. That confirmation is the only interactive checkpoint. Once you approve it, the red-green-refactor loop runs to completion without per-cycle prompts, so review the scope carefully before you confirm.
+
 Example prompts:
 
 - `/tdd`. *"Implement the discount engine from docs/specs/discount/feature-specification.md test-first."*
@@ -56,7 +58,7 @@ Code in your working tree, not a report. Specifically:
 - **Tests and production code**, grown one behavior per cycle. Each cycle shows you the real test-runner output for red (the test failing for the intended reason) and green (the new test passing, all prior tests still passing).
 - **A final summary**: behaviors implemented, the state of the test list including any deferred items with their reopen triggers, which coding standards and ADRs were applied and where, any YAGNI deferrals from refactor, and the final test, lint, and build status with output shown rather than asserted.
 
-The skill resolves your test, lint, and build commands from CLAUDE.md's `## Project Discovery` section, falling back to `project-discovery.md`, falling back to a one-time discovery script that infers them from your manifest files (package.json, pyproject.toml, go.mod, Cargo.toml, Gemfile, mix.exs, pom.xml, gradle, .csproj, or a Makefile test target). If none of those resolve the test command, the skill asks you for it before the loop starts, because the loop cannot run without it.
+The skill resolves your test, lint, and build commands from CLAUDE.md's `## Project Discovery` section, falling back to `project-discovery.md`, falling back to a one-time discovery script that infers them from your manifest files (package.json, pyproject.toml, go.mod, Cargo.toml, Gemfile, mix.exs, pom.xml, gradle, .csproj, or a Makefile test target). Commands the script infers are treated as best-effort suggestions, surfaced in the scope confirmation for you to correct, not trusted blindly. If none of those resolve the test command, the skill asks you for it before the loop starts, because the loop cannot run without it.
 
 ## How to get the most out of it
 

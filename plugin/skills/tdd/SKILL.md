@@ -18,7 +18,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(git *), Bash(find *), 
 
 ## Project Context
 
-- git installed: !`which git`
+- git installed: !`git --version 2>/dev/null`
 - current branch: !`git branch --show-current 2>/dev/null`
 - CLAUDE.md: !`find . -maxdepth 1 -name "CLAUDE.md" -type f`
 - project-discovery.md: !`find . -maxdepth 3 -name "project-discovery.md" -type f`

@@ -108,6 +108,6 @@ Skim the indexes after you read this page. Pick the one skill you need right now
 
 ## Related reading
 
-- [`docs/plugin-entity-taxonomy.md`](./guidance/plugin-entity-taxonomy.md). The taxonomy this plugin follows. Applies across all plugins in this repo.
+- [`docs/guidance/plugin-entity-taxonomy.md`](./guidance/plugin-entity-taxonomy.md). The taxonomy this plugin follows. Applies across all plugins in this repo.
 - [Claude Code Skills reference](https://code.claude.com/docs/en/skills). How skills are defined and invoked in Claude Code itself.
 - [Claude Code Subagents reference](https://code.claude.com/docs/en/sub-agents). How agents are dispatched from inside skills.
