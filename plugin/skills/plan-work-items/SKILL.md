@@ -1,20 +1,19 @@
 ---
-name: implementation-plan-to-issues
+name: "plan-work-items"
 description: >
-  Break an implementation plan into independently-grabbable issues. Use when
-  user wants to convert a plan to issues, create implementation tickets, or
-  break down the plan into work items. Do not use when there isn't an
-  implementation plan yet, or when the plan isn't yet trusted. Pair with
-  `/plan-implementation` or `/iterative-plan-review` upstream to create or
-  harden the plan before breaking it into issues.
-allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(find *), Bash(gh *)
+  Break a trusted implementation plan (or other provided context) into
+  independently-grabbable, atomic work items, written to a single
+  work-items.md file. Use when the user wants to convert a plan into work
+  items, create implementation tickets or tasks, divide a plan into work
+  units, or break the plan down into grabbable pieces. Do not use when there
+  is no implementation plan yet or the plan is not yet trusted — use
+  plan-implementation to produce the plan or iterative-plan-review to harden
+  it first. Does not sequence work into demoable delivery phases — use
+  plan-a-phased-build for that. Does not write code — use tdd to implement a
+  work item.
+argument-hint: "[implementation plan path or feature name, optional; output folder, optional]"
+allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(find *), Bash(mkdir *)
 ---
-
-## Pre-requisites
-
-- gh CLI: !`which gh`
-
-If `gh CLI` is not found and the user has provided a `github.com` URL as the plan source, inform the user that the gh CLI must be installed and configured to fetch issue content, and ask them to provide the plan as a file path instead. If the plan is a file path, proceed regardless of gh CLI availability.
 
 ## Project Context
 
@@ -22,70 +21,98 @@ If `gh CLI` is not found and the user has provided a `github.com` URL as the pla
 - project-discovery.md: !`find . -maxdepth 3 -name "project-discovery.md" -type f`
 - feature-implementation-plan.md: !`find . -maxdepth 5 -name "feature-implementation-plan.md" -type f`
 
-# Implementation Plan to Issues
+# Plan Work Items
 
-Break an implementation plan into vertical slices (tracer bullets), write a work-item file per repo.
+Break an implementation plan into vertical slices (tracer bullets) and write them as work items to a single `work-items.md` file.
 
-This skill (Steps 1–7) largely coordinates: locating the plan, getting confirmation, writing the work-items file. Step 4 is where the judgement comes into play, in dividing up the plan.
+This skill mostly coordinates: locating the plan or context, resolving where the file goes, getting confirmation, writing the work-items file. Step 5 is where the judgement comes into play, in dividing up the plan.
+
+## Operating Principles
+
+- **One file, no repository awareness.** This skill produces exactly one `work-items.md`. It does not split work by repository, count repositories, or reason about cross-repository integration. The breakdown is driven only by the plan or context it is given.
+- **Save incrementally — never lose work.** Write the work-items file as soon as the title and intro are drafted, then append each work item as it is finalized. Do not buffer the whole document in conversation memory and write it at the end.
+- **All sub-agents in this skill run on sonnet.** When launching any Agent tool call in this skill, pass `model: "sonnet"`.
 
 ## Rules
 
-- Do NOT close, edit, or comment on the parent implementation plan issue.
-- Each slice lives in exactly one repo. Cross-repo integration is documented in the preamble integration table, never as a native blocker.
-- Native `blocked_by` relationships are **within-repo only**. Cross-repo dependencies stay in the preamble integration table.
-- Every slice issue body MUST link the reference artifacts an implementer needs: API/event contracts, design frames, schema docs, runbooks, ADRs, coding standards. Issues that consume an HTTP endpoint or event payload MUST link the contract section that defines it.
-- UI slices, when the plan folder has a `ui-designs/` subfolder, MUST embed the relevant screenshots inline using same-target-repo raw URLs. See [references/screenshot-embed-rules.md](references/screenshot-embed-rules.md).
-- NEVER include process artifacts in issue bodies or the work-items preamble. Excluded categories: iteration histories, decision logs, review findings, team findings, facilitation summaries, gap analyses, and anything under an `artifacts/` subfolder of the plan that is not a contract or design reference. Restate plan-level decisions inline in the slice with `See plan: D-N` as the breadcrumb. Full include/exclude list in [references/reference-artifact-inventory.md](references/reference-artifact-inventory.md).
+- Do NOT modify, annotate, or comment on the source implementation plan or context. It is read-only input.
+- Each work item is a **vertical slice**: a narrow but complete path through the relevant layers (schema, API, UI, tests) that is demoable or verifiable on its own. Not a layer, not a stub.
+- Every work item body MUST link the reference artifacts an implementer needs: API/event contracts, design frames, schema docs, runbooks, ADRs, coding standards. A work item that consumes an HTTP endpoint or event payload MUST link the contract section that defines it.
+- UI work items, when the plan folder has a `ui-designs/` subfolder, MUST reference the relevant design screenshots by a relative path from the work-items file to the screenshot. See [references/work-item-template.md](references/work-item-template.md).
+- `Depends on` lists other work items **in this same file** that must complete first, or `None`.
+- NEVER include process artifacts in work item bodies or the preamble. Excluded categories: iteration histories, decision logs, review findings, team findings, facilitation summaries, gap analyses, and anything under an `artifacts/` subfolder of the plan that is not a contract or design reference. Restate plan-level decisions inline in the work item with `See plan: D-N` as the breadcrumb. Full include/exclude list in [references/reference-artifact-inventory.md](references/reference-artifact-inventory.md).
 
 ## Process
 
-### 1. Locate the implementation plan
+### 1. Locate the implementation plan or context
 
-If the plan is not provided, check to see if there are any existing features with plans, e.g., `docs/features/<feature-name>/feature-implementation-plan.md`. If there is only one, use that as the plan. If there are multiple, use the most recently-updated file as the plan. If there are none, ask for the plan file path or an issue URL. If the plan is a file and not already in context, read it. If the plan is a `github.com` URL, use the `gh` CLI tool to fetch the issue. Otherwise, try to use WebFetch to retrieve the issue body and all comments. If the issue body references a file, read that file too. The plan content is the union of all these sources. If WebFetch fails, e.g., due to authentication errors, ask the user to paste the content directly.
+The breakdown is built from an implementation plan when one exists, or from whatever context the user provided when one does not.
 
-### 2. Explore the codebase when needed
+- If the user provided a file path, read it. If a feature name was given, look for `docs/features/<feature-name>/feature-implementation-plan.md` (or the equivalent under the project's documentation root).
+- If nothing was provided, check for existing plans (the injected `feature-implementation-plan.md` results above help here). If there is exactly one, use it. If there are multiple, use the most recently updated one. If there are none, use whatever plan-like context the user supplied inline in the conversation.
+- If the plan references other files (a feature specification, a contract file, an ADR), read those too. The plan content is the union of all these sources.
+- If there is still no usable plan or context, ask the user — in one short message — for the implementation plan file path or the context to break down. Do not proceed without it.
 
-If the plan references existing code or repo boundaries that aren't in your context, explore the affected repos. Skip exploration if the plan is self-contained and the boundaries are already clear.
+### 2. Resolve the output location
 
-### 3. Inventory reference artifacts
+The skill writes exactly one file: `{folder}/work-items.md`.
 
-Before drafting slices, list every artifact an implementer of those slices will need. See [references/reference-artifact-inventory.md](references/reference-artifact-inventory.md) for the include list, exclude list, and screenshot-to-slice mapping rules.
+Resolve `{folder}` in this order:
 
-If an expected artifact is missing (e.g., the plan touches an HTTP boundary but no contract file exists), surface it to the user before Step 4. Slices that consume an undefined contract are not draftable.
+1. If the user specified an output folder, use it.
+2. If the plan is a file, default to the same folder as the plan file.
+3. If there is no plan file but the provided context points at a folder or document location, write next to that.
+4. Otherwise, make a best educated guess based on the provided context: propose a folder of **2 to 4 words** in kebab-case, placed under an existing documentation root surfaced via CLAUDE.md, `project-discovery.md`, or a Glob fallback (`docs/features/<feature>/`, `docs/plans/`, `docs/`). Confirm the folder with the user in one short line before writing files.
 
-### 4. Draft vertical slices
+If `work-items.md` already exists in the chosen folder, ask the user whether to overwrite, write to a timestamp-suffixed name, or stop. Do not silently overwrite.
+
+### 3. Explore the codebase when needed
+
+If the plan references existing code or boundaries that aren't in your context, explore the affected code. Skip exploration if the plan is self-contained and the boundaries are already clear.
+
+### 4. Inventory reference artifacts
+
+Before drafting work items, list every artifact an implementer of those work items will need. See [references/reference-artifact-inventory.md](references/reference-artifact-inventory.md) for the include list, exclude list, and screenshot-to-work-item mapping rules.
+
+If an expected artifact is missing (for example, the plan touches an HTTP boundary but no contract file exists), surface it to the user before Step 5. Work items that consume an undefined contract are not draftable.
+
+### 5. Draft the work items
 
 Launch `project-manager` (`subagent_type: "han:project-manager"`, `model: "sonnet"`) with:
 
-- The full plan content from Step 1.
-- The artifact inventory from Step 3.
+- The full plan or context content from Step 1.
+- The artifact inventory from Step 4.
 - The Rules section of this skill verbatim.
-- A directive to draft vertical slices: each slice is a narrow but complete path through the appropriate layers (schema, API, UI, tests) for a single repo, demoable or verifiable on its own. Classify each slice as **HITL** (requires human interaction: architectural decision, design review) or **AFK** (can be implemented and merged without sync). Prefer AFK over HITL. Prefer many thin slices over few thick ones.
-- A directive to return the proposed slice breakdown as a numbered list. Do not write any files.
+- A directive to draft vertical slices: each work item is a narrow but complete path through the appropriate layers (schema, API, UI, tests), demoable or verifiable on its own. Classify each work item as **HITL** (requires human interaction: an architectural decision, a design review) or **AFK** (can be implemented and merged without a sync). Prefer AFK over HITL. Prefer many thin work items over few thick ones.
+- A directive to return the proposed breakdown as a numbered list. Do not write any files.
 
-Return the project-manager's output verbatim. Proceed to Step 5.
+Return the project-manager's output verbatim. Proceed to Step 6.
 
-### 5. Assign symbolic IDs and titles
+### 6. Assign symbolic IDs and titles
 
-Give each slice a per-repo symbolic ID: a short prefix + sequential number within that file.
+Give each work item a stable symbolic ID: the prefix `W` plus a sequential number within this file (`W-1`, `W-2`, …). These IDs are for cross-referencing work items within the file and citing them in tickets, threads, and follow-up work. They are stable for the life of the file.
 
-Propose a 1–3 letter prefix based on the repo name and surface it to the user in Step 6 for confirmation before writing files.
+If the user asked for a different prefix (for example, a short feature-derived prefix so IDs stay distinct across multiple features' work-items files), use theirs. Otherwise default to `W`.
 
-Issue title format: `<SYM-N> — <short descriptive name>` (em-dash separator).
+Work item title format: `<W-N> — <short descriptive name>` (em-dash separator).
 
-### 6. Show the breakdown and get confirmation
+### 7. Show the breakdown and get confirmation
 
-Present a numbered list. For each slice show:
+Present a numbered list. For each work item show:
 
-- **Title**: `<SYM-N> — <short descriptive name>`
+- **Title**: `<W-N> — <short descriptive name>`
 - **Type**: HITL or AFK
-- **Depends on**: other slices in the **same repo** that must complete first, or `None`
-- **Work items addressed**: user stories or work-unit numbers from the parent plan that this slice satisfies
-- **Reference artifacts**: contract sections, design frame IDs, ADRs, and other references from Step 3
-- **Screenshots**: when `ui-designs/` exists and the slice is UI-bearing, list the screenshot filenames that will be embedded in the issue body
+- **Depends on**: other work items in this file that must complete first, or `None`
+- **Plan reference**: the decisions or work units from the parent plan this work item satisfies (e.g., `D-3, D-7, Work Unit 2`)
+- **Reference artifacts**: contract sections, design frame IDs, ADRs, and other references from Step 4
+- **Design references**: when `ui-designs/` exists and the work item is UI-bearing, the screenshot filenames that will be referenced
 
-Wait for the user's confirmation before writing files or creating issues.
+Wait for the user's confirmation before writing files.
 
-### 7. Write work-item files
+### 8. Write the work-items file
 
-**Plan is a file:** write one `<repo-name>.work-items.md` file per affected repo, in the same folder as the plan file. File layout (title line, intro, preamble structure) is specified in [references/work-items-file-format.md](references/work-items-file-format.md). Slice template is [references/issue-template.md](references/issue-template.md).
+Write one `work-items.md` in the folder resolved in Step 2. The file layout (title line, intro, optional shared-artifacts preamble) is specified in [references/work-items-file-format.md](references/work-items-file-format.md). Each work item uses the template in [references/work-item-template.md](references/work-item-template.md).
+
+Write incrementally per the operating principle: write the title and intro first, then append each work item as it is finalized. Save after each.
+
+When the file is complete, give the user a short in-channel summary: the file path, the count of work items by type (HITL / AFK), and the next concrete action (typically "review the breakdown, then start the first AFK work item").

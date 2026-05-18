@@ -1,30 +1,27 @@
 # Work-items file format
 
-One file per affected repo, in the same folder as the plan, named `<repo-name>.work-items.md` (e.g., `my-repo.work-items.md`).
+The skill writes exactly one file, named `work-items.md`, in the folder resolved in Step 2 of the skill (the plan's folder, the context's location, or a confirmed best-guess folder). There is never more than one work-items file and the file is never split by repository.
 
 ## Title and intro
 
 ```
-# <repo-name> Work Items — <feature-name>
+# Work Items — <feature-or-effort-name>
 ```
 
-Followed by one intro paragraph linking the parent plan and noting:
+Followed by one intro paragraph linking the parent plan (or naming the source context when there is no plan file) and noting:
 
-> Issues are numbered `<SYM>-N` for cross-reference only; actual issue numbers come from the issue tracker on creation. Dependencies listed are within this repo only.
+> Work items are numbered `W-N` for cross-reference only. `Depends on` lines refer to other work items in this file.
 
-Link the parent plan once here. Do not relink it inside every slice.
+Link the parent plan once here. Do not relink it inside every work item.
 
-## Preamble (only when the plan touches more than one repo)
+## Shared reference artifacts preamble (only when an artifact applies to more than one work item)
 
-In order:
+When a single artifact (an API response envelope, an event payload shape, a shared-stylesheet notice, a design-frame-to-component mapping, an ADR pointer) applies to more than one work item in this file, cite it once in a **Shared reference artifacts** section immediately after the intro. Each entry is a relative link plus the anchor an implementer should jump to.
 
-1. **Prerequisites** *(required when this repo depends on external PRs or other-repo deliverables)* — external PRs or cross-repo deliverables whose state must be verified before picking up any slice in this file.
-2. **Cross-repo integration points** *(required)* — a table of what this repo emits/exposes, which other-repo component consumes it, and the downstream slice that does the consuming. Immediately after the table, include a one-paragraph **Precedence rule**:
-   > If a per-ticket `Depends on` line conflicts with this table, this table wins for upstream-vs-downstream ownership. Per-ticket `Depends on` is a within-repo ordering hint only.
-3. **Shared reference artifacts** *(required when any artifact applies to more than one slice in this file)* — API response envelopes, event payload shapes, shared-stylesheet notices, design-frame-to-component mappings (Pencil document path + frame IDs), ADR pointers. Each entry is a relative link plus the anchor an implementer should jump to.
+The preamble stays in the work-items file and is **not** duplicated into each work item body. Each work item body still carries its own `**References.**` block — a work item reference can point into a shared-artifacts entry by anchor when the artifact is shared, but the bullets in the work item itself are what the implementer reads.
 
-## Slices
+Omit the preamble entirely when no artifact applies to more than one work item.
 
-Every slice uses the template at [issue-template.md](issue-template.md).
+## Work items
 
-The preamble (Prerequisites, Cross-repo integration points + Precedence rule, Shared reference artifacts) stays in the work-items file and is **not** duplicated into each issue body. Each issue body still carries its own `**References.**` block — slice references can point into the preamble's shared-artifacts entries by anchor when the artifact is shared, but the bullets in the slice itself are what the implementer reads on the issue.
+Every work item uses the template at [work-item-template.md](work-item-template.md). Work items appear in dependency order: a work item never appears before a work item it depends on.
