@@ -1,30 +1,45 @@
-| name | issue-triage |
-| --- | --- |
-| description | Triage a raw, vague issue or bug report into a structured document that names what is known, what is missing, and what to do next. Use when an incoming issue, bug report, or problem description is too vague or incomplete for investigation or planning: classify the issue type, identify missing information, assess severity and reproducibility, and recommend the right next han skill. Does not investigate root causes or trace code paths; use investigate for debugging, diagnosis, and root cause analysis. Does not plan features or build solutions; use plan-a-feature or plan-implementation for that. |
-| allowed-tools | Read, Write |
+---
+name: issue-triage
+description: >
+  Triage a raw, vague issue or bug report into a structured document that names
+  what is known, what is missing, and what to do next. Use when an incoming
+  issue, bug report, or problem description is too vague or incomplete for
+  investigation or planning: classify the issue type, identify missing
+  information, assess severity and reproducibility, and recommend the right next
+  han skill. Does not investigate root causes or trace code paths — use
+  investigate for debugging, diagnosis, and root cause analysis. Does not plan
+  features or build solutions — use plan-a-feature or plan-implementation for
+  that.
+argument-hint: "[issue text, bug report, or path to a report file; optional output path]"
+allowed-tools: Read, Write, Bash(find *), Bash(mkdir *)
+---
 
 ## Project Context
 
 - CLAUDE.md: !`find . -maxdepth 1 -name "CLAUDE.md" -type f`
+- project-discovery.md: !`find . -maxdepth 3 -name "project-discovery.md" -type f`
 
 ## Triage Approach
 
-- Work only from what the reporter wrote. Do not infer facts that are not stated.
-- For Expected Behavior and Suspected Areas, do not fill gaps with assumed intent or codebase guesses.
+- Work only from what the reporter wrote. Do not infer facts that are not stated. This is the single most important constraint in this skill.
 - Classify the issue type before doing anything else. The type drives what counts as missing information.
-- Severity is an estimate based on what is known. Mark it Unknown when impact is not inferable from the report.
-- The recommended next step is the single most appropriate han skill to run after triage completes.
-- Read CLAUDE.md only to inform Suspected Areas. Do not use it to fill gaps the reporter did not provide.
+- Severity and reproducibility are estimates based on what is known. Mark them Unknown when not inferable from the report.
+- The recommended next step is the single most appropriate han skill (or "clarify with reporter") to run after triage completes.
+- Project context (CLAUDE.md, project-discovery.md) is read only to identify Suspected Areas. Never use it to supply information the reporter omitted.
 
 # Issue Triage
 
-## Step 1: Read Project Context
+## Step 0: Resolve the Issue Text
 
-Read CLAUDE.md if present. Use it to identify relevant system areas when populating Suspected Areas. Do not use it to supply information the reporter omitted.
+Determine the issue text from the argument:
 
-## Step 2: Classify the Issue
+- If the argument is a path to an existing file, read that file; its contents are the issue text.
+- Otherwise the argument text itself is the issue text.
+- If no argument was given and no issue text is present in the conversation, ask the reporter to paste the issue or bug report, then stop until they provide it.
 
-Determine the issue type from the report text:
+## Step 1: Classify the Issue
+
+Determine the issue type from the report text. Choose exactly one:
 
 - **Bug** — something is broken or behaving unexpectedly
 - **Feature Request** — something new is being asked for
@@ -34,15 +49,15 @@ Determine the issue type from the report text:
 - **Question** — the reporter is asking how something works, not reporting a problem
 - **Other** — none of the above apply
 
-## Step 3: Extract What Is Known
+## Step 2: Extract What Is Known
 
 From the report, identify:
 
 - **Summary** — one sentence describing the problem in plain terms
-- **Reported Behavior** — what the reporter said happened, in their words or close paraphrase
+- **Reported Behavior** — what the reporter said happened, in their words or a close paraphrase
 - **Expected Behavior** — what the reporter said should happen; if not stated, mark Unknown
 
-## Step 4: Identify Missing Information
+## Step 3: Identify Missing Information
 
 List what a developer would need to reproduce or investigate this issue that is absent from the report. Common gaps by issue type:
 
@@ -51,11 +66,9 @@ List what a developer would need to reproduce or investigate this issue that is 
 - **Security** — affected endpoints or data, attack surface description, access level required to trigger
 - **Feature Request** — use case or job to be done, success criteria, constraints
 
-List only what is genuinely absent. Do not list information already present in the report.
+List only what is genuinely absent. Do not list information already present in the report. If nothing is missing, write exactly: `None - report has enough to proceed.`
 
-If nothing is missing, write: `None - report has enough to proceed.`
-
-## Step 5: Assess Severity and Reproducibility
+## Step 4: Assess Severity and Reproducibility
 
 **Severity** (estimate from what is known):
 
@@ -72,52 +85,28 @@ If nothing is missing, write: `None - report has enough to proceed.`
 - **Rare** — reported once or infrequently; hard to reproduce
 - **Unknown** — not stated in the report
 
-## Step 6: Identify Suspected Areas
+## Step 5: Identify Suspected Areas
 
-If the report or project context points to specific system areas, list them. Examples: upload pipeline, authentication middleware, database migrations, frontend state management. Do not infer areas that are not mentioned. If nothing in the report or CLAUDE.md points to a specific area, omit this section.
+If the report points to a specific system area, list it. Then, only to sharpen those areas, consult project context: if the `CLAUDE.md` label is non-empty, read it; if the `project-discovery.md` label is non-empty, read it (it is the richer system map when present). Use them to name relevant areas such as upload pipeline, authentication middleware, database migrations, or frontend state management.
+
+Do not infer areas the report does not point to, and never use project context to supply information the reporter omitted. If both `CLAUDE.md` and `project-discovery.md` are absent or empty, or nothing in the report points to a specific system area, omit the Suspected Areas section entirely and continue.
+
+## Step 6: Determine the Recommended Next Step
+
+Decide the single recommendation using the issue type from Step 1 and the gaps from Step 3:
+
+- **Bug, Regression, Performance, or Security** — if reproduction steps, environment details (OS, browser, version), or user-impact scope are missing, the recommendation is `Clarify with reporter before proceeding`. Otherwise it is `/investigate`.
+- **Feature Request** — if the use case (job to be done) or success criteria are missing, the recommendation is `Clarify with reporter before proceeding`. Otherwise, if the feature is described but not yet specified, it is `/plan-a-feature`; if requirements are already specified, it is `/plan-implementation`.
+- **Question** — if the report plus project context is enough to answer it, the recommendation is `Answer the question directly; no han skill needed`. Otherwise it is `Clarify with reporter before proceeding`.
+- **Other** — the recommendation is `Clarify with reporter before proceeding`.
 
 ## Step 7: Write the Triage Report
 
-Write the report to `~/.claude/triages/{kebab-case-summary}.md` unless the user specified a path.
+Resolve the output path:
 
-Use this structure:
+- If the user specified an output path, use it.
+- Otherwise use `$HOME/.claude/triages/{kebab-case-summary}.md`, where `{kebab-case-summary}` is the Step 2 Summary lowercased with non-alphanumeric runs replaced by single hyphens.
 
-```md
-# Summary
+Run `mkdir -p` on the directory that will contain the file (for the default, `mkdir -p "$HOME/.claude/triages"`). Write the report using the template at [template.md](references/template.md), filling every section from Steps 1-6 and writing the Step 6 result verbatim into Recommended Next Step. Omit the Suspected Areas section if Step 5 determined nothing is inferable.
 
-{one sentence}
-
-# Issue Type
-
-{type}
-
-# Reported Behavior
-
-{what the reporter said happened}
-
-# Expected Behavior
-
-{what should happen, or Unknown}
-
-# Missing Information
-
-{bulleted list, or "None - report has enough to proceed."}
-
-# Suspected Areas
-
-{bulleted list — omit section if nothing is inferable}
-
-# Severity
-
-{Critical | High | Medium | Low | Unknown}
-
-# Reproducibility
-
-{Always | Intermittent | Rare | Unknown}
-
-# Recommended Next Step
-
-{If any of these are missing, write "Clarify with reporter before proceeding": reproduction steps, environment details (OS, browser, version), or the user-impact scope. Otherwise choose the single most appropriate skill: /investigate, /plan-a-feature, or /plan-implementation.}
-```
-
-Present the triage report to the user.
+Present the completed triage report to the user.
