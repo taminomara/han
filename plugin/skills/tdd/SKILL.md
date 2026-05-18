@@ -6,12 +6,12 @@ description: >
   red-green-refactor with an enforced observed-failure gate. Use when the user
   wants to implement, build, or write code test-first, "do TDD", follow
   "red-green-refactor", drive code from tests, or grow a feature
-  behavior-by-behavior with tests leading. Does not produce a test plan
-  document — use test-planning for that. Does not review or audit existing
-  code — use code-review. Does not specify what a feature should do — use
-  plan-a-feature. Does not debug a failure to find a root cause — use
-  investigate. Applies the project's coding standards and ADRs during the green
-  and refactor steps, and enforces YAGNI during refactor.
+  behavior-by-behavior with tests leading. This skill writes and changes code;
+  it does not produce a test plan document (use test-planning), review or audit
+  existing code (use code-review), specify what a feature should do (use
+  plan-a-feature), or find the root cause of a bug (use investigate). It applies
+  the project's coding standards and ADRs during the green and refactor steps,
+  and enforces YAGNI during refactor.
 argument-hint: "[what to build, a behavior to drive, or a path to a spec/plan]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(git *), Bash(find *), Bash(npm *), Bash(npx *), Bash(pnpm *), Bash(yarn *), Bash(pytest *), Bash(python3 *), Bash(go *), Bash(cargo *), Bash(make *), Bash(bundle *), Bash(rake *), Bash(mix *), Bash(dotnet *), Bash(gradle *), Bash(mvn *)
 ---
