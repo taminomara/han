@@ -88,6 +88,7 @@ URL: https://en.wikipedia.org/wiki/Stephen_Toulmin#The_Toulmin_model_of_argument
 ## Related documentation
 
 - [Plugin landing page](../../README.md). The front door. Start here if you arrived from outside the docs tree.
+- [Agents Index](./README.md). All 22 agents, grouped by role.
 - [YAGNI](../yagni.md). The evidence-based "You Aren't Gonna Need It" rule the agent applies to the options landscape.
 - [`adversarial-validator`](./adversarial-validator.md). The agent that attacks this agent's landscape and recommendation; they pair in `/research`.
 - [`evidence-based-investigator`](./evidence-based-investigator.md). The symptom-shaped counterpart for codebase bug evidence.

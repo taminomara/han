@@ -8,6 +8,7 @@ New to the han plugin? Pick the path that matches what you are trying to do righ
 
 - **[Plan a new feature](#path-a--plan-a-new-feature).** You have an idea for a feature and need to figure out what it should do, how to build it, and then build it test-first.
 - **[Investigate a bug or failure](#path-b--investigate-a-bug-or-failure).** Something is broken or behaving oddly and you need a root cause.
+- **[Research your options](#path-e--research-your-options-before-you-commit).** Nothing is broken; you have a question and want the options, prior art, and a recommendation before you commit.
 - **[Review code or architecture](#path-c--review-code-or-architecture).** You want a second set of eyes on a branch, a PR, or an existing module.
 - **[Set up a project for everything else](#path-d--set-up-a-project-for-everything-else).** You want to document your project, formalize standards, and give every other skill richer context.
 
@@ -72,6 +73,17 @@ Every other path works better when the plugin has rich context about your projec
 
 ---
 
+## Path E: Research your options before you commit
+
+You have a question, not a bug and not yet a feature. You want the options, the prior art, and a recommendation you can trust before you pick a direction.
+
+1. **[`/research`](./skills/research.md).** Research the open-ended question across the codebase, the open web, and any material you provide. Produces a report: the framed question, numbered evidence each with a checkable source, an options landscape with trade-offs, a recommended option, and `adversarial-validator` findings that already tried to break the recommendation. Scales with [size](./sizing.md), defaulting to small.
+2. **[`/plan-a-feature`](./skills/plan-a-feature.md)** *(optional).* Once `/research` recommends an option, turn that decision into a behavioral specification.
+
+**You are done when:** you have a research report whose recommendation survived an adversarial pass, with every claim tied to a source you can check yourself. If the request was really a bug, a spec, a standard, an artifact comparison, or an architecture assessment, `/research` routes you to the skill that owns it instead.
+
+---
+
 ## Combining paths
 
 You can reference multiple skills in one prompt and Claude runs them in sequence, feeding each one's output into the next. A few that work:
@@ -81,12 +93,13 @@ You can reference multiple skills in one prompt and Claude runs them in sequence
 - *"Review my branch, then create an ADR for any architectural decisions in the diff."* → [`/code-review`](./skills/code-review.md) → [`/architectural-decision-record`](./skills/architectural-decision-record.md).
 - *"Plan the retry feature, then plan the implementation, then create a test plan for it."* → [`/plan-a-feature`](./skills/plan-a-feature.md) → [`/plan-implementation`](./skills/plan-implementation.md) → [`/test-planning`](./skills/test-planning.md).
 - *"Spec the discount engine, then build it test-first."* → [`/plan-a-feature`](./skills/plan-a-feature.md) → [`/tdd`](./skills/tdd.md) → [`/code-review`](./skills/code-review.md).
+- *"Research our options for background jobs, then spec the one you recommend."* → [`/research`](./skills/research.md) → [`/plan-a-feature`](./skills/plan-a-feature.md).
 - *"Compare the auth implementation to the auth spec, then plan how to close the gaps, finishing with splitting that work up into task-sized units."* → [`/gap-analysis`](./skills/gap-analysis.md) → [`/plan-implementation`](./skills/plan-implementation.md) → [`/plan-work-items`](./skills/plan-work-items.md).
 - *"Compare the share v1 implementation to the share v2 spec, split the gaps into a phased rollout, then plan implementation for the first phase, finally laying out individual tasks based on that plan."* → [`/gap-analysis`](./skills/gap-analysis.md) → [`/plan-a-phased-build`](./skills/plan-a-phased-build.md) → [`/plan-implementation`](./skills/plan-implementation.md) → [`/plan-work-items`](./skills/plan-work-items.md).
 
 ## A note on sizing
 
-Six skills (`/architectural-analysis`, `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, `/plan-implementation`) classify the work as **small**, **medium**, or **large** before dispatching agents, default to small, and scale the team and iteration depth to the chosen band. Pass the size as the first positional argument to override (`/code-review medium`, `/plan-a-feature large "describe the feature"`). See [Sizing](./sizing.md) for the full model.
+Seven skills (`/architectural-analysis`, `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, `/plan-implementation`, `/research`) classify the work as **small**, **medium**, or **large** before dispatching agents, default to small, and scale the team and iteration depth to the chosen band. Pass the size as the first positional argument to override (`/code-review medium`, `/plan-a-feature large "describe the feature"`). See [Sizing](./sizing.md) for the full model.
 
 ## A note on YAGNI
 

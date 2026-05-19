@@ -17,8 +17,8 @@ Current version: **2.4.0** (see [CHANGELOG.md](./CHANGELOG.md)).
 ├── plugin/             # The actual plugin shipped to Claude Code
 │   ├── .claude-plugin/
 │   │   └── plugin.json
-│   ├── agents/         # 21 agent definitions (.md with frontmatter)
-│   ├── skills/         # 18 skill directories, each with SKILL.md + references/
+│   ├── agents/         # 22 agent definitions (.md with frontmatter)
+│   ├── skills/         # 19 skill directories, each with SKILL.md + references/
 │   └── references/     # Cross-skill reference files (e.g. yagni-rule.md)
 ├── docs/               # Operator-facing documentation
 │   ├── writing-voice.md   # Voice profile every doc follows
@@ -26,8 +26,8 @@ Current version: **2.4.0** (see [CHANGELOG.md](./CHANGELOG.md)).
 │   ├── quickstart.md
 │   ├── sizing.md
 │   ├── yagni.md
-│   ├── agents/         # Long-form docs for all 21 agents, plus README
-│   ├── skills/         # Long-form docs for all 18 skills, plus README
+│   ├── agents/         # Long-form docs for all 22 agents, plus README
+│   ├── skills/         # Long-form docs for all 19 skills, plus README
 │   ├── guidance/       # Contributor-facing authoring guidance
 │   └── templates/      # Templates and coverage rule for long-form docs
 └── images/             # Banner and graphics for README
@@ -56,7 +56,7 @@ The plugin is shipped from `plugin/`; documentation lives in `docs/`. Long-form 
 
 ### Skill catalog (`docs/skills/`)
 
-- **[docs/skills/README.md](./docs/skills/README.md).** Index of all 18 skills grouped by purpose (planning, building, investigation, review, discovery, conventions, reporting). Start here when looking for the right slash command.
+- **[docs/skills/README.md](./docs/skills/README.md).** Index of all 19 skills grouped by purpose (planning, building, investigation and research, review, discovery, conventions, reporting). Start here when looking for the right slash command.
 - **[docs/skills/plan-a-feature.md](./docs/skills/plan-a-feature.md).** Spec a feature from scratch through an evidence-based interview that walks the design tree and dispatches specialist reviewers.
 - **[docs/skills/plan-implementation.md](./docs/skills/plan-implementation.md).** Turn a feature specification into an implementation plan through a project-manager-led team conversation.
 - **[docs/skills/plan-a-phased-build.md](./docs/skills/plan-a-phased-build.md).** Split a body of context (gap analysis, PRD, design doc) into a numbered sequence of vertical-slice phases, each independently demoable.
@@ -65,6 +65,7 @@ The plugin is shipped from `plugin/`; documentation lives in `docs/`. Long-form 
 - **[docs/skills/tdd.md](./docs/skills/tdd.md).** Drive a feature or behavior through a BDD-framed red-green-refactor loop with an enforced observed-failure gate. The plugin's only execution skill: it writes code, applying coding standards and ADRs in green and refactor.
 - **[docs/skills/issue-triage.md](./docs/skills/issue-triage.md).** Classify a vague issue or bug report, identify missing information, assess severity and reproducibility, and recommend the right next skill.
 - **[docs/skills/investigate.md](./docs/skills/investigate.md).** Evidence-based investigation of bugs, failures, and unexpected behavior, with adversarial validation of the proposed fix.
+- **[docs/skills/research.md](./docs/skills/research.md).** Research an open-ended question (options, prior art, how something works) across the codebase and the open web, ending at an adversarially-validated recommendation. The question-shaped sibling of investigate.
 - **[docs/skills/code-review.md](./docs/skills/code-review.md).** Comprehensive code review of the current branch or specified files. Dispatches a domain-aware roster that scales with sizing.
 - **[docs/skills/gh-pr-review.md](./docs/skills/gh-pr-review.md).** Run `/code-review` against a GitHub PR and post the review as comments after a clarity check.
 - **[docs/skills/architectural-analysis.md](./docs/skills/architectural-analysis.md).** Deep architectural analysis of a module: coupling, data flow, concurrency, risk, and SOLID alignment.
@@ -78,15 +79,15 @@ The plugin is shipped from `plugin/`; documentation lives in `docs/`. Long-form 
 
 ### Agent catalog (`docs/agents/`)
 
-- **[docs/agents/README.md](./docs/agents/README.md).** Index of all 21 agents grouped by role (planning, adversarial review, investigation, architecture, testing, gap/content). Start here when looking for the right sub-agent to dispatch directly.
+- **[docs/agents/README.md](./docs/agents/README.md).** Index of all 22 agents grouped by role (planning, adversarial review, investigation, architecture, testing, gap/content). Start here when looking for the right sub-agent to dispatch directly.
 
-Every agent has a long-form doc under `docs/agents/`. The 21 agents:
+Every agent has a long-form doc under `docs/agents/`. The 22 agents:
 
 Planning & facilitation: `project-manager`, `junior-developer`.
 
 Adversarial reviewers: `adversarial-security-analyst`, `adversarial-validator`, `devops-engineer`, `data-engineer`, `information-architect`, `user-experience-designer`.
 
-Investigation & evidence: `evidence-based-investigator`, `codebase-explorer`, `project-scanner`.
+Investigation & evidence: `evidence-based-investigator`, `research-analyst`, `codebase-explorer`, `project-scanner`.
 
 Architecture & risk: `structural-analyst`, `behavioral-analyst`, `concurrency-analyst`, `risk-analyst`, `software-architect`, `system-architect`.
 
@@ -126,4 +127,4 @@ Subdirectories:
 - **Every long-form doc links up.** The first bullet of the "Related Documentation" section always points back to the README at the repo root.
 - **Voice is uniform.** Every doc follows [docs/writing-voice.md](./docs/writing-voice.md). No em-dashes, direct second person, no flattery or hype.
 - **YAGNI applies to docs too.** Don't add speculative sections, for-future-flexibility warnings, or examples for behavior the skill doesn't have. The same evidence rule that gates plan steps gates docs.
-- **Counts to verify when editing indexes.** 21 agents in `plugin/agents/`; 18 skills in `plugin/skills/`; 21 long-form agent docs in `docs/agents/`; 18 long-form skill docs in `docs/skills/`.
+- **Counts to verify when editing indexes.** 22 agents in `plugin/agents/`; 19 skills in `plugin/skills/`; 22 long-form agent docs in `docs/agents/`; 19 long-form skill docs in `docs/skills/`.

@@ -118,7 +118,7 @@ URL: https://hbr.org/2007/09/performing-a-project-premortem
 ## Related documentation
 
 - [Plugin landing page](../../README.md). The front door. Start here if you arrived from outside the docs tree.
-- [Skills Index](./README.md). All skills, grouped by purpose.
+- [Skills Index](./README.md). All 19 skills, grouped by purpose.
 - [YAGNI](../yagni.md). The evidence-based "You Aren't Gonna Need It" rule the skill applies to the options landscape.
 - [`/investigate`](./investigate.md). The symptom-shaped sibling. Use it when something is broken; use `/research` when you have a question.
 - [`/plan-a-feature`](./plan-a-feature.md). Pair downstream: turn a recommended option into a behavioral spec.

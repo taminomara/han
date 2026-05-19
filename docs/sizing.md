@@ -1,6 +1,6 @@
 # Sizing
 
-Sizing is one of the two foundational mechanics of the han plugin. Every skill that dispatches a swarm of specialist agents (`/architectural-analysis`, `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, `/plan-implementation`) first classifies the work as **small**, **medium**, or **large**, then uses that classification to decide how many agents to dispatch, which agents to dispatch, how many rounds to iterate, and how aggressively to calibrate findings.
+Sizing is one of the two foundational mechanics of the han plugin. Every skill that dispatches a swarm of specialist agents (`/architectural-analysis`, `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, `/plan-implementation`, `/research`) first classifies the work as **small**, **medium**, or **large**, then uses that classification to decide how many agents to dispatch, which agents to dispatch, how many rounds to iterate, and how aggressively to calibrate findings.
 
 > See also: [Plugin landing page](../README.md) · [Concepts](./concepts.md) · [YAGNI](./yagni.md) · [All skills](./skills/README.md) · [All agents](./agents/README.md)
 
@@ -79,6 +79,7 @@ When the size is overridden with `$size`:
 | [`/iterative-plan-review`](./skills/iterative-plan-review.md) | Lightweight vs team mode + team size + round cap | 2–3 files, single system (lightweight, 1 round) | 3–5 files, one cross-cutting concern (team, 3–4, 2 rounds) | More than 5 files, multiple systems (team, 4–5, 3 rounds) |
 | [`/plan-a-feature`](./skills/plan-a-feature.md) | Review-team size cap | Single subsystem (team cap 2) | Two to three subsystems (team cap 3–4) | Cross-service or security-sensitive (team cap 4–5) |
 | [`/plan-implementation`](./skills/plan-implementation.md) | Implementation-team size + round cap | Single subsystem (team cap 3, 1 round) | Two to three subsystems (team cap 4–5, 2 rounds) | Cross-service or security-sensitive (team cap 6–8, 3 rounds) |
+| [`/research`](./skills/research.md) | Research-analyst angle count + reach | One domain, few or no options, narrow reach (2–3 agents) | Two to three domains or several options, codebase-plus-web reach (3–5 agents) | Many options across multiple domains, or full-breadth request (5–8 agents) |
 
 Read each skill's **Sizing** section for the full per-skill rules.
 

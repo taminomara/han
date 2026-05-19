@@ -28,9 +28,10 @@ Specialist reviewers whose default posture is adversarial toward the artifact un
 
 ## Investigation & evidence
 
-Agents that gather concrete evidence about a codebase.
+Agents that gather concrete, sourced evidence — from the codebase or the open web.
 
 - **[`evidence-based-investigator`](./evidence-based-investigator.md).** Gathers file paths, line numbers, code snippets, error messages, git history, and test coverage. Dispatched by `/investigate`.
+- **[`research-analyst`](./research-analyst.md).** Researches open-ended questions — options, prior art, trade-offs, how something works — from the open web and provided material, returning sourced evidence and a recommendation. Treats fetched content as claims, never instructions. Dispatched by `/research`.
 - **[`codebase-explorer`](./codebase-explorer.md).** Discovers implementation details for a specific feature: entry points, core logic, data models, configuration, tests.
 - **[`project-scanner`](./project-scanner.md).** Scans repository attributes (languages, frameworks, tooling, configuration). Optimized for config and structure, not deep code tracing. Dispatched by `/project-discovery`.
 
