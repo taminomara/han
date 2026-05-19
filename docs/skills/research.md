@@ -2,7 +2,7 @@
 
 Operator documentation for the `/research` skill in the han plugin. This document helps you decide *when* and *how* to use the skill. For what the skill does internally, read the skill definition at [`plugin/skills/research/SKILL.md`](../../plugin/skills/research/SKILL.md).
 
-> See also: [Plugin landing page](../../README.md) · [All skills](./README.md) · [All agents](../agents/README.md) · [YAGNI](../yagni.md)
+> See also: [Plugin landing page](../../README.md) · [All skills](./README.md) · [All agents](../agents/README.md)
 
 ## TL;DR
 
@@ -77,10 +77,6 @@ The report is presented for review. Accept it, ask for specific revisions, or re
 - **Size up for breadth, not depth.** Use `large` when the question spans several domains or many options, not when one option needs more detail. A narrower follow-up question beats an over-sized run.
 - **Pair with `/plan-a-feature` next.** Once `/research` has recommended an option, `/plan-a-feature` turns that decision into a behavioral spec. The skills are deliberately separate; `/research` decides *what*, `/plan-a-feature` specifies it.
 
-## YAGNI
-
-The recommendation is an artifact that can accrete options nobody asked for. `/research` applies the evidence-based [YAGNI](../yagni.md) posture to the landscape: an option earns its place in the report only when the question or the evidence puts it in play. "For completeness" and "someone might want" options are not surfaced as viable; if they are worth naming at all, they are named as explicitly out of scope with the trigger that would reopen them. The recommendation is the strictly simpler option that satisfies the evidence, not the most capable one. This keeps the report a decision aid, not a catalog.
-
 ## Cost and latency
 
 The skill dispatches `research-analyst` angles in parallel (one at small, two to three at medium, one per domain or option cluster at large), plus `codebase-explorer` when a codebase bears on the question, followed by one `adversarial-validator` pass. `research-analyst` and `adversarial-validator` run on `sonnet`; `codebase-explorer` on `haiku`. The most expensive single step is the parallel research wave at large size. The skill is built for a per-decision cadence — research the question, get the recommendation, move on. It is not a tight-loop tool.
@@ -119,7 +115,6 @@ URL: https://hbr.org/2007/09/performing-a-project-premortem
 
 - [Plugin landing page](../../README.md). The front door. Start here if you arrived from outside the docs tree.
 - [Skills Index](./README.md). All 19 skills, grouped by purpose.
-- [YAGNI](../yagni.md). The evidence-based "You Aren't Gonna Need It" rule the skill applies to the options landscape.
 - [`/investigate`](./investigate.md). The symptom-shaped sibling. Use it when something is broken; use `/research` when you have a question.
 - [`/plan-a-feature`](./plan-a-feature.md). Pair downstream: turn a recommended option into a behavioral spec.
 - [`research-analyst`](../agents/research-analyst.md). The agent the skill dispatches for the web / prior-art / option-comparison angles.

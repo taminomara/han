@@ -2,7 +2,7 @@
 
 Operator documentation for the `research-analyst` agent in the han plugin. This document helps you decide *when* and *how* to dispatch the agent. For what the agent does internally, read the agent definition at [`plugin/agents/research-analyst.md`](../../plugin/agents/research-analyst.md).
 
-> See also: [Plugin landing page](../../README.md) · [All agents](./README.md) · [All skills](../skills/README.md) · [YAGNI](../yagni.md)
+> See also: [Plugin landing page](../../README.md) · [All agents](./README.md) · [All skills](../skills/README.md)
 
 ## TL;DR
 
@@ -57,10 +57,6 @@ A numbered evidence list (E1, E2, …), each with a Source line (URL plus retrie
 - **Expect single-source caveats.** When the agent flags a claim as single-source, that is the agent working correctly, not a gap to paper over. Corroborate it or treat the recommendation as provisional.
 - **Pair with `adversarial-validator`.** The analyst produces the landscape; the validator attacks it. They are dispatched in sequence by `/research`, and the pairing is what turns a first-pass survey into a defensible recommendation.
 
-## YAGNI
-
-The options landscape is exactly the kind of artifact that accretes alternatives nobody asked for. The agent applies the [YAGNI](../yagni.md) posture: an option is surfaced as viable only when the question or the evidence puts it in play. Options that exist only "for completeness" are named as out of scope, not presented as live choices, and the recommendation is the strictly simpler option that satisfies the evidence rather than the most capable one. Strawman options — described only well enough to lose — are an explicit anti-pattern the agent guards against.
-
 ## Cost and latency
 
 Runs on `sonnet`. Research synthesis is judgment-heavy, so the model tier matches `evidence-based-investigator` and `adversarial-validator`. Web search and fetch make it slower than a pure codebase agent; dispatch several in parallel for breadth rather than running one analyst across many domains in series. It is a per-question agent, not a tight-loop one.
@@ -89,7 +85,6 @@ URL: https://en.wikipedia.org/wiki/Stephen_Toulmin#The_Toulmin_model_of_argument
 
 - [Plugin landing page](../../README.md). The front door. Start here if you arrived from outside the docs tree.
 - [Agents Index](./README.md). All 22 agents, grouped by role.
-- [YAGNI](../yagni.md). The evidence-based "You Aren't Gonna Need It" rule the agent applies to the options landscape.
 - [`adversarial-validator`](./adversarial-validator.md). The agent that attacks this agent's landscape and recommendation; they pair in `/research`.
 - [`evidence-based-investigator`](./evidence-based-investigator.md). The symptom-shaped counterpart for codebase bug evidence.
 - [`/research`](../skills/research.md). The skill that dispatches this agent.
