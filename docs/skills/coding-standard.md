@@ -62,6 +62,20 @@ A coding-standard document in the project's coding-standards directory, plus int
 - **Cross-references.** Links to related standards, ADRs, and feature docs, added bidirectionally.
 - **Source-document handling** (conversion mode). If the source is fully subsumed, it is deleted and references updated. If it retains useful content, a link to the new standard is added.
 
+## Why the canonical doc lives in `docs/` and a symlink lives in `.claude/rules/`
+
+Plain-language version of the design choice, for anyone who reads a new standard and wonders why the file is in two places.
+
+**One file. Two ways to find it.** The actual standard is a single readable document under your project's coding-standards directory (usually `docs/coding-standards/`). That is the only copy. The file under `.claude/rules/coding-standards/` is a symlink — a pointer back to that one canonical file, not a second copy. Edit either path; you are editing the same file.
+
+**Why not just store the standards inside `.claude/rules/`?** Because `.claude/` is a directory most teams treat as tool configuration, not human-readable documentation. Standards are documents people open in pull request reviews, link from onboarding pages, and read on GitHub. They belong in `docs/`. The symlink lets Claude Code find them through its rules surface without dragging the source-of-truth out of the docs tree.
+
+**Why not duplicate the file into both places?** Because two copies drift. The first time someone fixes a typo in one but not the other, the standard quietly forks. A symlink makes drift impossible: there is one file, and both access paths resolve to it.
+
+**Why a symlink instead of an enumerated link in `CLAUDE.md`?** Claude Code's path-scoped rules (see [Claude Code memory](https://code.claude.com/docs/en/memory)) load a rule only when a file matching its `paths:` glob is read. A standard about Go service code, scoped to `**/*.go`, will not load when you are editing a TypeScript file — so it does not bloat session startup. An enumerated link in `CLAUDE.md` loads on every session whether the standard is relevant or not. The symlink + `paths:` model keeps context small and load-on-demand.
+
+**What the skill does and does not touch in `CLAUDE.md`/`AGENTS.md`.** It will add a short pointer paragraph once, only if the memory file does not already mention `.claude/rules/coding-standards/`. It never adds an enumerated link for the new standard. Pre-existing enumerated entries from earlier versions of this skill are left alone — migrating them out is a separate one-time operation, not the skill's job.
+
 ## How to get the most out of it
 
 - **Run `/project-discovery` first.** The skill reads CLAUDE.md's Project Discovery section to find the coding-standards directory, the language, and the documentation root. Without discovery, it falls back to Glob defaults.

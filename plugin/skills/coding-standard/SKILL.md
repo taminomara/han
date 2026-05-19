@@ -21,7 +21,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(git config *), Bash(wh
 - CLAUDE.md: !`find . -maxdepth 1 -name "CLAUDE.md" -type f`
 - AGENTS.md: !`find . -maxdepth 1 -name "AGENTS.md" -type f`
 - project-discovery.md: !`find . -maxdepth 3 -name "project-discovery.md" -type f`
-- Rules directory: !`find .claude/rules/coding-standards -maxdepth 1 -type d 2>/dev/null || echo "absent"`
+- Rules directory: !`find . -maxdepth 4 -type d -path "*/.claude/rules/coding-standards"`
 
 ## Step 1: Determine Mode
 
