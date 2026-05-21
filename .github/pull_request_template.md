@@ -9,6 +9,8 @@ https://github.com/testdouble/han/blob/main/docs/skills/update-pr-description.md
 
 Work through this checklist before marking the PR ready. Leave it in the PR body while drafting; remove it once `/update-pr-description` has written the final description.
 
+**Do not bump the plugin version and do not edit `CHANGELOG.md` in this PR.** Both are handled by the `/han-release` skill when a release is cut. If your branch contains version or changelog changes, revert them before requesting review.
+
 ### Review the changes against project guidance
 
 - [ ] Read [CONTRIBUTING.md](../CONTRIBUTING.md) and confirm the changes follow the rules for the entity being touched (skill, agent, long-form doc, index, template).
