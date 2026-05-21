@@ -19,6 +19,10 @@ Work through this checklist before marking the PR ready. Leave it in the PR body
 - [ ] If the change touches plugin behavior, run the affected skill or agent locally and confirm it still works end-to-end.
 - [ ] If the change affects `plugin/.claude-plugin/plugin.json` or `.claude-plugin/marketplace.json`, confirm both are consistent.
 
+### Refresh the documentation
+
+Run `/han-update-documentation` in Claude Code from this branch. The skill scopes its pass to the entities this branch touched, syncing the long-form docs, indexes, counts, and cross-references with the changes on disk so the PR ships with accurate documentation.
+
 ### Generate the PR description
 
 When the checklist above passes, run `/update-pr-description` in Claude Code from this branch. The skill reads the branch's committed changes, drafts a description that surfaces the central mechanism and key files, runs a reviewer-context check, and pushes the result to this PR via `gh pr edit`.
