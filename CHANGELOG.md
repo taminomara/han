@@ -1,5 +1,29 @@
 # Han Release Notes
 
+## v2.6.2
+
+This release bundles three refactors that tighten how shipped skills and the repo's own guidance load context. No new skills or agents ship, none are renamed or removed, and no user-visible skill behavior changes. Operators should notice `/tdd` consuming less context per invocation, `/coding-standard` writing index files instead of symlinks, and the repo's own `.claude/rules/` layout matching the index-file shape the skill now produces.
+
+### `/tdd` token optimization
+
+`plugin/skills/tdd/SKILL.md` is restructured so reference files load lazily at the point they are needed rather than upfront. Step 1 now caps standards and ADR loading by relevance, and the loop prohibits intra-loop file rereads in favor of offset reads after grep. Paste-output directives are constrained to diagnostic content only. The inline YAGNI paraphrase is dropped from the refactor step, deferring to the canonical rule in `plugin/skills/tdd/references/yagni-rule.md`. The Constraints section is trimmed to enforcement, with the canonical red-green-refactor description living in `plugin/skills/tdd/references/tdd-loop.md`. The description loses an internal-behavior sentence, and the allowed-tools list drops long-tail JVM, .NET, and Elixir runners. The net effect is a meaningfully smaller context footprint per `/tdd` invocation without changing the loop itself. (PR #13)
+
+### `/coding-standard` index-file mechanism
+
+`plugin/skills/coding-standard/SKILL.md` is rewritten so the skill produces per-file-type index files instead of symlinking guidance into place. Step 3 groups discovered globs into index-file buckets, Step 6 frames the paths-approval gate as index-file routing, and Step 7 creates or updates the per-file-type index files directly. The symlink-verification step is replaced with index-file checks. A new template lands at `plugin/skills/coding-standard/references/index-file-template.md` to render the index files consistently. Because symlinks are no longer the mechanism, `ln`, `test`, and `readlink` are removed from the skill's allowed-tools list. The long-form operator doc at `docs/skills/coding-standard.md` is updated to describe the new mechanism. (PR #14)
+
+### Repo-local rules realignment under `.claude/rules/`
+
+The per-topic guidance under `.claude/rules/skills/` and `.claude/rules/agents/` previously consisted of symlinks pointing at individual pages in `docs/guidance/skill-building-guidance/` and `docs/guidance/agent-building-guidelines/`. Those symlinks are deleted and replaced with two canonical index files: `.claude/rules/coding-standards/plugin-skills.md` and `.claude/rules/coding-standards/plugin-agents.md`. Each index lists and links the underlying topic guidance directly rather than mirroring each page as its own symlink. This brings the repo's own `.claude/rules/` layout in line with the index-file template that `/coding-standard` now produces, so Han's internal setup matches the mechanism the shipped skill writes for other projects. (PR #15)
+
+### Pull requests in this release
+
+- TDD skill: token optimization (#13) — @mxriverlynn
+- coding-standard skill: add per-file-type index-file template (#14) — @mxriverlynn
+- Updating skill / agent rules to be index files (#15) — @mxriverlynn
+
+Full changelog: https://github.com/testdouble/han/blob/v2.6.2/CHANGELOG.md#v262
+
 ## v2.6.1
 
 The plugin skill loader is fixed so all 20 shipped skills register correctly again. The pull request template gains explicit instructions for documentation sync and version ownership, and the banner image is refreshed for the white Test Double logo.
