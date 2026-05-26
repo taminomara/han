@@ -201,14 +201,10 @@ Eliminate the duplication you just created. Bring the code into full
 conformance with the resolved coding standards and ADRs — this is the home for
 the stylistic and structural standards you deliberately skipped in green.
 
-Apply YAGNI here as a first-class concern, per
-[../../references/yagni-rule.md](../../references/yagni-rule.md). Removing
-duplication is the job; adding speculative abstraction is not. One concrete
-implementation beats an interface with one implementation. "Duplication is a
-hint, not a command" — abstract only when two or more concrete examples force
-it (the Rule of Three). Structure added for future flexibility with no evidence
-is a YAGNI candidate: defer it with the trigger that would reopen it, and tell
-the user. Never silently add it, never silently drop it.
+Apply YAGNI per [../../references/yagni-rule.md](../../references/yagni-rule.md):
+remove duplication, do not add speculative abstraction. Defer speculative
+structure with the trigger that would reopen it; never add silently, never
+drop silently.
 
 Change no behavior. Re-run the full suite after the refactor. **Paste the
 runner's summary line** — paste full output only if something unexpected
