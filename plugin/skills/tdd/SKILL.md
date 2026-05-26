@@ -76,9 +76,13 @@ build commands for use in every later step.
 ADR directory the same way: read CLAUDE.md's `## Project Discovery` section;
 fall back to `project-discovery.md`; fall back to Glob defaults (`docs/`,
 `docs/adr/`, `docs/coding-standards/`, `docs/decisions/`). Also check
-`CLAUDE.md` and `AGENTS.md` for inline standards. Read what you find — these
-govern the green and refactor steps. If none exist, state that plainly and plan
-to infer conventions from the surrounding code instead.
+`CLAUDE.md` and `AGENTS.md` for inline standards. **Read the standards and
+ADRs whose titles, paths, or one-line summaries indicate they govern the area
+being built. Cap at five documents; if more than five look relevant, list them
+and read only the five with the strongest apparent relevance — defer the rest
+until refactor surfaces a need.** These govern the green and refactor steps.
+If none exist, state that plainly and plan to infer conventions from the
+surrounding code instead.
 
 **Report scope, then proceed (no gate).** This skill runs autonomously after
 the initial request: it does not stop for confirmation. State to the user, in a
