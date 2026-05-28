@@ -4,6 +4,8 @@ Han is built out of two kinds of things: **skills** and **agents**. If you read 
 
 > See also: [Plugin landing page](../README.md) · [Quickstart](./quickstart.md) · [All skills](./skills/README.md) · [All agents](./agents/README.md)
 
+> **Sizing question first.** Han is built for solo product engineers and small teams, not for large teams or enterprise. If you are evaluating it against an org-wide AI tooling decision, read [Why solo and small teams, and not large teams or enterprise?](./why-solo-and-small-teams.md) before going further. It answers the obvious sizing question honestly so you can self-select.
+
 ## TL;DR
 
 - A **skill** is a deterministic process you run with a slash command (like `/code-review`). Think: flowchart.
