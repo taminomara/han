@@ -32,6 +32,7 @@ A 20+ year on-call veteran that reads application source code in a change and pr
 - A retry loop, queue handler, fan-out, schema migration, or other classically-load-bearing pattern is being added or modified.
 - A junior engineer wants experienced on-call eyes on their change without having to interrupt a senior teammate.
 - A code review is being run via `/code-review` and the change touches application code that runs in production.
+- A planning or review skill (`/architectural-analysis`, `/plan-a-feature`, `/plan-implementation`, `/iterative-plan-review`, `/gap-analysis`) signals that application-source resilience patterns are in scope. The skill dispatches this agent for you when the focus area or plan touches the named patterns.
 
 **Do not dispatch for:**
 

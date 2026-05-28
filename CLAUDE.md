@@ -16,7 +16,7 @@ Han is a Claude Code plugin: a suite of skills and agents for solo (or small-tea
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── agents/         # 23 agent definitions (.md with frontmatter)
-│   ├── skills/         # 19 skill directories, each with SKILL.md + references/
+│   ├── skills/         # 20 skill directories, each with SKILL.md + references/
 │   └── references/     # Cross-skill reference files (e.g. yagni-rule.md)
 ├── docs/               # Operator-facing documentation
 │   ├── writing-voice.md   # Voice profile every doc follows

@@ -14,8 +14,8 @@ Operator documentation for the `/update-pr-description` skill in the han plugin.
 
 - **Central mechanism up front.** Feature flags, migrations, and behavioral changes lead the Summary. Code structure is summarized; runtime behavior is not.
 - **Reviewer context check before posting.** A `junior-developer` agent reads the drafted description as a reviewer without full project context, flagging buried mechanisms, undefined acronyms, missing per-environment values, and unverifiable Test Plan items before the description goes live.
-- **Test Plan is conditional.** If the branch only changes documentation, the Test Plan section is omitted. If any code or config file changed, it is included.
-- **Ten-file cap per table.** Key file changes and Test Files Changed tables are each capped at ten entries. Overflow becomes a "+N more files (see full diff)" row.
+- **"How this was tested" is conditional.** If the branch only changes documentation, the section is omitted. If any code or config file changed, it is included.
+- **Files of interest is a bulleted list, capped at five.** This section is a bulleted list of at most 5 entries, never a table. Each entry is `` `path` `` followed by a one-phrase reason the file matters for review. Generated files, mechanical refactors, trivial changes, and non-central test helpers are skipped.
 - **Branch-specific diff only.** The skill describes changes unique to the feature branch. Never changes pulled in from the default branch.
 - **gh CLI required.** Without `gh`, the skill stops immediately and tells you to install it.
 
@@ -50,12 +50,13 @@ Example prompts:
 
 ## What you get back
 
-A PR description rendered in-channel, optionally pushed to the open PR:
+A PR description rendered in-channel, optionally pushed to the open PR. Sections appear in this fixed order: Summary, What to look at first, How this was tested (when included), Files of interest, Test scenario changes (when tests were added or edited).
 
-- **Summary.** Leads with the central mechanism, followed by supporting context.
-- **Key file changes.** Table of up to ten files, each with a one-line description of what changed.
-- **Key test scenario changes.** Table of up to ten test files (only present when tests were added or edited).
-- **Test Plan.** Checkbox list of verification steps (only present when at least one code or configuration file changed; omitted for documentation-only branches).
+- **Summary.** Opens with a single bolded TL;DR sentence (`**This PR <verb> <behavior>, so that <why>.**`), followed by 2–4 bullets covering user-visible or runtime behavior, scope, and reviewer-attention pointers. A `### Behavior changes` subsection appears only when runtime behavior changes (flag flips, migrations, state-machine edits, config changes, API contract changes).
+- **What to look at first.** A 2–4 bullet attention guide pointing at decisions, tradeoffs, or risks. Not a file list.
+- **How this was tested.** Past-tense author-self-check items prefixed with `- ✅` describing scenarios the author already verified. Only present when at least one code or configuration file changed. Omitted for documentation-only branches.
+- **Files of interest.** A bulleted list of at most 5 entries, never a table. Each entry is `` `path` `` followed by a one-phrase reason the file matters for review.
+- **Test scenario changes.** Behavioral scenarios in plain language. No file paths in this section (test files, when central, appear in Files of interest). Only present when tests were added or edited.
 - **An offer to push the description to the open PR.** The skill checks for an existing PR via `gh pr view`. If one exists, it asks before calling `gh pr edit --body`.
 
 ## How to get the most out of it
