@@ -56,7 +56,7 @@ The plugin is shipped from `plugin/`; documentation lives in `docs/`. Long-form 
 
 ### Skill catalog (`docs/skills/`)
 
-- **[docs/skills/README.md](./docs/skills/README.md).** Index of all 21 skills grouped by purpose (planning, building, investigation and research, review, discovery, conventions, reporting, operational). Start here when looking for the right slash command.
+- **[docs/skills/README.md](./docs/skills/README.md).** Index of all 21 skills grouped by purpose (planning, building, investigation and research, review, discovery, conventions, reporting, operations). Start here when looking for the right slash command.
 - **[docs/skills/plan-a-feature.md](./docs/skills/plan-a-feature.md).** Spec a feature from scratch through an evidence-based interview that walks the design tree and dispatches specialist reviewers.
 - **[docs/skills/plan-implementation.md](./docs/skills/plan-implementation.md).** Turn a feature specification into an implementation plan through a project-manager-led team conversation.
 - **[docs/skills/plan-a-phased-build.md](./docs/skills/plan-a-phased-build.md).** Split a body of context (gap analysis, PRD, design doc) into a numbered sequence of vertical-slice phases, each independently demoable.
