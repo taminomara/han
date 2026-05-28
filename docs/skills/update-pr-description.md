@@ -100,7 +100,7 @@ URL: https://martinfowler.com/articles/feature-toggles.html
 ## Related documentation
 
 - [Plugin landing page](../../README.md). The front door. Start here if you arrived from outside the docs tree.
-- [Skills Index](./README.md). All 20 skills, grouped by purpose.
+- [Skills Index](./README.md). All 21 skills, grouped by purpose.
 - [`/gh-pr-review`](./gh-pr-review.md). Post a code review to the same PR.
 - [`/code-review`](./code-review.md). Local code review without touching GitHub.
 - [`junior-developer`](../agents/junior-developer.md). Runs the reviewer context check against the drafted description.
