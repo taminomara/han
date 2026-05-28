@@ -64,6 +64,12 @@ Skills for turning the work back into something sharable.
 
 - **[`/update-pr-description`](./update-pr-description.md).** Generate a PR description from the current branch's changes.
 
+## Operations
+
+Skills for capturing operational knowledge in artifacts the next on-call engineer can use.
+
+- **[`/runbook`](./runbook.md).** Create or update a runbook for a single operational scenario (alert that has fired, incident, recurring task, known failure mode). Symptom-first template with imperative-voice procedure, expected output per step, escalation conditions, and rollback. Applies a YAGNI preflight that requires real evidence before writing.
+
 ---
 
 ## How dispatch scales: sizing

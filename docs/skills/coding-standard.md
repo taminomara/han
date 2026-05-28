@@ -35,6 +35,7 @@ Operator documentation for the `/coding-standard` skill in the han plugin. This 
 - **Feature documentation.** Use [`/project-documentation`](./project-documentation.md) for describing how a system works.
 - **Style rules that a linter or formatter can enforce.** Configure the tool. Do not write a standard that duplicates it.
 - **Open-ended research not destined for a standard.** Use [`/research`](./research.md) to survey options and prior art when the output you want is a recommendation, not an enforceable rule.
+- **Runbooks for operational scenarios.** Use [`/runbook`](./runbook.md). A runbook captures the procedure for an alert or incident; a coding standard encodes a rule the code itself must follow.
 
 ## How to invoke it
 
@@ -143,7 +144,7 @@ URL: https://code.claude.com/docs/en/memory
 
 - [Plugin landing page](../../README.md). The front door. Start here if you arrived from outside the docs tree.
 - [YAGNI](../yagni.md). The evidence-based "You Aren't Gonna Need It" rule this skill applies before committing items. The two gates, the acceptable-evidence list, the named anti-patterns, and the deferral format.
-- [Skills Index](./README.md). All 20 skills, grouped by purpose.
+- [Skills Index](./README.md). All 21 skills, grouped by purpose.
 - [`/architectural-decision-record`](./architectural-decision-record.md). For decisions rather than rules. Link the standard to the ADR when the rule embeds a choice.
 - [`/project-documentation`](./project-documentation.md). For system and feature documentation that is not a rule.
 - [`/code-review`](./code-review.md). Reads standards during every review. Violations become findings.

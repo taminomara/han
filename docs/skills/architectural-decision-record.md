@@ -34,6 +34,7 @@ Operator documentation for the `/architectural-decision-record` skill in the han
 - **Enforceable coding rules.** Use [`/coding-standard`](./coding-standard.md). An ADR records the decision; a coding standard encodes the rule it produces.
 - **Feature documentation.** Use [`/project-documentation`](./project-documentation.md).
 - **Recording an investigation's findings.** Use [`/investigate`](./investigate.md) for bug investigations with evidence and validation.
+- **Runbooks for operational scenarios.** Use [`/runbook`](./runbook.md). A runbook captures the procedure for an alert or incident; an ADR records the decision that shaped the system the runbook operates on.
 
 ## How to invoke it
 
@@ -120,7 +121,7 @@ URL: https://www.thoughtworks.com/radar/techniques/lightweight-architecture-deci
 
 - [Plugin landing page](../../README.md). The front door. Start here if you arrived from outside the docs tree.
 - [YAGNI](../yagni.md). The evidence-based "You Aren't Gonna Need It" rule this skill applies before committing items. The two gates, the acceptable-evidence list, the named anti-patterns, and the deferral format.
-- [Skills Index](./README.md). All 20 skills, grouped by purpose.
+- [Skills Index](./README.md). All 21 skills, grouped by purpose.
 - [`/coding-standard`](./coding-standard.md). For rules that come out of a decision. Link the standard to the ADR.
 - [`/architectural-analysis`](./architectural-analysis.md). Often produces decisions worth recording as ADRs.
 - [`/project-documentation`](./project-documentation.md). For feature docs that reference the ADR.

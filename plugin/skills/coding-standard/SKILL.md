@@ -9,7 +9,8 @@ description: >
   records — use architectural-decision-record for ADRs. Does not write feature or system
   documentation — use project-documentation for that. Does not research
   open-ended options or prior art that is not destined for a standard — use
-  research.
+  research. Does not produce runbooks for operational scenarios — use runbook
+  for that.
 argument-hint: [standard-topic or document-path]
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(git config *), Bash(whoami), Bash(mkdir *), Bash(find *)
 ---

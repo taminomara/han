@@ -7,7 +7,8 @@ description: >
   design decision, or updating the status of an existing ADR. Does not create or
   update enforceable coding standards or conventions — use coding-standard for
   that. Does not write feature or system documentation — use
-  project-documentation instead.
+  project-documentation instead. Does not produce runbooks for operational
+  scenarios — use runbook for that.
 argument-hint: [topic-or-title or document-path]
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(git config *), Bash(whoami), Bash(mkdir *), Bash(find *)
 ---

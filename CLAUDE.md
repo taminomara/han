@@ -16,7 +16,7 @@ Han is a Claude Code plugin: a suite of skills and agents for solo (or small-tea
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   ├── agents/         # 23 agent definitions (.md with frontmatter)
-│   ├── skills/         # 20 skill directories, each with SKILL.md + references/
+│   ├── skills/         # 21 skill directories, each with SKILL.md + references/
 │   └── references/     # Cross-skill reference files (e.g. yagni-rule.md)
 ├── docs/               # Operator-facing documentation
 │   ├── writing-voice.md   # Voice profile every doc follows
@@ -25,7 +25,7 @@ Han is a Claude Code plugin: a suite of skills and agents for solo (or small-tea
 │   ├── sizing.md
 │   ├── yagni.md
 │   ├── agents/         # Long-form docs for all 23 agents, plus README
-│   ├── skills/         # Long-form docs for all 20 skills, plus README
+│   ├── skills/         # Long-form docs for all 21 skills, plus README
 │   ├── guidance/       # Contributor-facing authoring guidance
 │   ├── templates/      # Templates and coverage rule for long-form docs
 │   ├── plans/          # Plan documents (one folder per plan; nested research lives inside)
@@ -56,7 +56,7 @@ The plugin is shipped from `plugin/`; documentation lives in `docs/`. Long-form 
 
 ### Skill catalog (`docs/skills/`)
 
-- **[docs/skills/README.md](./docs/skills/README.md).** Index of all 20 skills grouped by purpose (planning, building, investigation and research, review, discovery, conventions, reporting). Start here when looking for the right slash command.
+- **[docs/skills/README.md](./docs/skills/README.md).** Index of all 21 skills grouped by purpose (planning, building, investigation and research, review, discovery, conventions, reporting, operations). Start here when looking for the right slash command.
 - **[docs/skills/plan-a-feature.md](./docs/skills/plan-a-feature.md).** Spec a feature from scratch through an evidence-based interview that walks the design tree and dispatches specialist reviewers.
 - **[docs/skills/plan-implementation.md](./docs/skills/plan-implementation.md).** Turn a feature specification into an implementation plan through a project-manager-led team conversation.
 - **[docs/skills/plan-a-phased-build.md](./docs/skills/plan-a-phased-build.md).** Split a body of context (gap analysis, PRD, design doc) into a numbered sequence of vertical-slice phases, each independently demoable.
@@ -77,6 +77,7 @@ The plugin is shipped from `plugin/`; documentation lives in `docs/`. Long-form 
 - **[docs/skills/coding-standard.md](./docs/skills/coding-standard.md).** Create and update coding standards from existing patterns or evidence-based research.
 - **[docs/skills/architectural-decision-record.md](./docs/skills/architectural-decision-record.md).** Create, extract, or convert architectural decision records (ADRs).
 - **[docs/skills/update-pr-description.md](./docs/skills/update-pr-description.md).** Generate a PR description from the current branch's changes.
+- **[docs/skills/runbook.md](./docs/skills/runbook.md).** Create or update a runbook for a single operational scenario (alert that has fired, incident, recurring task, known failure mode). Applies a YAGNI preflight that requires real evidence before writing.
 
 ### Agent catalog (`docs/agents/`)
 
@@ -134,4 +135,4 @@ Folder selection rule: if the artifact is the plan, write to `docs/plans/{plan-n
 - **Every long-form doc links up.** The first bullet of the "Related Documentation" section always points back to the README at the repo root.
 - **Voice is uniform.** Every doc follows [docs/writing-voice.md](./docs/writing-voice.md). No em-dashes, direct second person, no flattery or hype.
 - **YAGNI applies to docs too.** Don't add speculative sections, for-future-flexibility warnings, or examples for behavior the skill doesn't have. The same evidence rule that gates plan steps gates docs.
-- **Counts to verify when editing indexes.** 23 agents in `plugin/agents/`; 20 skills in `plugin/skills/`; 23 long-form agent docs in `docs/agents/`; 20 long-form skill docs in `docs/skills/`.
+- **Counts to verify when editing indexes.** 23 agents in `plugin/agents/`; 21 skills in `plugin/skills/`; 23 long-form agent docs in `docs/agents/`; 21 long-form skill docs in `docs/skills/`.
