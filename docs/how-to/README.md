@@ -1,0 +1,26 @@
+# How-To Guides
+
+End-to-end recipes for the workflows the han plugin was built around. Each guide walks the whole loop: what to type, what decisions you make between steps, and what you should expect along the way.
+
+> See also: [Plugin landing page](../../README.md) · [Quickstart](../quickstart.md) · [Concepts](../concepts.md)
+
+How-to guides are for people who already know roughly what the plugin does and want to use it on a real piece of work. If you are not there yet, start with [Concepts](../concepts.md) and the [Quickstart](../quickstart.md).
+
+The skill long-form docs in [docs/skills/](../skills/README.md) are canonical for what each individual skill does on its own. These how-tos are canonical for the multi-skill workflows the plugin was built to support. When in doubt, the skill doc tells you what the skill does; the how-to tells you how to run a workflow that uses several skills together.
+
+## Which guide do you need?
+
+- **[Plan a feature, end to end](./plan-a-feature.md).** You have a feature idea and want a behavioral spec, an implementation plan, and a list of independently grabbable work items, grounded in evidence rather than your best guess. The longest of the three; covers most of the planning skills.
+- **[Triage and investigate a bug](./triage-and-investigate-a-bug.md).** Something is broken or behaving oddly and you want a root cause backed by evidence, not a guess. Or the work is queued rather than immediate, and you want a structured triage document instead.
+- **[Research a decision and capture it](./research-a-decision.md).** Nothing is broken; you have a question (a new library, a hosting move, a build-vs-buy call) and want the options, prior art, and a recommendation, then record the chosen direction as an ADR.
+
+## Where to go next
+
+- Pick a guide above and follow the **happy path** (the most common way through the workflow, named explicitly in each guide).
+- Skim the [Skills Index](../skills/README.md) if you want to know what every individual skill does.
+- Read [Sizing](../sizing.md) if a step in a guide says "small / medium / large" and you want to know how the team scales.
+- Read [YAGNI](../yagni.md) if a skill defers something to a "Deferred (YAGNI)" section and you want to know why.
+
+### About these guides
+
+Every guide opens with two short blocks: **Before you begin** (prerequisites the workflow assumes) and **What you'll end up with** (the artifacts and outcomes you should expect). The steps are grouped into named phases of three to four items each (occasionally up to six when a phase is a natural unit), and each phase is a natural pause point where you can stop and look at what you have. Decision points inside a step are written inline as "if X, do Y; otherwise, do Z" rather than as separate tracks. Each guide documents the **happy path** first and groups variations (different starting points, optional follow-ons) under a final **Variations** section. When you are new to a workflow, follow the happy path. Come back for variations once you understand what each step produces.
