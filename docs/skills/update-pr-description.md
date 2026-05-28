@@ -13,7 +13,7 @@ Operator documentation for the `/update-pr-description` skill in the han plugin.
 ## Key concepts
 
 - **Central mechanism up front.** Feature flags, migrations, and behavioral changes lead the Summary. Code structure is summarized; runtime behavior is not.
-- **Reviewer context check before posting.** A `junior-developer` agent reads the drafted description as a reviewer without full project context, flagging buried mechanisms, undefined acronyms, missing per-environment values, and unverifiable Test Plan items before the description goes live.
+- **Junior-developer authors the description.** A `junior-developer` agent writes the PR description directly. Authoring with a fresh-reviewer perspective (a teammate without full project context) means the result already anticipates what a reviewer needs to see, so no separate review pass is required.
 - **"How this was tested" is conditional.** If the branch only changes documentation, the section is omitted. If any code or config file changed, it is included.
 - **Files of interest is a bulleted list, capped at five.** This section is a bulleted list of at most 5 entries, never a table. Each entry is `` `path` `` followed by a one-phrase reason the file matters for review. Generated files, mechanical refactors, trivial changes, and non-central test helpers are skipped.
 - **Branch-specific diff only.** The skill describes changes unique to the feature branch. Never changes pulled in from the default branch.
@@ -69,19 +69,18 @@ A PR description rendered in-channel, optionally pushed to the open PR. Sections
 
 ## Cost and latency
 
-The skill reads the git diff, stat, log, and any source files needed to understand the change, then dispatches a single `junior-developer` agent for the reviewer context check in Step 6. The agent runs on its default model. Typical runs are around a minute for a typical PR.
+The skill reads the git diff, stat, log, and any source files needed to understand the change, then dispatches a single `junior-developer` agent in Step 4 to author the PR description. The agent runs on its default model. Typical runs are around a minute for a typical PR.
 
 ## In more detail
 
-The skill walks a seven-step process:
+The skill walks a six-step process:
 
 1. **Validate branch state.** Require `origin/HEAD`, require at least one commit, require at least one changed file.
 2. **Analyze changes.** Read the diff, stat, and log. Identify the central mechanism. Classify the change type.
 3. **Determine Test Plan applicability.** If all changed files are documentation, omit the Test Plan. If any are code or config, include it.
-4. **Generate the PR description.** Follow the template at [`references/template.md`](../../plugin/skills/update-pr-description/references/template.md). Apply file-path truncation from [`references/formatting-rules.md`](../../plugin/skills/update-pr-description/references/formatting-rules.md). No nested fenced code blocks. No "Generated with Claude Code" trailer.
+4. **Generate the PR description.** Dispatch a `junior-developer` agent with the branch context, the inclusion decision from Step 3, and the contents of [`references/template.md`](../../plugin/skills/update-pr-description/references/template.md) and [`references/formatting-rules.md`](../../plugin/skills/update-pr-description/references/formatting-rules.md). The agent authors the description with a fresh-reviewer perspective, anticipating what a teammate without full project context needs to see. No nested fenced code blocks. No "Generated with Claude Code" trailer.
 5. **Verify.** Section order, file-table caps, valid markdown, branch-specific content only.
-6. **Reviewer context check.** Dispatch a `junior-developer` agent to read the description as a reviewer without full project context. Apply edits for undefined acronyms, buried mechanisms, missing per-environment values, and unverifiable Test Plan items.
-7. **Display and update PR.** Show the description. If a PR exists, ask whether to push. On yes, `gh pr edit --body`.
+6. **Display and update PR.** Show the description. If a PR exists, ask whether to push. On yes, `gh pr edit --body`.
 
 ## Sources
 
@@ -103,5 +102,5 @@ URL: https://martinfowler.com/articles/feature-toggles.html
 - [Skills Index](./README.md). All 21 skills, grouped by purpose.
 - [`/gh-pr-review`](./gh-pr-review.md). Post a code review to the same PR.
 - [`/code-review`](./code-review.md). Local code review without touching GitHub.
-- [`junior-developer`](../agents/junior-developer.md). Runs the reviewer context check against the drafted description.
+- [`junior-developer`](../agents/junior-developer.md). Authors the PR description with a fresh-reviewer perspective.
 - [`SKILL.md` for /update-pr-description](../../plugin/skills/update-pr-description/SKILL.md). The internal process definition.
