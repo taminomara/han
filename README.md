@@ -19,7 +19,7 @@ Read [Concepts](./docs/concepts.md) for the skill-and-agent model that runs thro
 - **New to han?** → Start with [Concepts](./docs/concepts.md), then the [Quickstart](./docs/quickstart.md).
 - **Deciding which plugin to install?** → [Choosing a Han plugin](./docs/choosing-a-han-plugin.md). The full suite, core only, and the dependency that surprises people, with a quick "which one do you need?" guide.
 - **Want the end-to-end recipe for a workflow?** → [How-to guides](./docs/how-to/README.md). Plan a feature, triage and investigate a bug, or research a decision, walked through step by step.
-- **Want to extend Han with custom skills?** → [Extend Han with plugin dependencies](./docs/how-to/extend-han-with-plugin-dependencies.md) explains how one plugin builds on another through the `dependencies` field, using Han's own three-plugin split as the worked example. [Build a plugin that depends on Han](./docs/how-to/build-a-plugin-that-depends-on-han.md) is the hands-on walkthrough: stand up your own plugin, add a skill that builds on `han.core`, and confirm a clean install pulls Han in alongside it.
+- **Want to extend Han with custom skills?** → [Extend Han with plugin dependencies](./docs/how-to/extend-han-with-plugin-dependencies.md) explains how one plugin builds on another through the `dependencies` field, using Han's own four-plugin split as the worked example. [Build a plugin that depends on Han](./docs/how-to/build-a-plugin-that-depends-on-han.md) is the hands-on walkthrough: stand up your own plugin, add a skill that builds on `han.core`, and confirm a clean install pulls Han in alongside it.
 - **Looking for a specific skill?** → [Skills Index](./docs/skills/README.md). All skills grouped by purpose.
 - **Looking for a specific agent?** → [Agents Index](./docs/agents/README.md). All agents grouped by role.
 - **Wondering how the agent swarms scale?** → [Sizing](./docs/sizing.md). The small / medium / large dispatch model used by `/architectural-analysis`, `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, `/plan-implementation`, and `/research`.
@@ -36,12 +36,12 @@ Add the Test Double skills marketplace to Claude Code, then install the plugin:
 /plugin install han@han
 ```
 
-Han ships as three plugins: `han.core` (the planning, investigation, review, and documentation skills plus every agent), `han.github` (GitHub-facing skills like posting a code review on a PR), and `han` (a meta-plugin with no components of its own that depends on the other two). Installing `han@han` pulls in the whole suite, and is the right choice for almost everyone. If you do not want the GitHub skills, install `han.core@han` instead. There is no GitHub-only install: `han.github` depends on `han.core`, so installing it brings the core skills and every agent along with it. For the full picture and a quick "which one do you need?" guide, see [Choosing a Han plugin](./docs/choosing-a-han-plugin.md).
+Han ships as four plugins: `han.core` (the planning, investigation, review, and documentation skills plus every agent), `han.github` (GitHub-facing skills like posting a code review on a PR), `han.reporting` (reporting skills like the stakeholder summary), and `han` (a meta-plugin with no components of its own that depends on the other three). Installing `han@han` pulls in the whole suite, and is the right choice for almost everyone. If you do not want the GitHub or reporting skills, install `han.core@han` instead. There is no GitHub-only or reporting-only install: both `han.github` and `han.reporting` depend on `han.core`, so installing either brings the core skills and every agent along with it. For the full picture and a quick "which one do you need?" guide, see [Choosing a Han plugin](./docs/choosing-a-han-plugin.md).
 
 ## Documentation
 
 - [Concepts](./docs/concepts.md). Skill vs. agent, and how they compose. Read once before using the plugin.
-- [Choosing a Han plugin](./docs/choosing-a-han-plugin.md). The full suite vs. core only, the `han.github` dependency on `han.core`, and a quick guide to which one to install.
+- [Choosing a Han plugin](./docs/choosing-a-han-plugin.md). The full suite vs. core only, the `han.github` and `han.reporting` dependencies on `han.core`, and a quick guide to which one to install.
 - [Quickstart](./docs/quickstart.md). Five paths for five common situations. Each path is a short sequence of skills.
 - [How-to guides](./docs/how-to/README.md). End-to-end recipes for planning a feature, triaging and investigating a bug, and researching a decision. Pick one when you want the full walkthrough, not only the path.
 - [Skills Index](./docs/skills/README.md). All skills, grouped by purpose.

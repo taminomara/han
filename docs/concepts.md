@@ -103,7 +103,7 @@ Direct invocation uses the `Agent` tool with `subagent_type: han:{agent-name}` (
 
 ## How Han is packaged
 
-Han ships as three plugins in one marketplace. `han.core` carries the skills and every agent. `han.github` adds the GitHub skills and depends on `han.core`, so installing it brings the core along. `han` is a meta-plugin with no components of its own that depends on both, so installing it pulls in the whole suite. The practical choice is core only, or the full suite. There is no GitHub-only install.
+Han ships as four plugins in one marketplace. `han.core` carries most of the skills and every agent. `han.github` adds the GitHub skills and `han.reporting` adds the reporting skills; both depend on `han.core`, so installing either brings the core along. `han` is a meta-plugin with no components of its own that depends on all three, so installing it pulls in the whole suite. The practical choice is core only, or the full suite. There is no GitHub-only or reporting-only install.
 
 For which one to install and the dependency that surprises people, read [Choosing a Han plugin](./choosing-a-han-plugin.md).
 
