@@ -89,7 +89,7 @@ Include this subsection only when one or more issues were closed by the release'
 
 - **opened by** — the person who opened the issue (one mention).
 - **fixed in** — the PR(s) that closed the issue, and the people who worked on that PR (author, reviewers, and commit/co-authors), each linked. When more than one PR closed the issue, list each `#{number}` with its workers.
-- **thanks to** — the people who contributed meaningfully to the issue (its commenters), with the opener and the PR workers removed so each person is credited once. Omit the whole `; thanks to ...` clause when that set is empty.
+- **thanks to** — the people who contributed meaningfully to the issue: those who left a **substantive** comment. Reactions never count (a 👍 is not a comment) and neither do drive-by comments (a bare `+1`, `bump`, `thanks`, `any update?`, an emoji-only reply, or a short acknowledgment that adds no detail). The opener and the PR workers are removed so each person is credited once. Omit the whole `; thanks to ...` clause when that set is empty.
 
 Exclude bot accounts (`is_bot`, plus the `web-flow`, `github-actions`, and `dependabot` logins) from every list.
 

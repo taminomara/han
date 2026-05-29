@@ -49,7 +49,7 @@ The `## Issues closed` section lists every issue closed by this release's PRs, r
 * {issue title} (#{issue number}) — opened by @{opener}, fixed in #{PR number} by @{worker}, @{worker}; thanks to @{contributor}
 ```
 
-`{opener}` is the person who opened the issue, `{worker}` are the people who worked on the closing PR (author, reviewers, commit/co-authors), and `{contributor}` are the people who contributed meaningfully to the issue (its commenters), with the opener and PR workers removed and the `; thanks to ...` clause omitted when empty. Exclude bot accounts. Mentions stay bare `@login` here, the same as the PR list.
+`{opener}` is the person who opened the issue, `{worker}` are the people who worked on the closing PR (author, reviewers, commit/co-authors), and `{contributor}` are the people who contributed meaningfully to the issue: those who left a substantive comment (reactions and drive-by comments like a bare `+1`, `bump`, `thanks`, or an emoji-only reply do not count), with the opener and PR workers removed and the `; thanks to ...` clause omitted when empty. Exclude bot accounts. Mentions stay bare `@login` here, the same as the PR list.
 
 ## Full-changelog links
 
