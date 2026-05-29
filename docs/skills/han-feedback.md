@@ -1,6 +1,6 @@
 # /han-feedback
 
-Operator documentation for the `/han-feedback` skill in the han plugin. This document helps you decide *when* and *how* to use the skill. For what the skill does internally, read the skill definition at [`han.core/skills/han-feedback/SKILL.md`](../../han.core/skills/han-feedback/SKILL.md).
+Operator documentation for the `/han-feedback` skill in the opt-in `han.feedback` plugin. This document helps you decide *when* and *how* to use the skill. For what the skill does internally, read the skill definition at [`han.feedback/skills/han-feedback/SKILL.md`](../../han.feedback/skills/han-feedback/SKILL.md).
 
 > See also: [Plugin landing page](../../README.md) · [All skills](./README.md) · [All agents](../agents/README.md) · [YAGNI](../yagni.md) · [Evidence](../evidence.md)
 
@@ -36,6 +36,8 @@ Operator documentation for the `/han-feedback` skill in the han plugin. This doc
 ## How to invoke it
 
 Run `/han-feedback` in Claude Code at the end of a session where `han:` skills ran. No arguments are required.
+
+The skill ships in the opt-in `han.feedback` plugin, which the `han` meta-plugin does not bundle. Install it on its own first with `/plugin install han.feedback@han` (it pulls `han.core` along the way). See [Choosing a Han plugin](../choosing-a-han-plugin.md) for where it sits in the suite.
 
 Give it:
 

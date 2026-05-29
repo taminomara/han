@@ -74,7 +74,7 @@ Skills for capturing operational knowledge in artifacts the next on-call enginee
 
 ## Feedback
 
-Skills for capturing observations about the Han plugin itself.
+Skills for capturing observations about the Han plugin itself. These ship in the opt-in `han.feedback` plugin, which the `han` meta-plugin does not bundle; install it on its own with `/plugin install han.feedback@han`.
 
 - **[`/han-feedback`](./han-feedback.md).** Capture structured post-session feedback on Han skills you used and optionally post it as a GitHub issue to testdouble/han.
 
