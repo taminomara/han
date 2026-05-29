@@ -23,7 +23,7 @@ The narrative carries the per-plugin sub-headings as they appear in `CHANGELOG.m
 
 If there is no previous release (this is the first tag), omit the `**Full Changelog:**` compare line and keep only the `**Full changelog:**` blob link.
 
-If no merged PRs were found, replace the PR list with a single line: `* Direct commits since {prev tag}; see the full changelog below.` and still include the narrative and links.
+If no merged PRs were found, replace the PR list with a single line: `* Direct commits since {prev tag}; see the full changelog below.` and still include the narrative and links. This is the release-body form of the no-PR fallback. The `CHANGELOG.md` no-PR fallback is different by design: it lists each commit under a `### Commits in this release` subsection (see [changelog-rules.md](changelog-rules.md)). The body summarizes; the changelog enumerates.
 
 ## PR line format
 

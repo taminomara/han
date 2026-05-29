@@ -81,6 +81,8 @@ When no merged pull requests are found between the previous release and `HEAD` (
 - {commit subject} ({short sha})
 ```
 
+This is the changelog form of the no-PR fallback. The GitHub release body uses a different, single-line form for the same case (see [release-notes-format.md](release-notes-format.md)). The changelog enumerates each commit; the body summarizes.
+
 Close the subsection with one final line:
 
 ```

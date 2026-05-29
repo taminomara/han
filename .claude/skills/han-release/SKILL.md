@@ -17,7 +17,7 @@ description: >
   post-code-review-to-pr to post a PR review, and update-pr-description for PR
   bodies.
 argument-hint: "[pause before publishing] [draft] [optional release context]"
-allowed-tools: Read, Edit, Write, Glob, Grep, Agent, AskUserQuestion, Bash(git *), Bash(gh *), Bash(jq *)
+allowed-tools: Read, Edit, Write, Glob, Grep, Agent, AskUserQuestion, Bash(git *), Bash(gh *), Bash(jq *), Bash(which *), Bash(grep *), Bash(sed *), Bash(head *)
 ---
 
 ## Pre-requisites
@@ -47,7 +47,7 @@ allowed-tools: Read, Edit, Write, Glob, Grep, Agent, AskUserQuestion, Bash(git *
 - **current** of a plugin — the version in its working-tree `plugin.json`.
 - **target** of a plugin — the version being released for it. The release tag is `v{parent target}`.
 - `prev` is the `latest release tag` (for example `v2.7.0`; the number without the leading `v` is `prev#`). On the first release `prev` is empty.
-- Each plugin's source directory comes from the `source` field in `marketplace.json` (for example `./han.core`), so its `plugin.json` is `{source}/.claude-plugin/plugin.json`.
+- Each plugin's source directory comes from the `source` field in `marketplace.json` (for example `./han.core`), so its `plugin.json` is `{source}/.claude-plugin/plugin.json`. Use `{source}` verbatim in every git command: the `./`-prefixed form works both after a `{ref}:` colon (`git show {prev}:{source}/...`) and as a pathspec (`git diff ... -- {source}/`). Do not strip the leading `./`.
 
 ## Step 1: Parse the invocation and check release safety
 
@@ -90,7 +90,7 @@ Enumerate the plugins from `plugins` in Project Context (one parent, plus each c
 
 For each plugin, read `current` from `{source}/.claude-plugin/plugin.json` and compute `baseline`:
 
-- **Child, did not exist at `prev`** (`git cat-file -e {prev}:{source-without-leading-dot-slash}/.claude-plugin/plugin.json` fails, or this is the first release): **new plugin**. `baseline = current`, `target = current`, **no bump**, mark it `new`. Skip the rest of the classification for this plugin.
+- **Child, did not exist at `prev`** (`git cat-file -e {prev}:{source}/.claude-plugin/plugin.json` fails, or this is the first release): **new plugin**. `baseline = current`, `target = current`, **no bump**, mark it `new`. Skip the rest of the classification for this plugin.
 - **Child, existed at `prev`**: `baseline = git show {prev}:{source}/.claude-plugin/plugin.json | jq -r .version`.
 - **Parent**: `baseline = prev#` (the parent's version is what the tag tracks, regardless of any directory move). On the first release `baseline` is empty and the parent is treated like a new plugin set to its `current` value.
 
@@ -156,7 +156,7 @@ Follow [references/changelog-rules.md](references/changelog-rules.md) exactly. F
 3. **It does not exist — generate, then append.** Dispatch **one** `general-purpose` agent to write the narrative `## v{parent target}` section. The skill already holds this context — paste the actual values into the prompt, do not tell the agent to go read them:
 
    - The version plan from Step 3: parent `baseline → target`, and for each changed/new child its `name`, `baseline → target`, level, and new/changed status.
-   - The commit log `git log {range} --oneline` and `git diff {range} --stat`, plus, per changed plugin, `git diff {range} --stat -- {source}/` so the agent can attribute each change to its plugin.
+   - The commit log `git log {range} --oneline` and `git diff {range} --stat`, plus, per changed plugin, `git diff {range} --stat -- {source}/` so the agent can attribute each change to its plugin, plus a suite-level stat `git diff {range} --stat -- docs/ README.md CONTRIBUTING.md CHANGELOG.md .claude-plugin/` labeled as the evidence for the `### han` parent section (repo-root changes outside any plugin directory).
    - `$pr_list` (PR numbers, titles, authors).
    - `$release_context` from Step 1 (may be empty).
    - The two newest existing `## v{X.Y.Z}` sections from `CHANGELOG.md` verbatim, as the register model.
@@ -200,7 +200,7 @@ The operator's request to tag and publish authorizes the commit and push require
 Per [references/release-notes-format.md](references/release-notes-format.md), using `/tmp/han-release-notes-v{parent target}.md`:
 
 - **No release exists for `v{parent target}`** (`gh release view v{parent target}` fails): `gh release create v{parent target} --title "v{parent target}" --notes-file /tmp/han-release-notes-v{parent target}.md` plus `--latest`, plus `--draft` only when `draft_release` is true (never `--latest` together with `--draft`).
-- **A release already exists:** do not create a second one. `gh release edit v{parent target} --notes-file /tmp/han-release-notes-v{parent target}.md`. Report it as updated, not created.
+- **A release already exists:** do not create a second one. `gh release edit v{parent target} --notes-file /tmp/han-release-notes-v{parent target}.md`. Add `--draft=false` only when the operator asked to publish an existing draft (and `draft_release` is not set). Report it as updated, not created.
 
 ## Step 10: Report
 
