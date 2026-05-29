@@ -101,15 +101,15 @@ In four places the skill delegates a synthesis responsibility (classifying proce
 
 The skill is well-factored for its primary job: the analyzer owns neutral gap classification (E5), and the swarm owns adversarial validation and the actor sweep. The four frictions all sit at the seam where the *skill* is supposed to add judgment on top of those neutral inputs, and in each case the seam is missing:
 
-- **V7 noise (E1, E2)** is a missing taxonomy plus a missing render channel. The validator is correctly probing provenance (Strategy 4), but the skill collapses every validator output into three gap-validity verdicts and renders only Confirmations/Contradictions/Augmentations. A workflow observation — "your desired-state spec is your own uncommitted same-session file" — has no class and no place, so it masquerades as a high-confidence gap contradiction. The fix is to give it a class in the brief (E1) and a channel in the report (E2).
+- **V7 noise (E1, E2)** is a *surfacing-granularity* problem, not a missing taxonomy. The validator is correctly probing provenance (Strategy 4), and per `evidence-rule.md` the operator's own uncommitted spec is a **provided** source that genuinely warrants interested-party scrutiny — so the caveat is legitimate and must not be suppressed. The friction is that this is a *single artifact-level caveat* (it applies uniformly to every gap, since they all rest on the same spec), yet it was surfaced *per-gap as a high-confidence finding*, which made one workflow-level reminder read as many gap-level contradictions. The fix is to surface the provided-source caveat **once**, at the artifact level, in its own report channel — not to downgrade or hide it. *(Corrected by validation — see V2.)*
 
-- **Second-round ceremony (E3)** is a gate that keys on the wrong signal. Trigger A asks "were there ≥ 3 new gaps?" when the question that determines whether the round adds value is "would re-analysis tell us anything the swarm hasn't already established?" When each proposed gap is already specified and corroborated, the answer is no, and the round is ceremony.
+- **Second-round ceremony (E3)** is a *brief-scope* problem, not a gate that should skip. Step 5.5 exists to find *new* gaps in an actor/behavior class the first pass systematically excluded, and to surface recategorizations and withdrawals — all of which issue #34 explicitly praised ("confirmed the three new gaps and rejected one meta-candidate"). The complaint was narrowly that the round *re-confirmed gaps the swarm had already corroborated*. So the fix narrows the round's brief to exclude that redundant re-confirmation while keeping its real work (new gaps + withdrawals) intact — it does not skip the round. *(Corrected by validation — see V3, V5.)*
 
-- **Actor-sweep brief-dependence (E4)** is a responsibility delegated without a seed. The skill asks junior-developer to enumerate actors but never reads the desired-state artifact for actor/mode signals itself, so a non-obvious actor (the batch runner) only enters the sweep if the operator names it. Actor discovery from the artifact is a skill responsibility that is currently unowned.
+- **Actor-sweep brief-dependence (E4)** is a responsibility delegated without a seed. The skill asks junior-developer to enumerate actors but no upstream step surfaces the actor/mode signals to seed it, so a non-obvious actor (the batch runner) only enters the sweep if the operator names it. The analyzer already reads the desired state's full surface area in its Steps 2–3, so the fix routes actor discovery through the analyzer's *output* (have it report the actors/modes it already encountered) rather than adding a duplicate skill-level read that could diverge from the analyzer's correspondence map. *(Corrected by validation — see V4, V6.)*
 
-- **No blocking subset (E5)** is a synthesis judgment with no input and no output slot. Prioritization cannot live in the analyzer (it is correctly forbidden), so it must be a skill-level view conditioned on the operator's purpose — but the skill never captures the purpose and the template has no slot for the view.
+- **No blocking subset (E5)** is a synthesis judgment with no input, no output slot, and — as written — no granting authority. Prioritization cannot live in the analyzer (correctly forbidden), so it must be a skill-level view conditioned on the operator's purpose. But the skill's Operating Principles do not currently grant the skill prioritization authority, and a ranked "blocking" view is impact assessment under another name. So the fix must (a) add an Operating Principle that grants purpose-conditioned synthesis authority, (b) place the view as an explicitly-labeled judgment block distinct from the neutral magnitude summary, and (c) keep it optional and non-load-bearing. *(Corrected by validation — see V1.)*
 
-The common thread: these are not analyzer or agent defects. They are gaps in the skill's own synthesis layer. Every fix below lands in `SKILL.md` and the report template; the `gap-analyzer` agent stays neutral and unchanged, and the `adversarial-validator` and `junior-developer` agents keep their generic behavior — the skill just briefs and renders them better.
+The common thread holds: these are gaps in the skill's own synthesis layer, not analyzer or agent defects. Most fixes land in `SKILL.md` and the report template. Validation corrected one scope assumption: Fix 3 also makes a small, neutrality-preserving edit to `gap-analyzer.md`'s *output format* (it reports the actors it observed; it still does not classify, prioritize, or assess impact). The `adversarial-validator` and `junior-developer` agents keep their generic behavior — the skill just briefs and renders them better.
 
 ## Coding Standards Reference
 
@@ -125,50 +125,130 @@ The common thread: these are not analyzer or agent defects. They are gaps in the
 
 ### Summary
 
-Add the four missing synthesis responsibilities to `SKILL.md` and the report template — a workflow-note class and render channel, a second-round escape clause, a skill-owned actor-enumeration step, and a purpose-conditioned blocking-subset view — while leaving the `gap-analyzer` agent neutral and the swarm agents generic.
+Add the four missing synthesis responsibilities — surface the provided-source caveat once instead of per gap, narrow the second-round brief instead of skipping the round, route actor discovery through the analyzer's output to seed the actor sweep, and add a purpose-conditioned, explicitly-labeled prioritized pointer view — across `SKILL.md`, the report template, a small `gap-analyzer.md` output addition, and the canonical long-form doc, while keeping the analyzer neutral (no classification, prioritization, or impact assessment) and the swarm agents generic.
+
+> **Revised after adversarial validation.** Every fix below reflects the V-findings in the Validation Results section. The original drafts (a `workflow_note` verdict, a second-round skip clause, a duplicate skill-level actor read, and a Section-1 blocking ranking) were each refuted or weakened and have been replaced.
 
 ### Changes
 
 #### `han.core/skills/gap-analysis/SKILL.md`
 
-- **Change (Fix 1 — workflow-note class for the validator):** In Step 5's validator brief, add a clause: provenance and process observations that do not bear on whether a gap is real — for example, "the desired-state artifact is the operator's own uncommitted, same-session file" — are returned as a `workflow_note`, not as a per-gap `contradicted`/`inconclusive` verdict. Keep the corroboration/provenance scrutiny for *external or third-party* desired-state sources as a real verdict (those can genuinely invalidate a gap). Add one Operating-Principles line stating that workflow notes are surfaced as reminders and never feed per-gap confidence.
-- **Evidence:** (E1), (E2)
-- **Standards:** Analyzer-neutral (untouched); writing voice; YAGNI (the carve-out for external sources prevents over-suppression).
-- **Details:** New verdict token `workflow_note` added only to the validator brief. Confidence derivation in Step 6 render rule 3 explicitly ignores `workflow_note` items so they cannot lower or raise any gap's confidence.
+- **Change (Fix 1 — surface the provided-source caveat once, not per gap):** In Step 5's validator brief, keep provenance scrutiny fully intact (the `evidence-rule.md` **provided** trust class requires it). Add a clause: when a provenance concern applies *uniformly to the desired-state artifact as a whole* (e.g., "the desired state is a provided, uncommitted, same-session source"), return it **once** as a single artifact-level `analysis_caveat`, not repeated as a per-gap verdict on every gap that rests on that artifact. Provenance concerns specific to an *individual* gap's evidence still return as that gap's `contradicted`/`inconclusive` verdict. Add one Operating-Principles line: artifact-level analysis caveats are surfaced once and do not feed per-gap confidence (they bear on the whole report equally, so per-gap weighting would double-count one fact).
+- **Evidence:** (E1), (E2); corrected by (V2), (V7)
+- **Standards:** `evidence-rule.md` "provided" trust class (caveat is preserved, not suppressed); writing voice; YAGNI.
+- **Details:** No new per-gap verdict token. `analysis_caveat` is an artifact-level channel, distinct from the per-gap `confirmed`/`contradicted`/`inconclusive` verdicts. Step 6 confidence derivation (render rule 3) reads only the per-gap verdicts, so an `analysis_caveat` neither raises nor lowers any gap's confidence. This removes the "one fact, thirteen high-confidence findings" noise while keeping the scrutiny the evidence rule mandates.
 
-- **Change (Fix 2 — second-round escape clause):** In Step 5.5, after the Trigger A/B definitions, add: before re-dispatching the analyzer, check whether the proposed new gaps are already fully characterized — each has an evidence pair and ≥ 2 swarm agents confirmed it. If every proposed new gap meets that bar, **skip** the second round and record the skip reason ("second round skipped: all N proposed gaps already specified and corroborated by the swarm; re-analysis would only re-confirm"). Reframe the round's purpose so it runs only when the proposed gaps are under-specified, contested, or point to a *systematic* actor/behavior-class the first pass excluded — not on raw count alone.
-- **Evidence:** (E3)
-- **Standards:** Deterministic/flowchartable (the escape is a concrete, checkable condition); YAGNI (keeps the round for the case it was built for, drops it for the ceremony case).
-- **Details:** Trigger A stays as the *entry* condition, but gains an exit gate. The in-channel summary (Step 7) reports "second round skipped (reason)" in addition to the existing "second round ran (trigger/changes)".
+- **Change (Fix 2 — narrow the second-round brief; do not skip the round):** In Step 5.5, leave Triggers A and B and the round itself intact (the round's job — finding new gaps in a systematically-excluded actor/behavior class, plus recategorizations and withdrawals — is praised in issue #34). Edit the re-dispatch brief so it explicitly **excludes redundant re-confirmation**: "Do not re-confirm gaps the swarm already corroborated. Return only (a) new gaps in the actor or behavior classes the proposed gaps reveal were under-covered, (b) gaps needing recategorization, and (c) gaps that should be withdrawn." Add a sentence clarifying that Trigger A's count is a *proxy* for a systematically-excluded class, so the round should re-scan that class for additional gaps rather than re-litigate the ones already surfaced.
+- **Evidence:** (E3); corrected by (V3), (V5)
+- **Standards:** Preserve praised behavior (the round's withdrawal and new-gap functions stay); YAGNI (cuts only the redundant re-confirmation the feedback named).
+- **Details:** No skip clause. The Step 7 in-channel summary keeps reporting "second round ran (trigger / new gaps / recategorizations / withdrawals)"; the change is that the round no longer spends effort re-confirming already-corroborated gaps.
 
-- **Change (Fix 3 — skill-owned actor enumeration):** Add **Step 1.5: Enumerate candidate actors.** After inputs are resolved, the skill reads the desired-state artifact for actor and mode signals — named roles, sub-roles, interaction modes (interactive vs. batch/automated), API/agent/integration surfaces — and produces a candidate actor list. In Step 5, the junior-developer brief is seeded with that list ("candidate actors derived from the desired state: [list]; expand it — these are a floor, not a ceiling"). If the artifact yields no actor signal, record that and fall back to the current generic enumeration.
-- **Evidence:** (E4)
-- **Standards:** Skill-as-process-engine (actor discovery becomes a deterministic skill step); junior-developer role preserved (it still owns the sweep and still expands the list).
-- **Details:** Step 1.5 is lightweight — a read-and-list step, not an analysis. It does not replace junior-developer's enumeration; it removes the dependence on the operator naming non-obvious actors in the brief.
+- **Change (Fix 3 — analyzer reports observed actors; skill seeds the sweep):** Have actor discovery flow through the agent that already reads the desired state, not a duplicate skill read. (a) In Step 5's brief to `gap-analyzer` (and the agent's output format — see below), have the analyzer report the **actors and modes it observed** in the desired state (named roles, sub-roles, interactive vs. batch/automated modes, API/agent/integration surfaces) as a neutral observation in its source file. (b) In Step 5, seed the junior-developer brief with that observed-actor list: "candidate actors the analyzer observed in the desired state: [list]; expand it — this is a floor, not a ceiling." If the analyzer observed no actor signal, record that and fall back to the current generic enumeration.
+- **Evidence:** (E4); corrected by (V4), (V6)
+- **Standards:** No duplicate read (single source of actor truth = the analyzer's correspondence-map pass); analyzer neutrality preserved (reporting observed actors is not classification, prioritization, or impact assessment); junior-developer still owns and expands the sweep.
+- **Details:** Near-zero marginal cost — the analyzer already reads the desired state's surface area in its Steps 2–3, so this only surfaces what it already saw. This also defuses the single-run YAGNI concern (V6): the change adds reporting, not a new always-on read step that fails when no actors are present.
 
-- **Change (Fix 4 — capture purpose; purpose-conditioned blocking subset):** In Step 1, capture the **purpose** of the comparison when the operator stated one (e.g., "before a redesign pass," "to scope the next sprint"), or ask for it in the same one-line confirmation that states the comparison direction. In Step 6, add a render rule: when a purpose was captured, the skill produces a **Blocking subset** — a short list (default top 5, fewer if fewer qualify) of the gaps that most block that stated purpose, with a one-line reason each. This is an explicit skill-level synthesis judgment, labeled as such; it never alters the analyzer's neutral, unprioritized gap list. When no purpose was given, the subset is omitted.
-- **Evidence:** (E5)
-- **Standards:** Analyzer stays neutral (prioritization lives only in the skill, labeled as a synthesis view); optional sections must not be load-bearing (the subset is additive — Sections 1–2 still stand alone without it); writing voice.
-- **Details:** The subset is a pointer view: each entry is `G-NNN — one-line reason it blocks {purpose}`. It cites existing `G-NNN` IDs; it adds no new gaps and changes no categories or confidence.
+- **Change (Fix 4 — capture purpose; grant authority; labeled prioritized pointer view):** (a) In Step 1, capture the **purpose** of the comparison when the operator stated one (e.g., "before a redesign pass"), or offer to capture it in the same one-line confirmation that states the comparison direction. (b) Add an Operating-Principles line granting the skill authority to produce a purpose-conditioned prioritized *pointer* view as a labeled synthesis judgment, explicitly layered on top of — and never replacing — the analyzer's neutral, unprioritized gap list. (c) In Step 6, add a render rule: when a purpose was captured, produce a **Where to start** block — up to five gaps that most block that stated purpose, one plain-language reason each, citing existing `G-NNN` IDs. Omitted entirely when no purpose was given.
+- **Evidence:** (E5); corrected by (V1)
+- **Standards:** Analyzer stays neutral (prioritization lives only in the skill, as a granted, labeled judgment); optional-sections-not-load-bearing (the block is additive; the neutral magnitude summary and Sections 1–2 still stand alone); consistent with the existing synthesis judgments the skill already makes (thematic clustering in render rule 5, confidence derivation in render rule 3).
+- **Details:** The block carries an explicit label — "Where to start (skill judgment for your stated purpose: {purpose})" — so it is never mistaken for the analyzer's neutral output or for the plain-language magnitude summary. It is plain language (IDs + reasons, no file paths), adds no new gaps, and changes no categories or confidence. Placement: a distinctly-titled block in Section 1 after the magnitude table, *not* folded into the neutral "shape of the gap" bullets, and *not* in swarm-gated Section 4 (so it survives the `no swarm` path).
+
+#### `han.core/agents/gap-analyzer.md`
+
+- **Change:** Add one line to the full-analysis output format (a neutral "Actors and modes observed in the desired state" note under Scope or Correspondence) so the analyzer reports the actor/mode signals it already encountered while building the correspondence map. Do **not** touch the Rules (no prioritization, no impact assessment), the gap taxonomy, or the neutral posture.
+- **Evidence:** (E4); scope corrected by (V4)
+- **Standards:** Analyzer neutrality is explicitly preserved — this reports an observation, it does not classify, rank, or weight; writing voice.
+- **Details:** Surfaces what the analyzer's Step 2 surface-area pass already sees, so the skill (Fix 3) can seed junior-developer without a divergent second read.
 
 #### `han.core/skills/gap-analysis/references/gap-analysis-report-template.md`
 
-- **Change:** (a) Add a **Process notes** subsection at the end of Section 4 (after Augmentations, outside the Confidence summary) for `workflow_note` items — rendered as plain reminders, explicitly not gap findings. (b) Add an optional **Blocking subset** block near the top of Section 1 (right after "Bottom line"), shown only when a purpose was captured: a titled mini-list of the top blocking gaps with their `G-NNN` IDs and one-line reasons, prefaced by the stated purpose. Mark both as optional in the front-matter `sections_included` guidance and in "How to Read This Report."
-- **Evidence:** (E2), (E5)
-- **Standards:** Information-architect's layered-report design (the blocking subset sits in the two-minute read; process notes sit with the confidence signals); optional-sections-not-load-bearing; writing voice.
-- **Details:** Process notes use a one-line italic preface ("These are workflow reminders, not gaps."). The blocking subset is conditional and purpose-labeled so it never reads as the analyzer prioritizing.
+- **Change:** (a) Add an **Analysis caveats** subsection at the end of Section 4 (after Augmentations, outside the Confidence summary) for artifact-level `analysis_caveat` items — rendered once as plain reminders, explicitly not gap findings. (b) Add an optional **Where to start** block in Section 1 after the magnitude table, shown only when a purpose was captured: a distinctly-titled, purpose-labeled mini-list of the most-blocking gaps with their `G-NNN` IDs and one-line reasons. Mark both as optional in the front-matter `sections_included` guidance and in "How to Read This Report."
+- **Evidence:** (E2), (E5); corrected by (V1), (V2)
+- **Standards:** Information-architect's layered-report design (the pointer view sits in the two-minute read; caveats sit with the confidence signals); optional-sections-not-load-bearing; writing voice.
+- **Details:** Analysis caveats use a one-line italic preface ("These are analysis caveats that apply to the whole report, not gaps."). The "Where to start" block is conditional and purpose-labeled so it never reads as the analyzer prioritizing.
 
 #### `docs/skills/gap-analysis.md`
 
-- **Change:** Update the canonical long-form doc to describe the new Step 1.5, the purpose capture, the second-round escape clause, the workflow-note class, and the blocking-subset view, so the doc matches the implementation.
+- **Change:** Update the canonical long-form doc to describe the purpose capture, the analyzer-reported actor seeding, the narrowed second-round brief, the artifact-level analysis-caveat channel, and the purpose-conditioned "Where to start" view, so the doc matches the implementation.
 - **Evidence:** (E1)–(E5); `CLAUDE.md` Conventions ("one canonical source per concept")
 - **Standards:** Long-form doc is canonical; voice profile.
-- **Details:** Prose-only update; no new behaviors beyond those in `SKILL.md`. Verify the skills index entry still scents correctly.
+- **Details:** Prose-only update; no new behaviors beyond those in `SKILL.md` and `gap-analyzer.md`. Verify the skills index entry still scents correctly.
 
 ## Validation Results
 
-<!-- Populated from the adversarial-validator dispatch in Step 5. -->
+One `adversarial-validator` agent attacked the full evidence summary, root cause, and the original four fixes. It returned seven findings; four refuted or weakened load-bearing premises and drove the fix revisions above.
+
+### Counter-Evidence Investigated
+
+#### V1: Original Fix 4 smuggled impact assessment into the skill and conflicted with its own Operating Principles
+
+- **Hypothesis:** A skill-level "blocking subset" respects the analyzer's "no prioritization" rule.
+- **Investigation:** `SKILL.md` Operating Principle 2 makes Sections 1–2 plain-language and neutral; Operating Principle 1 says the skill "does not classify gaps itself." Ranking gaps by how much they "block" a purpose is impact assessment, and the skill has no principle granting it that authority. The original placement (inside Section 1's neutral summary) compounded the conflict.
+- **Result:** Partially Refuted.
+- **Impact:** Fix 4 revised — add an explicit Operating Principle granting purpose-conditioned synthesis authority, label the view as judgment ("Where to start"), keep it plain-language, and place it as a distinct block (not inside the neutral magnitude summary, not in swarm-gated Section 4).
+
+#### V2: Original Fix 1 contradicted `evidence-rule.md`'s "provided" trust class
+
+- **Hypothesis:** An operator's own same-session spec deserves less provenance scrutiny than an external source, so it can be routed to a non-confidence note.
+- **Investigation:** `evidence-rule.md` defines **provided** sources (operator-supplied material) as warranting "interested-party scrutiny; hold to the same standard as web sources," with no operator-vs-external distinction. `SKILL.md` Operating Principle 4 already invokes this rule for every gap. The validator's provenance flag was the rule working, not noise. An uncommitted spec can change, which genuinely bears on whether the gaps are real.
+- **Result:** Refutes the original premise.
+- **Impact:** Fix 1 reframed — the caveat is preserved (never suppressed); the only change is to surface it **once** at the artifact level (`analysis_caveat`) instead of per-gap, since one fact about the shared artifact was being repeated as many high-confidence per-gap findings. The operator-vs-external carve-out was dropped entirely.
+
+#### V3: Original Fix 2's skip clause used the wrong condition for the round's purpose
+
+- **Hypothesis:** The second round can be skipped when proposed gaps are already well-evidenced and corroborated.
+- **Investigation:** `SKILL.md` Step 5.5 frames the round as detecting that "the analyzer's correspondence map systematically excluded an actor type or behavior class," and its re-dispatch brief asks for "new gaps the first pass missed." Well-specified proposed gaps are a *symptom* of an excluded class, not proof the class is fully mapped. The skip condition ("proposed gaps are well-evidenced") does not imply "re-analysis would find nothing."
+- **Result:** Refutes.
+- **Impact:** Fix 2 reframed — do not skip the round; narrow its brief to exclude redundant re-confirmation while keeping the new-gap, recategorization, and withdrawal work the round exists to do.
+
+#### V4: Original Fix 3 duplicated work `gap-analyzer` already performs
+
+- **Hypothesis:** A new skill Step 1.5 must read the desired-state artifact for actor signals.
+- **Investigation:** `gap-analyzer.md` Steps 2–3 already read both inputs and map the desired state's full surface area (features and behaviors), which includes actor/mode signals. The analyzer just does not *return* them — its summary is gap counts plus a file path. A parallel skill read would re-read the same artifact and could produce an actor list that diverges from the analyzer's actual correspondence map.
+- **Result:** Partially Refuted.
+- **Impact:** Fix 3 rerouted — have the analyzer report the actors it already observed (small output-format edit to `gap-analyzer.md`, neutrality preserved); the skill seeds junior-developer from that single source instead of reading again.
+
+#### V5: Original Fix 2 would have suppressed a behavior issue #34 praised
+
+- **Hypothesis:** The second round in the issue #34 run was pure ceremony.
+- **Investigation:** Issue #34's "What worked well" notes the second round "confirmed the three new gaps and rejected one meta-candidate." The withdrawal (rejecting the meta-candidate) is a documented function of Step 5.5 and was treated as valuable in the issue. The complaint in "What didn't work" was narrowly about *re-confirmation* of already-described gaps, not about the round as a whole.
+- **Result:** Refutes the original framing.
+- **Impact:** Reinforces the Fix 2 reframe — preserve the round (and its withdrawals); cut only the redundant re-confirmation the feedback actually named.
+
+#### V6: Original Fix 3 risked failing the skill's own YAGNI evidence test
+
+- **Hypothesis:** A permanent always-on Step 1.5 is justified by a single run.
+- **Investigation:** The evidence base is one run, and the original Step 1.5 had a fallback ("if no actor signal, fall back to generic enumeration") implying it would frequently read and find nothing — added cost, occasional value.
+- **Result:** Partially Refuted.
+- **Impact:** Folds into the Fix 3 reroute (V4): surfacing actors the analyzer *already* read is near-zero marginal cost, so the YAGNI concern about a new always-on read step is resolved rather than argued around.
+
+#### V7: The original `workflow_note` token had no defined handling in the validator agent
+
+- **Hypothesis:** Adding a `workflow_note` verdict to the brief is clean.
+- **Investigation:** `adversarial-validator.md`'s output format uses `Confirmed | Refuted | Partially Refuted`; the per-gap verdict set is already a skill-brief override. A new token is a skill construct the agent has no internal concept of, and the boundary "does not bear on whether a gap is real" is fuzzy given V2 (provided-source provenance *does* bear on validity).
+- **Result:** Confirmed-with-risk.
+- **Impact:** Resolved by the Fix 1 reframe — instead of a per-gap token with a fuzzy boundary, use a single artifact-level `analysis_caveat` channel with a precise scope ("a provenance fact about the desired-state artifact as a whole"), rendered once in a defined "Analysis caveats" report subsection.
+
+### Adjustments Made
+
+- **Fix 1** (V2, V7): dropped the `workflow_note` per-gap token and the operator-vs-external carve-out; replaced with a single artifact-level `analysis_caveat` channel that preserves the evidence-rule scrutiny but surfaces it once.
+- **Fix 2** (V3, V5): dropped the skip clause; replaced with a narrowed re-dispatch brief that cuts redundant re-confirmation while keeping new-gap discovery and withdrawals.
+- **Fix 3** (V4, V6): dropped the duplicate skill-level read (Step 1.5); replaced with a neutral output-format addition to `gap-analyzer.md` plus skill-level seeding of junior-developer from the analyzer's reported actors. Added `gap-analyzer.md` to the changed-files list.
+- **Fix 4** (V1): added an Operating Principle granting purpose-conditioned synthesis authority; relabeled the view "Where to start" as explicit skill judgment; moved it out of the neutral magnitude summary and out of swarm-gated Section 4.
+- **Root cause detail** updated for all four fixes to reflect the corrected mechanisms.
+
+### Confidence Assessment
+
+- **Confidence:** Medium. The four frictions are real and well-located in the files (E1–E5 stand on direct citations). The fixes have been reworked to survive the validator's strongest objections, and each now respects the skill's existing principles and the evidence rule. Confidence is not High because (a) the fixes are doc/skill-instruction changes whose real-world effect can only be confirmed by running the revised skill on a comparable case, and (b) the evidence base is a single run.
+- **Remaining Risks:**
+  - **Single-run evidence (V6 residual):** all four frictions come from one `gap-analysis` run. If they do not recur, Fix 4's purpose-capture and Fix 1's caveat channel still cost little, but their value is unproven beyond this case. Reopen trigger: a second feedback run reporting the same friction, or its absence after these changes ship.
+  - **Fix 4 determinism (V1 residual):** "which gaps most block the purpose" is a judgment, not a flowchart. Mitigated by requiring a one-line reason per entry, a hard cap, and an explicit judgment label — but two runs could rank differently. Acceptable because the block is an optional pointer, not the gap list.
+  - **`proposals/CLAUDE.md` not readable:** the exact desired-state spec from the issue is uncommitted and outside this repo, so we cannot confirm Fix 3 would have surfaced the batch-runner actor in that specific run. Fix 3's value rests on the general claim that the analyzer's surface-area pass sees actor signals when the artifact contains them.
 
 ## Final Summary
 
-<!-- Populated after validation. -->
+- **Root Cause:** Four frictions in issue #34 trace to gaps in the `gap-analysis` skill's own synthesis layer — it surfaced an artifact-level provenance caveat per gap (E1, E2), re-confirmed already-corroborated gaps in its second round (E3), never seeded the actor sweep from the artifact (E4), and had no purpose-conditioned prioritized view (E5).
+- **Fix:** Surface the provided-source caveat once at the artifact level, narrow the second-round brief to drop redundant re-confirmation, have `gap-analyzer` report the actors it already observed so the skill can seed the sweep, and add a granted, explicitly-labeled "Where to start" pointer view when the operator states a purpose.
+- **Why Correct:** Each fix lands on the cited evidence (E1–E5) and now respects the skill's Operating Principles, the analyzer's neutrality, and `evidence-rule.md`'s "provided" trust class — the four points the validator used to refute the original drafts (V1–V5).
+- **Validation Outcome:** Adversarial validation refuted or weakened all four original fixes (V1–V6) and confirmed a handling risk (V7); every fix was reworked to preserve the behaviors issue #34 praised (the second-round withdrawal, the actor sweep) while removing the named friction.
+- **Remaining Risks:** Single-run evidence base and the inherent non-determinism of the purpose-conditioned pointer view; see the Confidence Assessment.
