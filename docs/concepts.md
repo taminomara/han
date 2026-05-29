@@ -69,7 +69,7 @@ Every skill that dispatches an agent swarm classifies the work as **small**, **m
 
 - **Default is small.** Every sizing-aware skill starts the classification at small and only escalates when concrete signals require it.
 - **Auto-classified, with a `$size` override.** Skills read signals (file count, subsystems touched, security/data/infra surface) and announce the chosen size with a one-line justification. Pass `small`, `medium`, or `large` as the first positional argument to override (`/code-review medium`, `/plan-a-feature large "describe the feature"`).
-- **Seven sizing-aware skills.** [`/architectural-analysis`](./skills/architectural-analysis.md), [`/code-review`](./skills/code-review.md), [`/gap-analysis`](./skills/gap-analysis.md), [`/iterative-plan-review`](./skills/iterative-plan-review.md), [`/plan-a-feature`](./skills/plan-a-feature.md), [`/plan-implementation`](./skills/plan-implementation.md), [`/research`](./skills/research.md).
+- **Sizing-aware skills.** [`/architectural-analysis`](./skills/architectural-analysis.md), [`/code-review`](./skills/code-review.md), [`/gap-analysis`](./skills/gap-analysis.md), [`/iterative-plan-review`](./skills/iterative-plan-review.md), [`/plan-a-feature`](./skills/plan-a-feature.md), [`/plan-implementation`](./skills/plan-implementation.md), [`/research`](./skills/research.md).
 
 Read the full [Sizing](./sizing.md) reference for the bands, the auto-classification process, and the per-skill rules.
 
@@ -103,7 +103,7 @@ Direct invocation uses the `Agent` tool with `subagent_type: han:{agent-name}` (
 
 ## How Han is packaged
 
-Han ships as three plugins in one marketplace. `han.core` carries the skills and every agent. `han.github` adds the two GitHub PR skills and depends on `han.core`, so installing it brings the core along. `han` is a meta-plugin with no components of its own that depends on both, so installing it pulls in the whole suite. The practical choice is two options wide: core only, or the full suite. There is no GitHub-only install.
+Han ships as three plugins in one marketplace. `han.core` carries the skills and every agent. `han.github` adds the GitHub skills and depends on `han.core`, so installing it brings the core along. `han` is a meta-plugin with no components of its own that depends on both, so installing it pulls in the whole suite. The practical choice is core only, or the full suite. There is no GitHub-only install.
 
 For which one to install and the dependency that surprises people, read [Choosing a Han plugin](./choosing-a-han-plugin.md).
 

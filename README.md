@@ -35,7 +35,7 @@ Add the Test Double skills marketplace to Claude Code, then install the plugin:
 /plugin install han@han
 ```
 
-Han ships as three plugins: `han.core` (the planning, investigation, review, and documentation skills plus every agent), `han.github` (GitHub-facing skills like posting a code review on a PR), and `han` (a meta-plugin with no components of its own that depends on the other two). Installing `han@han` pulls in the whole suite, and is the right choice for almost everyone. If you do not want the GitHub PR skills, install `han.core@han` instead. There is no GitHub-only install: `han.github` depends on `han.core`, so installing it brings the core skills and every agent along with it. For the full picture and a quick "which one do you need?" guide, see [Choosing a Han plugin](./docs/choosing-a-han-plugin.md).
+Han ships as three plugins: `han.core` (the planning, investigation, review, and documentation skills plus every agent), `han.github` (GitHub-facing skills like posting a code review on a PR), and `han` (a meta-plugin with no components of its own that depends on the other two). Installing `han@han` pulls in the whole suite, and is the right choice for almost everyone. If you do not want the GitHub skills, install `han.core@han` instead. There is no GitHub-only install: `han.github` depends on `han.core`, so installing it brings the core skills and every agent along with it. For the full picture and a quick "which one do you need?" guide, see [Choosing a Han plugin](./docs/choosing-a-han-plugin.md).
 
 ## Documentation
 

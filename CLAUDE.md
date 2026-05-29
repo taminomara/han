@@ -21,7 +21,7 @@ Han is a Claude Code plugin suite for solo (or small-team) product engineers. It
 │   ├── agents/         # Agent definitions (.md with frontmatter)
 │   ├── skills/         # Skill directories, each with SKILL.md + references/
 │   └── references/     # Cross-skill reference files (e.g. yagni-rule.md)
-├── han.github/         # GitHub plugin: gh-pr-review, update-pr-description
+├── han.github/         # GitHub plugin: gh-pr-review, update-pr-description, work-items-to-issues
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   └── skills/         # GitHub-facing skill directories, each with SKILL.md + scripts/
@@ -61,7 +61,7 @@ The plugins are shipped from `han.core/` and `han.github/`; the `han/` meta-plug
 - **[docs/quickstart.md](./docs/quickstart.md).** Five path-based recipes (plan a feature, investigate a bug, review code, set up a project, research your options). Use when picking which skill to run for a specific situation. For the full end-to-end recipe for planning, bugs, or research, the quickstart points into the how-to guides below.
 - **[docs/choosing-a-han-plugin.md](./docs/choosing-a-han-plugin.md).** Which plugin to install: the full `han` suite vs. `han.core` only, the `han.github`-depends-on-`han.core` dependency (there is no GitHub-only install), and a "which one do you need?" guide. Use when an operator is at the install decision point or asks what the three plugins are.
 - **[docs/how-to/README.md](./docs/how-to/README.md).** Three end-to-end workflow guides (plan a feature, triage and investigate a bug, research a decision) that walk the whole loop with specific prompts, decision points, and what to expect at each step. Use when the operator wants the full recipe and not just a path-picker. The quickstart is canonical for picking a path; a how-to is canonical for running it.
-- **[docs/sizing.md](./docs/sizing.md).** The small / medium / large dispatch model used by the seven swarming skills (`/architectural-analysis`, `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, `/plan-implementation`, `/research`). Use when a swarming skill needs to decide team size, or when a user asks what `medium` / `large` mean.
+- **[docs/sizing.md](./docs/sizing.md).** The small / medium / large dispatch model used by the swarming skills (`/architectural-analysis`, `/code-review`, `/gap-analysis`, `/iterative-plan-review`, `/plan-a-feature`, `/plan-implementation`, `/research`). Use when a swarming skill needs to decide team size, or when a user asks what `medium` / `large` mean.
 - **[docs/yagni.md](./docs/yagni.md).** The evidence-based "You Aren't Gonna Need It" rule every planning, review, and architecture skill applies before committing items to its artifact. Use when explaining why an item was deferred or rejected from a plan / review / ADR.
 - **[docs/evidence.md](./docs/evidence.md).** The three structural principles (proximity to origin, corroboration, explicit no-evidence labeling) that define what "evidence-based" means in Han, plus the trust-class vocabulary (codebase / web / provided) that grounds the corroboration gate. Use when a skill, agent, or operator asks what counts as valid evidence, how to label uncorroborated claims, or what to do when no evidence exists at all.
 - **[docs/why-solo-and-small-teams.md](./docs/why-solo-and-small-teams.md).** Honest fit answer for teams evaluating Han: the plugin is designed for solo product engineers and small teams, not for large teams or enterprise. Use when an operator is evaluating Han against an organization-sized governance or coordination problem, or when explaining what Han is and is not built for.
@@ -89,6 +89,7 @@ The plugins are shipped from `han.core/` and `han.github/`; the `han/` meta-plug
 - **[docs/skills/coding-standard.md](./docs/skills/coding-standard.md).** Create and update coding standards from existing patterns or evidence-based research.
 - **[docs/skills/architectural-decision-record.md](./docs/skills/architectural-decision-record.md).** Create, extract, or convert architectural decision records (ADRs).
 - **[docs/skills/update-pr-description.md](./docs/skills/update-pr-description.md).** Generate a PR description from the current branch's changes.
+- **[docs/skills/work-items-to-issues.md](./docs/skills/work-items-to-issues.md).** Publish each item in a `/plan-work-items` work-items file as a GitHub issue in its target repo, with within-repo blockers linked and no label or assignee by default.
 - **[docs/skills/runbook.md](./docs/skills/runbook.md).** Create or update a runbook for a single operational scenario (alert that has fired, incident, recurring task, known failure mode). Applies a YAGNI preflight that requires real evidence before writing.
 
 ### Agent catalog (`docs/agents/`)
