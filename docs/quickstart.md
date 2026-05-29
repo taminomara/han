@@ -4,6 +4,8 @@ New to the han plugin? Pick the path that matches what you are trying to do righ
 
 > See also: [Plugin landing page](../README.md) · [Concepts](./concepts.md) · [How-to guides](./how-to/README.md) · [Skills](./skills/README.md) · [Agents](./agents/README.md) · [Sizing](./sizing.md) · [YAGNI](./yagni.md)
 
+> **Have not installed Han yet?** Read [Choosing a Han plugin](./choosing-a-han-plugin.md) first to pick between the full suite and core only, then come back here.
+
 If you want the full end-to-end recipe for one of these paths (specific prompts, what to do between steps, what to expect at each one), the [how-to guides](./how-to/README.md) cover planning, bug triage, and research workflows in depth. The quickstart points you at the right path; the how-to walks you through it.
 
 ## Which path are you on?

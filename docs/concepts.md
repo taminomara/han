@@ -101,6 +101,12 @@ You might invoke an agent directly when:
 
 Direct invocation uses the `Agent` tool with `subagent_type: han:{agent-name}` (for example, `han:adversarial-security-analyst`).
 
+## How Han is packaged
+
+Han ships as three plugins in one marketplace. `han.core` carries the skills and every agent. `han.github` adds the two GitHub-facing skills and depends on `han.core`, so installing it brings the core along. `han` is a meta-plugin with no components of its own that depends on both, so installing it pulls in the whole suite. The practical choice is two options wide: core only, or the full suite. There is no GitHub-only install.
+
+For which one to install and the dependency that surprises people, read [Choosing a Han plugin](./choosing-a-han-plugin.md).
+
 ## What does the plugin include?
 
 - **The skills.** The [skills index](./skills/README.md) groups them by purpose (planning, building, investigation and research, review, discovery, conventions, reporting, operations).
