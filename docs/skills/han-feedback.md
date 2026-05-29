@@ -71,4 +71,6 @@ No agents are dispatched. The skill runs in the current conversation context usi
 
 - [Plugin landing page](../../README.md)
 - [All skills](./README.md)
+- [How to provide feedback on Han](../how-to/provide-feedback.md) — the end-to-end recipe this skill is the second half of, alongside `/issue-triage` for ideas and vague observations
+- [Choosing a Han plugin](../choosing-a-han-plugin.md) — why `han.feedback` is installed separately from the bundled suite
 - [Concepts](../concepts.md) — the skill-and-agent model the plugin uses

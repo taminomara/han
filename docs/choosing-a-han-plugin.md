@@ -69,4 +69,5 @@ Choosing `han.core` is not a one-way door. If you start with core only and later
 - [Concepts](./concepts.md). The skill-and-agent model that runs through the whole suite.
 - [Quickstart](./quickstart.md). Five paths for five common situations, once you have installed.
 - [Skills Index](./skills/README.md). Every skill, grouped by purpose.
+- [How to provide feedback on Han](./how-to/provide-feedback.md). What to do once `han.feedback` is installed, and how to shape an idea into an issue with `/issue-triage`.
 - [Why solo and small teams?](./why-solo-and-small-teams.md). The honest fit answer if you are still deciding whether Han is for you.
