@@ -1,52 +1,5 @@
 # Han Release Notes
 
-## v3.0.0
-
-This release restructures Han from a single plugin into a parent meta-plugin (`han` 3.0.0) that installs its capabilities through child plugins, each versioned on its own. Four child plugins ship at 1.0.0: `han.core` (planning, review, investigation, and documentation), `han.github` (GitHub-facing skills), `han.reporting` (stakeholder and HTML reporting), and the opt-in `han.feedback`. Installing `han` now pulls in `han.core`, `han.github`, and `han.reporting` through dependencies. `han.feedback` is installed separately.
-
-### han v3.0.0
-
-`han` is now a meta-plugin with no skills or agents of its own. It installs `han.core`, `han.github`, and `han.reporting` through its `dependencies`. Anyone who installed the previous single plugin needs to reinstall against the new layout, which is why this is a major release.
-
-Documentation was reworked to match the split. Paths throughout the docs were repointed from the old `plugin/` tree to `han.core` and `han.github`. Added a "Choosing a Han Plugin" page and reorganized the README path-finder into categories. Added how-to guides for extending Han with your own plugin via dependencies, closing the request from [@mxriverlynn](https://github.com/mxriverlynn) in #31. Made `CONTRIBUTING.md` plugin-aware and stopped hardcoding skill and agent counts across the docs so the indexes no longer drift.
-
-### han.core v1.0.0
-
-New plugin at 1.0.0. Packages the core of Han: the planning, building, investigation, review, discovery, and documentation skills, plus the specialist agents that previously shipped under the single `han` plugin. This release also adds a `/runbook` skill for operational scenarios and an `on-call-engineer` agent.
-
-Fixed `/gap-analysis` based on feedback from [@mjansen401](https://github.com/mjansen401) in #34, and documented the resulting behavior changes in its long-form doc. Corrected `/plan-a-feature`, `/plan-implementation`, `/issue-triage`, and `/research` based on feedback from [@mjansen401](https://github.com/mjansen401) in #36: `/plan-a-feature` gained weight-based decision-log triggering and connected-source resolution, `/plan-implementation` gained synthesis-audit parity and an altitude rule, `/issue-triage` added a `/research` route and omits inapplicable fields, and `/research` now right-sizes its report and hands off pure requests.
-
-### han.github v1.0.0
-
-New plugin at 1.0.0. Packages the GitHub-facing skills. Renamed the old `gh-pr-review` skill to `/post-code-review-to-pr` and moved `/update-pr-description` in. Added a new `/work-items-to-issues` skill that publishes each item in a work-items file as a GitHub issue, links within-repo blockers, and leaves the label and assignee optional.
-
-### han.reporting v1.0.0
-
-New plugin at 1.0.0. Packages the reporting skills. Moved `/stakeholder-summary` in and added a new `/html-summary` skill that converts a stakeholder summary into a single self-contained HTML executive report, styled with a Test Double-derived palette and inlined Mermaid diagrams.
-
-### han.feedback v1.0.0
-
-New plugin at 1.0.0. An opt-in plugin packaging the `/han-feedback` skill, which captures structured post-session feedback across the whole `han.*` family and can post it as a GitHub issue to testdouble/han. It depends on `han.core` but is deliberately left out of the `han` meta-plugin, so you install it on its own.
-
-### Issues closed in this release
-
-- How-to for extending Han skills via plugin dependencies (#31). Opened by [@mxriverlynn](https://github.com/mxriverlynn); fixed in #32 by [@mxriverlynn](https://github.com/mxriverlynn).
-- Feedback on `/gap-analysis` (#34). Opened by [@mjansen401](https://github.com/mjansen401); fixed in #37 by [@mxriverlynn](https://github.com/mxriverlynn).
-- Feedback on `/issue-triage`, `/research`, `/plan-a-feature`, and `/plan-implementation` (#36). Opened by [@mjansen401](https://github.com/mjansen401); fixed in #38 by [@mxriverlynn](https://github.com/mxriverlynn).
-
-### Pull requests in this release
-
-- #28 docs: stop hardcoding skill/agent counts ([@afrerich](https://github.com/afrerich))
-- #29 Han v3.0.0 - Plugin restructure as dependencies ([@mxriverlynn](https://github.com/mxriverlynn))
-- #32 How-To: Extending Han with plugin dependencies ([@mxriverlynn](https://github.com/mxriverlynn))
-- #33 Rename gh-pr-review skill to post-code-review-to-pr ([@mxriverlynn](https://github.com/mxriverlynn))
-- #35 Han reporting ([@mxriverlynn](https://github.com/mxriverlynn))
-- #37 Gap analysis correction ([@mxriverlynn](https://github.com/mxriverlynn))
-- #38 Issue #36 investigation and corrections plan across four skills ([@mxriverlynn](https://github.com/mxriverlynn))
-- #39 Add /han-feedback skill ([@mjansen401](https://github.com/mjansen401))
-
-**Full changelog:** https://github.com/testdouble/han/blob/v3.0.0/CHANGELOG.md#v300
-
 ## v2.7.0
 
 This release adds a new operational runbook skill, a new adversarial on-call agent wired into six existing skills, and a canonical evidence rule extracted out of `/research` into a plugin-wide reference that long-form docs and agent prompts now point at. The shipped catalog moves from 20 skills and 22 agents (v2.6.2) to 21 skills and 23 agents. Operators should notice three concrete things: `/runbook` is available for the first time, six review and planning skills (`/code-review`, `/architectural-analysis`, `/plan-a-feature`, `/plan-implementation`, `/iterative-plan-review`, `/gap-analysis`) now include `on-call-engineer` in their swarm rosters, and `/research` reports now end in a single indexed `Sources` registry instead of separate `Artifacts` and `References` sections. The release also lands a new how-to guide set, a "why solo and small teams" intro doc, and a documentation drift sweep across long-form docs.
