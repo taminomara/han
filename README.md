@@ -14,34 +14,6 @@ Read [Concepts](./docs/concepts.md) for the skill-and-agent model that runs thro
 
 > **Evaluating Han for a larger org?** Han is built for solo product engineers and small teams, not for large teams or enterprise. Read [Why solo and small teams, and not large teams or enterprise?](./docs/why-solo-and-small-teams.md) for the honest fit answer before going further.
 
-## Which path are you on?
-
-### Getting started
-
-- **New to han?** → Start with [Concepts](./docs/concepts.md), then the [Quickstart](./docs/quickstar.md)
-- **Deciding which plugin to install?** → [Choosing a Han plugin](./docs/choosing-a-han-plugin.md)
-
-### Running a workflow
-
-- **Want the end-to-end recipe for a workflow?** → [How-to guides](./docs/how-to/README.md)
-
-### Finding a skill or agent
-
-- **Looking for a specific skill?** → [Skills Index](./docs/skills/README.md)
-- **Looking for a specific agent?** → [Agents Index](./docs/agents/README.md)
-
-### Understanding how Han works
-
-- **Wondering how the agent swarms scale?** → [Sizing](./docs/sizing.md)
-- **Wondering why a skill said "YAGNI"?** → [YAGNI](./docs/yagni.md)
-- **Wondering what counts as evidence?** → [Evidence](./docs/evidence.md)
-
-### Extending and contributing
-
-- **Want to send the maintainers feedback?** → [How to provide feedback on Han](./docs/how-to/provide-feedback.md)
-- **Want to extend Han with custom skills?** → [Extend Han via dependencies](./docs/how-to/extend-han-with-plugin-dependencies.md) and [Build a plugin that depends on Han](./docs/how-to/build-a-plugin-that-depends-on-han.md)
-- **Writing or editing a skill or agent?** → [Contributing](./CONTRIBUTING.md)
-
 ## Installation
 
 Add the Test Double skills marketplace to Claude Code, then install the plugin:
@@ -79,6 +51,9 @@ For the full picture and a quick "which one do you need?" guide, see [Choosing a
 - [Sizing](./docs/sizing.md). The small / medium / large model that decides how many agents the swarming skills dispatch.
 - [YAGNI](./docs/yagni.md). The evidence-based "You Aren't Gonna Need It" rule every planning, review, and architecture skill applies.
 - [Evidence](./docs/evidence.md). What counts as evidence in Han, how to characterize how strong it is, and what to do when no evidence exists at all.
+- [How to provide feedback on Han](./docs/how-to/provide-feedback.md). Send the maintainers structured feedback on a skill or agent run.
+- [Extend Han via dependencies](./docs/how-to/extend-han-with-plugin-dependencies.md). Add your own custom skills on top of Han.
+- [Build a plugin that depends on Han](./docs/how-to/build-a-plugin-that-depends-on-han.md). Ship a plugin that builds on Han's skills and agents.
 - [Contributing](./CONTRIBUTING.md). Adding or editing skills, agents, and documentation.
 - [Changelog](./CHANGELOG.md). What's new in each version of the plugin.
 
