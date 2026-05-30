@@ -1,6 +1,6 @@
 ---
 name: Feedback, bug, or feature request
-about: Share feedback on a Han skill, report a bug, or request a feature
+about: Share feedback on a Han skill or agent, report a bug, or request a feature
 title: ""
 labels: []
 assignees: []
@@ -27,8 +27,10 @@ here as an issue:
 2. Feedback on a session you ran.
    Install the opt-in han.feedback plugin (/plugin install han.feedback@han)
    and run /han-feedback at the end of the session, before you compact the
-   context. It summarizes what worked, what did not, and a rating, then offers
-   to post the issue for you.
+   context. It captures the Han skills and agents you used across the whole
+   han.* family (han.core, han.github, han.reporting, han.feedback), summarizes
+   what worked, what did not, and a rating, then offers to post the issue for
+   you.
 
 Prefer to write it by hand? That works too. Fill in the sections below and
 delete any that do not apply, along with these instructions.
@@ -38,9 +40,9 @@ delete any that do not apply, along with these instructions.
 
 <!-- Pick one: Bug · Feature request · Feedback on a skill · Question · Other -->
 
-## Which Han skill or skills does this involve?
+## Which Han skill or agent does this involve?
 
-<!-- For example /code-review or /plan-a-feature. Write "not skill-specific" if it is general. -->
+<!-- For example /code-review, /plan-a-feature, or an agent like risk-analyst or evidence-based-investigator. Write "not component-specific" if it is general. -->
 
 ## What happened, and what did you expect?
 
