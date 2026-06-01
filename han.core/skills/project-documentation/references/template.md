@@ -27,13 +27,18 @@ Key files:
 
 ## Architecture
 
-<!-- ASCII block diagram showing the feature's high-level structure: the main parts and -->
-<!-- how they connect. Use box-drawing characters (┌─┐│└─┘) for boxes, arrows (→ ──▶ │ ▼) -->
-<!-- for connections. This shows what the parts are; How It Works and Primary Flows below -->
-<!-- explain what they do. -->
+<!-- Mermaid diagram showing the feature's high-level structure: the main parts and how -->
+<!-- they connect. Use a `flowchart` (TD for layered structure, LR for a pipeline). Label -->
+<!-- each node with a part a reader would recognize, and label the edges with what passes -->
+<!-- between them. This shows what the parts are; How It Works and Primary Flows below -->
+<!-- explain what they do. Keep it to the parts that matter — a reader should grasp the -->
+<!-- shape at a glance, not trace every wire. -->
 
-```
-Diagram here
+```mermaid
+flowchart TD
+    A[Component A] -->|sends request| B[Component B]
+    B --> C[(Data store)]
+    B -->|emits| D[Downstream consumer]
 ```
 
 ## How It Works
@@ -54,7 +59,8 @@ Diagram here
 <!-- list the steps in plain language (what happens and why, not which function is called), -->
 <!-- and state the outcome. Narrate the main failure path too, as steps. Reference a file -->
 <!-- or type by name only when it aids understanding; the deep detail lives in Technical -->
-<!-- Reference below. Add a small diagram here if a flow needs one. -->
+<!-- Reference below. Add a small Mermaid diagram here if a flow needs one — a -->
+<!-- `sequenceDiagram` for actor-to-system exchanges, or a `flowchart` for branching paths. -->
 
 ### {Flow name}
 
@@ -242,13 +248,14 @@ See `path/to/types-file` for the full definitions. Key fields:
 #### Component Hierarchy
 
 <!-- CONDITIONAL: Include when there's a meaningful page/component tree to illustrate. -->
+<!-- Use a Mermaid `flowchart TD` so the tree renders as nested boxes. -->
 
-```
-PageComponent
-└── ContainerComponent
-    ├── HeaderComponent
-    └── TableComponent
-        └── CellComponents
+```mermaid
+flowchart TD
+    Page[PageComponent] --> Container[ContainerComponent]
+    Container --> Header[HeaderComponent]
+    Container --> Table[TableComponent]
+    Table --> Cell[CellComponents]
 ```
 
 #### Routing
