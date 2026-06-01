@@ -40,6 +40,7 @@ Operator documentation for the `/plan-implementation` skill in the han plugin. T
 - **Recording an architectural decision that has already been made.** Use `/architectural-decision-record` when the decision is settled and needs to be captured as an ADR.
 - **File-level code review.** Use `/code-review` for correctness, style, and maintainability review of committed or pending code.
 - **Documenting an already-built feature.** Use `/project-documentation` when the feature exists and the team wants documentation.
+- **Contributing a new skill, agent, or documentation file to a plugin.** Follow the repository's `CONTRIBUTING.md` checklist. This skill is sized for shipping software features; a plugin contribution is a conventions-driven file addition, and routing it through the full implementation-planning protocol produces more scaffolding than the change warrants. (Documentation with genuine behavioral complexity, like a multi-surface guide, is still a fit.)
 
 ## How to invoke it
 

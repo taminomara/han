@@ -37,6 +37,7 @@ Operator documentation for the `/plan-a-feature` skill in the han plugin. This d
 - **Investigating a bug or failure.** Use `/investigate` for evidence-based root-cause work.
 - **Analyzing existing architecture.** Use `/architectural-analysis` for assessing coupling, cohesion, data flow, concurrency, and SOLID alignment of an already-built module.
 - **Documenting an already-built feature.** Use `/project-documentation` when the feature exists and needs documentation.
+- **Contributing a new skill, agent, or documentation file to a plugin.** Follow the repository's `CONTRIBUTING.md` checklist. This skill is sized for software features grounded in a codebase; a plugin contribution is a conventions-driven file addition, and routing it through the full specification protocol produces more scaffolding than the change warrants. (Documentation with genuine behavioral complexity, like a multi-surface guide, is still a fit.)
 - **Recording an architectural decision.** Use `/architectural-decision-record` when the team has made a decision that needs to be captured as an ADR.
 - **File-level code review.** Use `/code-review` for correctness, style, and maintainability review of committed or pending code.
 - **Researching options before there is a feature to spec.** Use [`/research`](./research.md) to weigh options and prior art; bring the recommendation back here to specify it.
