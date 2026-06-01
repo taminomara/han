@@ -57,9 +57,10 @@ Example prompts:
 
 A feature doc under the project's documentation root plus integration:
 
-- **`docs/{feature-name}.md`.** The feature doc, following the template at [`references/template.md`](../../han.core/skills/project-documentation/references/template.md). Structural sections: title + one-sentence description, Overview, Key Files, Behavior, Configuration, Error Handling, Testing, and Related Documentation. Template sections marked CONDITIONAL are omitted when they do not apply.
-- **Absolute file paths** from the repo root in every code example.
-- **Concrete, annotated code examples** (10–30 lines) drawn from real files.
+- **`docs/{feature-name}.md`.** The feature doc, following the template at [`references/template.md`](../../han.core/skills/project-documentation/references/template.md). The doc leads with behavior: a plain-language Summary, an Architecture diagram, a How It Works overview, and Primary Flows that narrate the main paths step by step. Reference detail (data model, core types, constants, implementation notes, API endpoints, components) sits below under a `## Technical Reference` region for the reader who needs it. Template sections marked CONDITIONAL are omitted when they do not apply.
+- **Behavioral overview first.** A reader who only needs to understand what the feature does and how it behaves can stop after Primary Flows and never read the Technical Reference.
+- **Absolute file paths** from the repo root.
+- **Reference code as pointers and short snippets.** Technical Reference points to the file and function and shows a short snippet only where the source is non-obvious, rather than reproducing long source blocks.
 - **Language-specific code fences** matching the project's actual language.
 - **`CLAUDE.md` / `AGENTS.md` reference.** A line added in the section most relevant to the feature.
 - **Bidirectional cross-references** to related docs.
@@ -84,7 +85,7 @@ The skill walks an eight-step process:
 
 1. **Evaluate and gather context.** Guard check for ADR/coding-standard topics, resolve the docs directory, derive the target filename, resolve author info, flag whether the content audit will run.
 2. **Explore the codebase.** Two to three `codebase-explorer` agents in parallel; merge into a unified D1/D2/D3 discovery summary.
-3. **Write the documentation.** Follow the template; absolute paths; concrete code examples; language-specific fences; conditional sections omitted; update mode preserves existing structure and flags provisional removals.
+3. **Write the documentation.** Follow the template, leading with behavior (Summary, How It Works, Primary Flows) before the Technical Reference; absolute paths; reference code as pointers and short snippets; language-specific fences; conditional sections omitted; update mode preserves existing structure and flags provisional removals.
 4. **Update agent configuration files.** Add the `CLAUDE.md` / `AGENTS.md` reference in the right section with the project's existing pattern.
 5. **Cross-reference.** Grep for the feature name across existing docs; add bidirectional references.
 6. **Content audit** (when updating). Dispatch `content-auditor`; restore facts classified Missing.
@@ -109,7 +110,7 @@ URL: https://www.writethedocs.org/guide/
 
 ### JoAnn Hackos: Information Development
 
-Hackos's work on topic-based authoring and DITA concept/task/reference distinctions underlies the template's structure: an Overview section is concept, a Behavior section is task-like, Configuration and Key Files are reference.
+Hackos's work on topic-based authoring and DITA concept/task/reference distinctions underlies the template's structure: the Summary and How It Works sections are concept, Primary Flows are task-like, and the Technical Reference region (data model, core types, constants, API endpoints) is reference.
 
 URL: https://en.wikipedia.org/wiki/Darwin_Information_Typing_Architecture
 
