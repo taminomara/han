@@ -8,14 +8,17 @@ Operator documentation for the `/test-planning` skill in the han plugin. This do
 
 - **What it does.** Produces a standalone test plan by analyzing code for coverage gaps and edge cases. Dispatches `test-engineer` and `edge-case-explorer` in parallel and adds `concurrency-analyst` or `adversarial-security-analyst` when the files touch those concerns, then merges all findings.
 - **When to use it.** You want a prioritized test plan for a branch, a directory, or specific files, without running a full code review.
-- **What you get back.** A unified test plan with up to 40 items tagged CRIT / HIGH / MED / LOW, each with `file:line` references, test approach, code paths, and risk assessment.
+- **What you get back.** A test plan that leads with plain language — a Summary, a What Needs Testing and Why section, and a What Each Test Covers walkthrough — over a Technical Reference holding up to 40 items tagged CRIT / HIGH / MED / LOW, each with `file:line` references, test approach, code paths, and risk assessment.
 
 ## Key concepts
 
+- **Behavioral tests only, at the public API.** Every recommended test verifies observable behavior at a public seam — caller-supplied inputs, observed outputs and side effects, and interactions with the objects and services the unit collaborates with. The skill does not recommend tests that reach into private methods, internal state, or implementation structure: if two implementations would produce the same observable behavior, the test must pass for both. It covers the critical behaviors a caller depends on and stops, rather than specifying a test for every branch, helper, or intermediate value.
 - **Two always-on agents plus two conditional.** `test-engineer` analyzes coverage gaps (observable behaviors, inputs, outputs, collaborator interactions). `edge-case-explorer` discovers boundary values, type coercion traps, state-dependent failures, and error propagation gaps. `concurrency-analyst` joins when the files touch threads/async/shared state, to surface race and lock-ordering tests. `adversarial-security-analyst` joins when the files touch auth, input handling, isolation, crypto, uploads, or SQL/ORM, to surface negative security tests. Security items land as CRIT and are exempt from the 40-item cap.
 - **Four-tier priority scheme.** CRIT (security, data integrity, auth), HIGH (business logic, error handling), MED, LOW. Classification comes from both agents' rankings mapped into a unified scheme.
 - **Unified IDs with cross-reference.** `TP-001`, `TP-002`, … with the original agent ID recorded (for example, *"TP-001 (from T3)"*).
 - **Three review modes.** Mode A (full git context, branch vs default), Mode B (uncommitted/staged changes), Mode C (no git, glob-discovered files).
+- **Plain-language spine, technical reference below.** The plan leads with a Summary, a What Needs Testing and Why themes section, and a What Each Test Covers walkthrough, all in plain language. The per-item detail (test level, code paths, approach, priority justification), deferred and dropped items, coverage counts, and scope sit below under a `## Technical Reference` region for the reader who needs them.
+- **Output review pass.** After generating the plan, the skill dispatches `information-architect` and `junior-developer` in parallel against it — the first confirms the plan leads with plain language and defers the implementation detail, the second confirms the plain-language layer is comprehensible on its own. Actionable edits are applied before the plan is finalized.
 - **Plan, not test code.** The skill does not write tests. It produces a plan describing what to test, how, and at what level.
 
 ## When to use it
@@ -52,13 +55,17 @@ Example prompts:
 
 ## What you get back
 
-A structured test plan in-channel:
+A structured test plan in-channel, leading with plain language and deferring the implementation detail:
 
-- **Scope.** Scope type, file count, branch, language, test framework, file list.
-- **Test Plan.** Up to 40 items, grouped by priority tier (CRIT, HIGH, MED, LOW). Each item has a unified ID (TP-NNN), the original agent cross-reference, a clear description of what to test, test approach, code paths, file:line references, and risk assessment.
-- **Deferred Tests.** Items `test-engineer` excluded because brittleness risk outweighed value, with reasons.
-- **Dropped Edge Cases.** Items `edge-case-explorer` intentionally excluded, with reasons.
-- **Coverage Summary.** Counts by priority tier and a qualitative assessment of overall coverage.
+- **Summary.** A plain-language paragraph for a reader who has not seen the code — what was analyzed, the overall state of coverage, the biggest risk, and where to start — plus orienting bullets.
+- **What Needs Testing and Why.** The testing work grouped into 2-4 themes, each explained in everyday terms (what could break, who is affected) and ending with the test IDs it covers.
+- **What Each Test Covers.** Every meaningful test as a plain-language line led by its TP-ID, stating what behavior it protects and what would break untested.
+- **Technical Reference.** The implementation outline below the plain-language spine:
+  - **Test Plan.** Up to 40 items, grouped by priority tier (CRIT, HIGH, MED, LOW). Each item has a unified ID (TP-NNN), the original agent cross-reference, a clear description of what to test, test approach, code paths, file:line references, and risk assessment.
+  - **Deferred Tests.** Items `test-engineer` excluded because brittleness risk outweighed value, with reasons.
+  - **Dropped Edge Cases.** Items `edge-case-explorer` intentionally excluded, with reasons.
+  - **Coverage Summary.** Counts by priority tier.
+  - **Scope.** Scope type, file count, branch, language, test framework, file list.
 
 If more than 40 items exist, the skill notes how many were omitted and recommends a re-run after the highest-priority items land.
 
@@ -72,16 +79,17 @@ If more than 40 items exist, the skill notes how many were omitted and recommend
 
 ## Cost and latency
 
-The skill dispatches two always-on agents (`test-engineer`, `edge-case-explorer`) plus up to two conditional agents (`concurrency-analyst`, `adversarial-security-analyst`) in parallel, all on their default models. Typical runs are a few minutes. The 40-item cap keeps non-security output bounded; security items are uncapped, and dropped items are surfaced explicitly so nothing is quietly omitted.
+The skill dispatches two always-on agents (`test-engineer`, `edge-case-explorer`) plus up to two conditional agents (`concurrency-analyst`, `adversarial-security-analyst`) in parallel, all on their default models. After the plan is generated, two reviewers (`information-architect`, `junior-developer`) run in parallel against it. Typical runs are a few minutes. The 40-item cap keeps non-security output bounded; security items are uncapped, and dropped items are surfaced explicitly so nothing is quietly omitted.
 
 ## In more detail
 
-The skill walks a four-step process:
+The skill walks a five-step process:
 
 1. **Determine scope.** Resolve project config; detect git mode (A/B/C) via `detect-test-context.sh`; build a file list.
 2. **Dispatch testing agents.** Launch `test-engineer` and `edge-case-explorer` always. Add `concurrency-analyst` when the file list touches async or shared state. Add `adversarial-security-analyst` when it touches auth, input handling, isolation, crypto, uploads, or SQL/ORM. All run in parallel in the background. The skill waits for every dispatched agent.
 3. **Merge and prioritize.** Classify findings into the four-tier priority scheme (security items auto-CRIT). Assign unified IDs. Interleave by priority. Cap non-security items at 40.
-4. **Generate output.** Fill the template at [`references/template.md`](../../han.core/skills/test-planning/references/template.md) with scope, test plan, deferred, dropped, and coverage summary.
+4. **Generate output.** Fill the template at [`references/template.md`](../../han.core/skills/test-planning/references/template.md), leading with plain language (Summary, What Needs Testing and Why, What Each Test Covers) before the Technical Reference region that holds the per-item test plan, deferred, dropped, coverage summary, and scope.
+5. **Review the output.** Dispatch [`information-architect`](../agents/information-architect.md) and [`junior-developer`](../agents/junior-developer.md) in parallel against the generated plan — the information-architect confirms it leads with plain language and defers the implementation detail, the junior-developer confirms the plain-language layer stands on its own for a reader who never opens the Technical Reference. Apply every actionable edit; surface author-judgment findings with a recommended resolution.
 
 ## YAGNI
 
@@ -122,4 +130,5 @@ URL: https://www.wiley.com/en-us/Testing+Computer+Software%2C+2nd+Edition-p-9780
 - [`test-engineer`](../agents/test-engineer.md), [`edge-case-explorer`](../agents/edge-case-explorer.md). Always dispatched.
 - [`concurrency-analyst`](../agents/concurrency-analyst.md). Dispatched when the file list touches async, threads, or shared state.
 - [`adversarial-security-analyst`](../agents/adversarial-security-analyst.md). Dispatched when the file list touches auth, input handling, isolation, crypto, uploads, or SQL/ORM.
+- [`information-architect`](../agents/information-architect.md), [`junior-developer`](../agents/junior-developer.md). Review the generated plan for findability and plain-language clarity before it is finalized.
 - [`SKILL.md` for /test-planning](../../han.core/skills/test-planning/SKILL.md). The internal process definition.
