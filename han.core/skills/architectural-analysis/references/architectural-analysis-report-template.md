@@ -5,7 +5,7 @@ size: "{{small | medium | large}} — {{one_line_justification}}"
 roster: "{{comma_separated_list_of_dispatched_agents}}"
 git_available: "{{yes | no — churn and recency evidence skipped when no}}"
 generated: "{{YYYY-MM-DD}}"
-generated_by: "han:architectural-analysis"
+generated_by: "han.core:architectural-analysis"
 sections_included:
   - executive_summary
   - structural_analysis

@@ -128,7 +128,7 @@ Write documentation for the discovered feature using the template from
 
 ## Step 4: Validate Documentation
 
-Use the `Agent` tool with `content-auditor` to verify:
+Use the `Agent` tool with `han.core:content-auditor` to verify:
 - No fabricated details (only documents what exists in code)
 - All public interfaces are covered
 - Code examples compile/run
@@ -354,3 +354,4 @@ Cross-references:
 - [Skill Reference Files](./skill-reference-files.md) — Where to store domain knowledge referenced by workflow steps
 - [Progressive Disclosure](./progressive-disclosure.md) — How the three-level architecture supports workflow patterns
 - [Context Hygiene](./context-hygiene.md) — Why position effects matter for skill structure
+- [Agent Dispatch Namespacing](./agent-dispatch-namespacing.md) — Dispatch agents by `han.core:agent-name`, never bare or `han:`

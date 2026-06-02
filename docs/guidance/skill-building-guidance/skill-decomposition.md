@@ -94,7 +94,7 @@ Use the `Agent` tool to dispatch extracted agent definitions for specialized sub
 ```markdown
 ## Step 2: Investigate
 
-Use the `Agent` tool with `evidence-based-investigator` to gather evidence.
+Use the `Agent` tool with `han.core:evidence-based-investigator` to gather evidence.
 ```
 
 Add `Agent` to the skill's `allowed-tools`:
@@ -115,3 +115,4 @@ Cross-references:
 
 - [External File References in Agent Definitions](../agent-building-guidelines/agent-external-files.md). Agent file structure constraints.
 - [Skill Composition](./skill-composition.md). Orchestration vs data-fetch composition patterns.
+- [Agent Dispatch Namespacing](./agent-dispatch-namespacing.md). Name a dispatched agent `han.core:agent-name`.
