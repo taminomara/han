@@ -6,13 +6,14 @@ Operator documentation for the `/update-pr-description` skill in the han plugin.
 
 ## TL;DR
 
-- **What it does.** Generates a PR description from the current branch's changes against a GitHub PR using the `gh` CLI.
+- **What it does.** Generates a PR description from the current branch's changes against a GitHub PR using the `gh` CLI. When the repository defines its own GitHub pull-request template, the description conforms to that template's structure.
 - **When to use it.** You have a branch with committed changes and want a thorough PR description that surfaces the central mechanism, key files, and a test plan.
 - **What you get back.** A markdown PR description in-channel, optionally pushed to the open PR via `gh pr edit`.
 
 ## Key concepts
 
 - **Central mechanism up front.** Feature flags, migrations, and behavioral changes lead the Summary. Code structure is summarized; runtime behavior is not.
+- **Repository PR template aware.** Before generating, the skill looks for a GitHub pull-request template (in the repo root, `.github/`, `docs/`, or a `PULL_REQUEST_TEMPLATE/` directory). If it finds one, the description conforms to that template's headings and order instead of the default structure. It reads the template's intent rather than assuming a shape: a template whose comments say "replace this with a description" is treated as a throwaway scaffold and replaced wholesale, while a structural template's sections are filled in and preserved. Checklist boxes are checked only when the diff unambiguously proves them; the rest are left for the author. If multiple templates exist in a `PULL_REQUEST_TEMPLATE/` directory, the skill asks which to use.
 - **Junior-developer authors the description.** A `junior-developer` agent writes the PR description directly. Authoring with a fresh-reviewer perspective (a teammate without full project context) means the result already anticipates what a reviewer needs to see, so no separate review pass is required.
 - **"How this was tested" is conditional.** If the branch only changes documentation, the section is omitted. If any code or config file changed, it is included.
 - **Files of interest is a bulleted list, capped at five.** This section is a bulleted list of at most 5 entries, never a table. Each entry is `` `path` `` followed by a one-phrase reason the file matters for review. Generated files, mechanical refactors, trivial changes, and non-central test helpers are skipped.
@@ -50,7 +51,7 @@ Example prompts:
 
 ## What you get back
 
-A PR description rendered in-channel, optionally pushed to the open PR. Sections appear in this fixed order: Summary, What to look at first, How this was tested (when included), Files of interest, Test scenario changes (when tests were added or edited).
+A PR description rendered in-channel, optionally pushed to the open PR. When the repository has no PR template, sections appear in this fixed order: Summary, What to look at first, How this was tested (when included), Files of interest, Test scenario changes (when tests were added or edited). When the repository defines a PR template, the description follows that template's headings and order instead, with "What to look at first" and "Files of interest" appended when the template has no home for them.
 
 - **Summary.** Opens with a single bolded TL;DR sentence (`**This PR <verb> <behavior>, so that <why>.**`), followed by 2–4 bullets covering user-visible or runtime behavior, scope, and reviewer-attention pointers. A `### Behavior changes` subsection appears only when runtime behavior changes (flag flips, migrations, state-machine edits, config changes, API contract changes).
 - **What to look at first.** A 2–4 bullet attention guide pointing at decisions, tradeoffs, or risks. Not a file list.
@@ -73,14 +74,15 @@ The skill reads the git diff, stat, log, and any source files needed to understa
 
 ## In more detail
 
-The skill walks a six-step process:
+The skill walks a seven-step process:
 
 1. **Validate branch state.** Require `origin/HEAD`, require at least one commit, require at least one changed file.
-2. **Analyze changes.** Read the diff, stat, and log. Identify the central mechanism. Classify the change type.
-3. **Determine "How this was tested" applicability.** If all changed files are documentation, omit the section. If any are code or config, include it.
-4. **Generate the PR description.** Dispatch a `junior-developer` agent with the branch context, the inclusion decision from Step 3, and the contents of [`references/template.md`](../../han.github/skills/update-pr-description/references/template.md) and [`references/formatting-rules.md`](../../han.github/skills/update-pr-description/references/formatting-rules.md). The agent authors the description with a fresh-reviewer perspective, anticipating what a teammate without full project context needs to see. No nested fenced code blocks. No "Generated with Claude Code" trailer.
-5. **Verify.** Section order, file-table caps, valid markdown, branch-specific content only.
-6. **Display and update PR.** Show the description. If a PR exists, ask whether to push. On yes, `gh pr edit --body`.
+2. **Discover the repository PR template.** Look in the repo root, `.github/`, `docs/`, and any `PULL_REQUEST_TEMPLATE/` directory for a GitHub pull-request template. If exactly one is found, read it in full (including HTML comments). If a `PULL_REQUEST_TEMPLATE/` directory holds several, ask which to conform to. If none exists, the skill uses its default structure.
+3. **Analyze changes.** Read the diff, stat, and log. Identify the central mechanism. Classify the change type.
+4. **Determine "How this was tested" applicability.** If all changed files are documentation, omit the section. If any are code or config, include it.
+5. **Generate the PR description.** Dispatch a `junior-developer` agent with the branch context, the inclusion decision from Step 4, the contents of [`references/formatting-rules.md`](../../han.github/skills/update-pr-description/references/formatting-rules.md), and a structure directive. With no template, the directive carries [`references/template.md`](../../han.github/skills/update-pr-description/references/template.md) and the fixed section order. With a template, it carries the discovered template and the conformance rules in [`references/template-conformance.md`](../../han.github/skills/update-pr-description/references/template-conformance.md). The agent authors the description with a fresh-reviewer perspective, anticipating what a teammate without full project context needs to see. No nested fenced code blocks. No "Generated with Claude Code" trailer.
+6. **Verify.** Structure (fixed order, or conformance to the discovered template), file-list caps, valid markdown, branch-specific content only.
+7. **Display and update PR.** Show the description. If a PR exists, ask whether to push. On yes, `gh pr edit --body`.
 
 ## Sources
 
