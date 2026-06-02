@@ -70,7 +70,7 @@ Skills for capturing operational knowledge in artifacts the next on-call enginee
 GitHub-facing skills that talk to GitHub through the `gh` CLI. Depends on `han.core`.
 
 - **[`/post-code-review-to-pr`](./post-code-review-to-pr.md).** Run `/code-review` against a GitHub PR and post the review as comments, after a `junior-developer` clarity check on the drafted review body.
-- **[`/update-pr-description`](./update-pr-description.md).** Generate a PR description from the current branch's changes.
+- **[`/update-pr-description`](./update-pr-description.md).** Generate a PR description from the current branch's changes, conforming to the repository's PR template when one exists.
 - **[`/work-items-to-issues`](./work-items-to-issues.md).** Publish each item in a `/plan-work-items` work-items file as a GitHub issue in its target repo, with within-repo blockers linked, screenshots copied into the repo, and no label or assignee by default.
 
 ## han.reporting
