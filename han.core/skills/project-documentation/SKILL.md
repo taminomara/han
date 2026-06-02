@@ -51,15 +51,24 @@ Use the template at [template.md](references/template.md) as the structural guid
 **File location:** `docs/{feature-name}.md` (in the directory determined in Step 1)
 
 **Writing rules:**
-1. **Absolute file paths** from repo root (e.g., `src/services/auth.ts`, not `./auth.ts`)
-2. **Concrete code examples** — 10-30 lines, annotated, copied or adapted from actual source code
-3. **Code fence language identifiers** must match the project's actual languages (from Step 1)
-4. **Document constants and magic numbers** with their actual values
-5. **Skip CONDITIONAL sections** from the template that don't apply — don't include empty sections
-6. **One-sentence description** in the title area summarizing what the feature does
-7. **Separate backend and frontend content** — use `### Backend` / `### Frontend` sub-headings for cross-cutting features; skip sub-headings for single-layer features
 
-**Updating existing documents:** Read the entire existing document first and note all content sources (existing doc, content migrated from CLAUDE.md or other files, any other inputs). Preserve the existing structure — don't reorganize unless requested. Identify sections needing changes based on Step 2 exploration. Add new sections where the template suggests them. Flag removals as provisional for the Content Audit (Step 6). Update code examples to match current source and update cross-references in both directions.
+Lead with behavior. These rules make the doc an overview first and a reference second:
+1. **Lead with behavior.** Write the Summary, How It Works, and Primary Flows in plain language before any reference section. Describe what the feature does and what happens when it runs, in functional terms. Name files and types only where it aids understanding.
+2. **Summary is prose plus bullets.** Open the Summary with a 2-4 sentence plain-language paragraph for a reader who has not seen the code, then the scannable bullets. The paragraph carries no code, type names, or paths.
+3. **Primary Flows narrate the main paths.** Cover the 1-3 flows that matter, not every branch. Name the actor or trigger, give numbered plain-language steps (what happens and why, not which function is called), state the outcome, and narrate the main failure path.
+4. **Reference is supporting detail.** Place schema, core types, constants, implementation notes, API bodies, and component listings under the `## Technical Reference` region, below the behavioral spine. Treat them as lookup material, not the document's main body.
+
+Apply to every section:
+5. **Absolute file paths** from repo root (e.g., `src/services/auth.ts`, not `./auth.ts`).
+6. **Prefer pointers over long code.** In Technical Reference, point to the file and function and include a short illustrative snippet only where the source is non-obvious. Do not reproduce long (10-30 line) source blocks; link to the source instead.
+7. **Code fence language identifiers** must match the project's actual languages (from Step 1).
+8. **Document constants and magic numbers** with their actual values in the Constants table.
+9. **Skip CONDITIONAL sections** from the template that don't apply. Don't include empty sections.
+10. **One plain-language description** in the title area summarizing what the feature does.
+11. **Separate backend and frontend content.** Use `### Backend` / `### Frontend` sub-headings for cross-cutting features; skip sub-headings for single-layer features.
+12. **Diagrams are Mermaid, not ASCII.** Render the Architecture diagram, any Primary Flow diagram, and the Component Hierarchy as Mermaid in a ```` ```mermaid ```` fence — `flowchart` for structure and trees, `sequenceDiagram` for actor-to-system exchanges. Label nodes with parts a reader recognizes and label edges with what passes between them. Keep each diagram to the parts that matter; a reader should grasp the shape at a glance.
+
+**Updating existing documents:** Read the entire existing document first and note all content sources (existing doc, content migrated from CLAUDE.md or other files, any other inputs). Preserve the existing structure; don't reorganize unless requested. Identify sections needing changes based on Step 2 exploration. Add new sections where the template suggests them. If the existing doc has no plain-language behavioral layer (no Summary, How It Works, or Primary Flows), add those sections at the top so the updated doc leads with behavior. Flag removals as provisional for the Content Audit (Step 6). Update code examples to match current source and update cross-references in both directions.
 
 **Metadata:** Fill in **Last Updated** (current date/time) and **Authors** (from project context or Step 1 user input).
 
@@ -88,15 +97,15 @@ Present the audit summary to the user: number of facts checked, number present, 
 
 ## Step 7: Information-Architecture Review
 
-Dispatch an `information-architect` agent against the written/updated doc before final verification. Pass it the document path, the docs directory root, and the intended audience (a developer who needs to understand or change this feature).
+Dispatch an `information-architect` agent against the written/updated doc before final verification. Pass it the document path, the docs directory root, and the intended audience (a developer or technically-literate stakeholder who needs to understand the feature's behavior before reading its code, and who may later modify it).
 
-Prompt: "Audit the feature doc at {doc_path} for findability, orientation, and comprehension. The intended audience is a developer who needs to understand or change this feature. Check: does the title + one-sentence description match what a reader scanning `{docs_directory}` would expect to find here? Is the Overview oriented at the right audience, and does it lead the reader to the next section they need? Are Behavior, Configuration, and Error Handling scannable and in the right order for the likely reading path? Does the Related Documentation section lead the reader to the next useful artifact, or dead-end them? Return a short list of structural edits; return an empty list if the document reads well."
+Prompt: "Audit the feature doc at {doc_path} for findability, orientation, and comprehension. The intended audience is a developer or technically-literate stakeholder who needs to understand the feature's behavior before reading its code, and who may later modify it. Check: (1) Does a plain-language Summary and a How It Works and Primary Flows narration appear before any code, schema, or type reference? If the behavioral content is missing or sits below the reference detail, that is a finding. (2) Does the heading list let a scanning reader see where the functional overview ends and the deep `## Technical Reference` begins? (3) Is the Summary a short prose paragraph plus bullets, oriented at the right audience, and does the title + one-sentence description match what a reader scanning `{docs_directory}` would expect to find here? (4) Are Configuration and Error Handling scannable and placed ahead of the raw reference detail? (5) Does the Related Documentation section lead the reader to the next useful artifact, or dead-end them? Return a list of structural edits. Do not return an empty list unless the document leads with behavior and defers code reference."
 
 Apply every actionable edit the agent returns. For findings that require a judgment only the author can make (scope, audience ambiguity), surface them to the user with a recommended resolution; do not silently resolve.
 
 ## Step 8: Verification
 
-1. **Documentation file:** Follows template structure, no `{placeholder}` values remain, absolute file paths, concrete code examples, no empty CONDITIONAL sections, ASCII diagrams render correctly
+1. **Documentation file:** Follows template structure and leads with behavior (Summary, How It Works, Primary Flows appear before the `## Technical Reference` region), no `{placeholder}` values remain, absolute file paths, reference code is short snippets or file pointers rather than long source blocks, no empty CONDITIONAL sections, Mermaid diagrams are syntactically valid (open with ```` ```mermaid ````, declare a diagram type, and parse)
 2. **Agent config file:** Reference correctly formatted, link path valid, placed in right section
 3. **Cross-references:** Links point to real files, related docs link back to new doc
 4. **IA review applied:** Step 7 edits were applied, or any skipped edits were surfaced to the user
