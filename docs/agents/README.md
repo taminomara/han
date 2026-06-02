@@ -6,7 +6,7 @@ All agents in the han plugin, grouped by role. Each entry is a one-sentence scen
 
 ## New here?
 
-Most agents are dispatched *for you* by skills. You do not usually invoke them directly. Read [Concepts](../concepts.md) for the skill-vs-agent model before browsing this list. If you are looking to dispatch one directly, use the `Agent` tool with `subagent_type: han:{agent-name}`.
+Most agents are dispatched *for you* by skills. You do not usually invoke them directly. Read [Concepts](../concepts.md) for the skill-vs-agent model before browsing this list. If you are looking to dispatch one directly, use the `Agent` tool with `subagent_type: han.core:{agent-name}`.
 
 When editing this index, verify every agent definition in `han.core/agents/` has a long-form doc in `docs/agents/` and an entry below.
 
@@ -74,7 +74,7 @@ Agents that compare artifacts and preserve meaning across documentation moves.
 Agents enter the workflow two ways:
 
 1. **Dispatched by a skill.** The normal path. Run a skill and it chooses the right agents. You see their findings folded into the skill's output. You do not see the agent dispatch itself.
-2. **Dispatched directly.** You invoke the `Agent` tool with `subagent_type: han:{agent-name}`. Most useful when the judgment you want is narrower than any slash command, or when you want a second opinion on something a skill just produced.
+2. **Dispatched directly.** You invoke the `Agent` tool with `subagent_type: han.core:{agent-name}`. Most useful when the judgment you want is narrower than any slash command, or when you want a second opinion on something a skill just produced.
 
 See [Concepts](../concepts.md) for more on skill/agent composition.
 

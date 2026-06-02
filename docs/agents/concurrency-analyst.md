@@ -40,7 +40,7 @@ Operator documentation for the `concurrency-analyst` agent in the han plugin. Th
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:concurrency-analyst`. Give it a focus area (module, directory, or set of files). The agent first detects whether concurrency patterns exist; if they do, it runs the five-dimension analysis.
+Dispatch via the `Agent` tool with `subagent_type: han.core:concurrency-analyst`. Give it a focus area (module, directory, or set of files). The agent first detects whether concurrency patterns exist; if they do, it runs the five-dimension analysis.
 
 Example prompts:
 

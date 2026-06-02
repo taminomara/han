@@ -34,7 +34,7 @@ Operator documentation for the `research-analyst` agent in the han plugin. This 
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:research-analyst`.
+Dispatch via the `Agent` tool with `subagent_type: han.core:research-analyst`.
 
 Give it:
 

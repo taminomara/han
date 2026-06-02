@@ -57,7 +57,7 @@ The agent has two modes (artifact review and live discussion). Invoke the right 
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:junior-developer`. Pick the right mode for the situation.
+Dispatch via the `Agent` tool with `subagent_type: han.core:junior-developer`. Pick the right mode for the situation.
 
 ### Artifact-review mode
 

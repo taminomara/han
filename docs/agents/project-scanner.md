@@ -35,7 +35,7 @@ Operator documentation for the `project-scanner` agent in the han plugin. This d
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:project-scanner`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:project-scanner`. Give it:
 
 1. **A project root.** A directory to scan. The agent does not assume the repository root is the project root (a monorepo has many).
 2. **A focus area, optional.** *"Languages and frameworks,"* *"build tooling and commands,"* *"documentation and infrastructure."* Lets multiple scanners in parallel divide the work cleanly.

@@ -39,7 +39,7 @@ Operator documentation for the `behavioral-analyst` agent in the han plugin. Thi
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:behavioral-analyst`. Give it a focus area (module, directory, or set of files). The agent traces runtime behavior plus one layer outward in each direction.
+Dispatch via the `Agent` tool with `subagent_type: han.core:behavioral-analyst`. Give it a focus area (module, directory, or set of files). The agent traces runtime behavior plus one layer outward in each direction.
 
 Example prompts:
 

@@ -30,7 +30,7 @@ Operator documentation for the `{agent-name}` agent in the han plugin. This docu
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:{agent-name}`.
+Dispatch via the `Agent` tool with `subagent_type: han.core:{agent-name}`.
 
 Give it:
 

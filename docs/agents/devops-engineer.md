@@ -43,7 +43,7 @@ An adversarial DevOps / Site Reliability engineer that audits a feature, change,
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:devops-engineer`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:devops-engineer`. Give it:
 
 1. **A focus area.** A branch, directory, service, pipeline file, IaC module, Dockerfile, or feature. The narrower the scope, the sharper the findings.
 2. **A production profile, if you have one.** Even a one-paragraph description of traffic shape, criticality tier, regulated data, and current error-budget status dramatically reduces Open Questions.

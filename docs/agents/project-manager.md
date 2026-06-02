@@ -53,7 +53,7 @@ The agent has two modes (facilitation and synthesis). Invoke the right one for t
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:project-manager`. Pick the right mode for the situation.
+Dispatch via the `Agent` tool with `subagent_type: han.core:project-manager`. Pick the right mode for the situation.
 
 ### Facilitation mode
 

@@ -41,7 +41,7 @@ Operator documentation for the `system-architect` agent in the han plugin. This 
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:system-architect`.
+Dispatch via the `Agent` tool with `subagent_type: han.core:system-architect`.
 
 Give it:
 

@@ -42,7 +42,7 @@ An adversarial information architect that audits a documentation set (a README, 
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:information-architect`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:information-architect`. Give it:
 
 1. **A focus area.** A docs directory, a README, a specific plugin's docs tree, an ADR folder, an API-reference root, or a specific set of text files. The narrower the scope, the sharper the findings.
 2. **A brief, if you have one.** Even a short paragraph naming the target audience, the top reader tasks, and the primary arrival path dramatically reduces Open Questions.

@@ -37,7 +37,7 @@ Operator documentation for the `edge-case-explorer` agent in the han plugin. Thi
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:edge-case-explorer`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:edge-case-explorer`. Give it:
 
 1. **A focus area.** Files, a function, an endpoint, or a small module. The narrower the scope, the sharper the edge cases.
 2. **Exploration mode, optional.** Default is focused. Request *"exhaustive exploration"* explicitly to flip into full-mode discovery (more items, deeper coverage, higher cost).

@@ -99,7 +99,7 @@ You might invoke an agent directly when:
 - You want a second opinion after a skill has run. Dispatch `adversarial-validator` against the plan a planning skill produced.
 - You are composing a custom workflow that does not match any slash command cleanly.
 
-Direct invocation uses the `Agent` tool with `subagent_type: han:{agent-name}` (for example, `han:adversarial-security-analyst`).
+Direct invocation uses the `Agent` tool with `subagent_type: han.core:{agent-name}` (for example, `han.core:adversarial-security-analyst`).
 
 ## How Han is packaged
 

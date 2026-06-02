@@ -39,7 +39,7 @@ Operator documentation for the `evidence-based-investigator` agent in the han pl
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:evidence-based-investigator`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:evidence-based-investigator`. Give it:
 
 1. **The symptom or issue.** What is observed: error message, unexpected value, failed deploy, intermittent timeout. The more concrete, the sharper the search.
 2. **An angle of investigation.** *"Trace the error path,"* *"follow the data flow,"* *"check recent commits."* This lets you dispatch multiple investigators in parallel without overlap.

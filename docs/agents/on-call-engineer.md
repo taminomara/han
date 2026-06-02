@@ -47,7 +47,7 @@ A 20+ year on-call veteran that reads application source code in a change and pr
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:on-call-engineer`.
+Dispatch via the `Agent` tool with `subagent_type: han.core:on-call-engineer`.
 
 Give it:
 

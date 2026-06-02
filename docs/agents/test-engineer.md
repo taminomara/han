@@ -36,7 +36,7 @@ Operator documentation for the `test-engineer` agent in the han plugin. This doc
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:test-engineer`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:test-engineer`. Give it:
 
 1. **A focus area.** Files, a directory, or a feature description. The narrower the scope, the sharper the plan.
 2. **Project context, optional.** If the project's test framework and conventions are not obvious from the existing tests, mention them.

@@ -39,7 +39,7 @@ Operator documentation for the `software-architect` agent in the han plugin. Thi
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:software-architect`. Normally this happens as the final step of `/architectural-analysis`. You rarely invoke it directly.
+Dispatch via the `Agent` tool with `subagent_type: han.core:software-architect`. Normally this happens as the final step of `/architectural-analysis`. You rarely invoke it directly.
 
 If you do invoke it directly, give it:
 

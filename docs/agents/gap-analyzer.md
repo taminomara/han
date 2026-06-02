@@ -37,7 +37,7 @@ Operator documentation for the `gap-analyzer` agent in the han plugin. This docu
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:gap-analyzer`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:gap-analyzer`. Give it:
 
 1. **The current state.** A file path, directory, URL, or inline text. The first input is the current state unless otherwise specified.
 2. **The desired state.** A file path, directory, URL, or inline text. The second input is the desired state unless otherwise specified.

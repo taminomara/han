@@ -42,7 +42,7 @@ An adversarial UX designer that audits a feature, screen, or flow and writes a f
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:user-experience-designer`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:user-experience-designer`. Give it:
 
 1. **A focus area.** File globs, a directory, a route, a component, or a design-artifact reference. The narrower the scope, the sharper the findings.
 2. **A brief, if you have one.** Even a one-paragraph description of the user goal, target persona, or entry path dramatically reduces Open Questions.

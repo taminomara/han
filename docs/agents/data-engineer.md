@@ -45,7 +45,7 @@ An adversarial data / database engineer that audits a schema, migration, data pi
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:data-engineer`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:data-engineer`. Give it:
 
 1. **A focus area.** A branch, directory, schema file, migration set, ORM model layer, repository module, query file, stream contract, or data-pipeline module. The narrower the scope, the sharper the findings.
 2. **A workload profile, if you have one.** Even a one-paragraph description of transactional vs analytical mix, read/write ratio, row-count scale, regulated data in scope, and availability / consistency requirements dramatically reduces Open Questions.

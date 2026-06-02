@@ -38,7 +38,7 @@ Operator documentation for the `structural-analyst` agent in the han plugin. Thi
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:structural-analyst`. Give it a focus area (module, directory, or set of files). The agent examines the focus area plus one layer outward in each direction (what depends on it, what it depends on).
+Dispatch via the `Agent` tool with `subagent_type: han.core:structural-analyst`. Give it a focus area (module, directory, or set of files). The agent examines the focus area plus one layer outward in each direction (what depends on it, what it depends on).
 
 Example prompts:
 

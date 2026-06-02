@@ -36,7 +36,7 @@ Operator documentation for the `codebase-explorer` agent in the han plugin. This
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:codebase-explorer`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:codebase-explorer`. Give it:
 
 1. **Feature name.** What you're exploring.
 2. **Feature type.** API, event-driven, data layer, UI, integration, infrastructure, or cross-cutting.

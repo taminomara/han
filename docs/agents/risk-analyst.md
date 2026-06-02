@@ -36,7 +36,7 @@ Operator documentation for the `risk-analyst` agent in the han plugin. This docu
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:risk-analyst`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:risk-analyst`. Give it:
 
 1. **The full verbatim output of upstream analysts.** `structural-analyst` findings (`S#`), `behavioral-analyst` findings (`B#`), `concurrency-analyst` findings (`C#`). Without these, the agent has nothing to assess.
 2. **Project context, optional.** Production criticality, deadlines, team capacity. The likelihood and severity scales calibrate on the team's risk appetite.

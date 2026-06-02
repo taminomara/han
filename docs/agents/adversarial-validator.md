@@ -38,7 +38,7 @@ Operator documentation for the `adversarial-validator` agent in the han plugin. 
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:adversarial-validator`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:adversarial-validator`. Give it:
 
 1. **The evidence summary.** The full numbered evidence list from the investigation (`E1, E2, …`) or the gap list from a gap analysis (`G-NNN`).
 2. **The root cause analysis.** A short statement of the root cause the investigation reached.

@@ -39,7 +39,7 @@ Operator documentation for the `adversarial-security-analyst` agent in the han p
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:adversarial-security-analyst`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:adversarial-security-analyst`. Give it:
 
 1. **A list of files to analyze.** The narrower the scope, the sharper the findings. The agent reads the files plus all dependency manifests it can find in the project.
 2. **A branch name, optional.** Helps the agent contextualize what changed.

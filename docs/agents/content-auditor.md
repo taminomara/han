@@ -36,7 +36,7 @@ Operator documentation for the `content-auditor` agent in the han plugin. This d
 
 ## How to invoke it
 
-Dispatch via the `Agent` tool with `subagent_type: han:content-auditor`. Give it:
+Dispatch via the `Agent` tool with `subagent_type: han.core:content-auditor`. Give it:
 
 1. **The path to the new/updated document.**
 2. **A list of all source content.** The original doc, relevant CLAUDE.md sections, any other files content was migrated from. The agent needs to see every place a fact could have lived.
