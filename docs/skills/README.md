@@ -86,6 +86,12 @@ The opt-in feedback plugin. It captures observations about the Han suite itself.
 
 - **[`/han-feedback`](./han-feedback.md).** Capture structured post-session feedback on the Han skills and agents you used across the whole `han.*` plugin family, and optionally post it as a GitHub issue to testdouble/han.
 
+## han.atlassian
+
+The opt-in Atlassian plugin. It publishes Han documentation to Confluence through the Atlassian MCP server. The `han` meta-plugin does not bundle it; install it on its own with `/plugin install han.atlassian@han`. Requires a configured Atlassian MCP server. Depends on `han.core`.
+
+- **[`/confluence-project-documentation`](./confluence-project-documentation.md).** Run `/project-documentation` to write or update feature documentation, then publish it to a user-specified Confluence location after confirmation. Requires the user to name the destination (a page URL, or a space plus parent page); it does not search Confluence for the right place.
+
 ---
 
 ## How dispatch scales: sizing

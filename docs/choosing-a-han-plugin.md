@@ -4,19 +4,20 @@
 
 > See also: [Plugin landing page](../README.md) · [Concepts](./concepts.md) · [Quickstart](./quickstart.md)
 
-> **Short answer.** Install the bundled suite with `/plugin install han@han`. That gives you everything the meta-plugin bundles: the planning, investigation, review, and documentation skills, every agent, the GitHub skills, and the reporting skills. Pick `han.core` instead only when you know you do not want the GitHub or reporting skills. There is no GitHub-only or reporting-only option, because both of those plugins depend on the core plugin and bring it along. The feedback skill is the one piece the meta-plugin does not bundle: install `han.feedback` separately if you want it.
+> **Short answer.** Install the bundled suite with `/plugin install han@han`. That gives you everything the meta-plugin bundles: the planning, investigation, review, and documentation skills, every agent, the GitHub skills, and the reporting skills. Pick `han.core` instead only when you know you do not want the GitHub or reporting skills. There is no GitHub-only or reporting-only option, because both of those plugins depend on the core plugin and bring it along. Two plugins sit outside the bundle: install `han.feedback` separately if you want to send feedback, and `han.atlassian` separately if you want to publish documentation to Confluence.
 
-The rest of this page explains the five plugins, the one dependency that surprises people, and how to pick.
+The rest of this page explains the six plugins, the one dependency that surprises people, and how to pick.
 
-## The five plugins
+## The six plugins
 
-Han ships as five plugins in one marketplace. `han.core`, `han.github`, `han.reporting`, and `han.feedback` carry components; `han` is a convenience wrapper around four of them.
+Han ships as six plugins in one marketplace. `han.core`, `han.github`, `han.reporting`, `han.feedback`, and `han.atlassian` carry components; `han` is a convenience wrapper that bundles three of them (`han.core`, `han.github`, and `han.reporting`).
 
 - **`han.core`.** The heart of the suite. It carries the planning, investigation, review, and documentation skills, plus every agent the skills dispatch. If you install only this, you have the full set of specialists and almost every skill. See the [Skills Index](./skills/README.md) for the complete list.
 - **`han.github`.** The GitHub layer. It adds the skills that talk to GitHub through the `gh` CLI: [`post-code-review-to-pr`](./skills/post-code-review-to-pr.md), which posts a code review as comments on a pull request; [`update-pr-description`](./skills/update-pr-description.md), which writes a PR description from the branch's changes; and [`work-items-to-issues`](./skills/work-items-to-issues.md), which publishes a work-items file as GitHub issues. This plugin depends on `han.core`.
 - **`han.reporting`.** The reporting layer. It adds [`stakeholder-summary`](./skills/stakeholder-summary.md), which turns a feature specification into a plain-language stakeholder summary (also called an executive or business summary) with diagrams, for sharing with non-technical stakeholders before implementation kicks off; and [`html-summary`](./skills/html-summary.md), which converts that summary into a single self-contained HTML executive report. This plugin depends on `han.core`.
 - **`han.feedback`.** The feedback layer. It adds [`han-feedback`](./skills/han-feedback.md), which captures structured post-session feedback on the Han skills you ran and optionally posts it as a GitHub issue to testdouble/han. This plugin depends on `han.core`, but it is **opt-in**: the `han` meta-plugin does not pull it in, so you install it on its own.
-- **`han`.** A meta-plugin with no components of its own. It exists to pull in `han.core`, `han.github`, and `han.reporting`. Installing it is how you ask for the bundled suite in one command. It does not bundle `han.feedback`.
+- **`han.atlassian`.** The Atlassian layer. It adds [`confluence-project-documentation`](./skills/confluence-project-documentation.md), which runs the core documentation skill and then publishes the result to a Confluence location you specify, through the Atlassian MCP server. This plugin depends on `han.core`, but it is **opt-in**: the `han` meta-plugin does not pull it in, so you install it on its own. It also requires a configured Atlassian MCP server.
+- **`han`.** A meta-plugin with no components of its own. It exists to pull in `han.core`, `han.github`, and `han.reporting`. Installing it is how you ask for the bundled suite in one command. It does not bundle `han.feedback` or `han.atlassian`.
 
 ## The one thing that surprises people
 
@@ -31,7 +32,7 @@ That means **there is no GitHub-only or reporting-only install.** The real choic
 
 Install `han` when you want the bundled suite: the `han` meta-plugin exists for exactly this, to mean "the bundled Han suite" in one command, so it is the clearest way to ask for everything it carries. The difference is also what shows up in your installed plugin list: installing `han` lists `han` and pulls its dependencies along.
 
-`han.feedback` sits outside that choice. It is opt-in by design: the meta-plugin deliberately does not bundle it, so neither `han` nor `han.core` brings it in. Install it on its own with `/plugin install han.feedback@han` when you want to send post-session feedback to the maintainers, and it pulls `han.core` along the same way the other layers do.
+`han.feedback` and `han.atlassian` sit outside that choice. Both are opt-in by design: the meta-plugin deliberately does not bundle them, so neither `han` nor `han.core` brings them in. Install `han.feedback` on its own with `/plugin install han.feedback@han` when you want to send post-session feedback to the maintainers. Install `han.atlassian` on its own with `/plugin install han.atlassian@han` when you want to publish documentation to Confluence; it also needs a configured Atlassian MCP server. Both pull `han.core` along the same way the other layers do.
 
 ## Which one do you need?
 
@@ -43,8 +44,9 @@ Find the row that matches you and run the command in it. Start with the recommen
 | You work with GitHub from Claude Code (review PRs, write PR descriptions, publish work items as issues) | `han` (the bundled suite includes the GitHub skills) | `/plugin install han@han` |
 | You do not need the GitHub or reporting skills and want a leaner install | `han.core` | `/plugin install han.core@han` |
 | You want to send post-session feedback on Han skills to the maintainers | `han.feedback` (alongside whatever you already have) | `/plugin install han.feedback@han` |
+| You want to publish Han documentation to Confluence | `han.atlassian` (alongside whatever you already have; needs an Atlassian MCP server) | `/plugin install han.atlassian@han` |
 
-The bundled `han` suite is the right default for almost everyone. Core-only is the deliberate choice for a reader who knows they do not want the GitHub or reporting skills, for example because they do not work with GitHub from Claude Code. `han.feedback` is an extra you add on top of either when you want to report back on how the skills are working for you.
+The bundled `han` suite is the right default for almost everyone. Core-only is the deliberate choice for a reader who knows they do not want the GitHub or reporting skills, for example because they do not work with GitHub from Claude Code. `han.feedback` is an extra you add on top of either when you want to report back on how the skills are working for you. `han.atlassian` is an extra you add when you want documentation published to Confluence, and it needs an Atlassian MCP server configured.
 
 ## Installing
 
@@ -55,7 +57,7 @@ First add the marketplace, then install the plugin you picked:
 /plugin install han@han
 ```
 
-Swap the second command for `han.core@han` if you chose core only, or name a layer plugin directly with `han.github@han`, `han.reporting@han`, or `han.feedback@han`. All five resolve from the same marketplace.
+Swap the second command for `han.core@han` if you chose core only, or name a layer plugin directly with `han.github@han`, `han.reporting@han`, `han.feedback@han`, or `han.atlassian@han`. All six resolve from the same marketplace.
 
 Adding the marketplace makes the Test Double registry visible to Claude Code so it can resolve the plugin by name; that is why it comes first. When the install finishes, Claude Code lists what it added, including any dependencies it pulled in, so you can confirm you got what you expected.
 
