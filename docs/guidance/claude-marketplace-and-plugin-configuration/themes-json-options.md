@@ -2,6 +2,8 @@
 
 Plugin theme files are JSON files placed in the `themes/` directory (or a custom path set via the `themes` field in `plugin.json`). The filename without `.json` becomes the theme's slug.
 
+> **Experimental.** Themes are an experimental plugin component. In `plugin.json` the preferred placement is under the `experimental` key (`"experimental": { "themes": "./themes/" }`). The bare top-level `themes` key still works but `claude plugin validate` warns against it, and `--strict` treats that warning as an error. The manifest schema may change.
+
 ## Fields
 
 All three fields are optional.

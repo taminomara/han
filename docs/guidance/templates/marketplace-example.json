@@ -18,9 +18,11 @@
   "plugins": [
     {
       "name": "relative-path-plugin",
+      "displayName": "Relative Path Plugin",
       "source": "./relative-path-plugin",
       "description": "A plugin loaded from a relative path within this repository",
       "version": "1.2.0",
+      "defaultEnabled": true,
       "author": {
         "name": "Test Double",
         "email": "hello@testdouble.com"

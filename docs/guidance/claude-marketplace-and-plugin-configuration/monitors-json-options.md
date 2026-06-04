@@ -2,11 +2,13 @@
 
 The monitors configuration file defines persistent background processes that deliver notifications to Claude during a session. It is a JSON **array** of monitor entry objects.
 
+> **Experimental.** Monitors are an experimental plugin component. In `plugin.json` the preferred placement is under the `experimental` key (`"experimental": { "monitors": "..." }`). The bare top-level `monitors` key still works but `claude plugin validate` warns against it, and `--strict` treats that warning as an error. The schema may change.
+
 ## File Location
 
 - Default: `monitors/monitors.json` in the plugin root
-- Custom path: set the `monitors` field in `plugin.json` (e.g. `"monitors": "./config/monitors.json"`)
-- Inline: declare the array directly in `plugin.json` under the `monitors` key
+- Custom path: set the `monitors` field in `plugin.json` (e.g. `"monitors": "./config/monitors.json"`); the preferred form is `"experimental": { "monitors": "./config/monitors.json" }`
+- Inline: declare the array directly in `plugin.json` under the `experimental.monitors` key
 
 Requires Claude Code v2.1.105 or later.
 

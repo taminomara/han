@@ -14,7 +14,9 @@ The `.claude-plugin/plugin.json` manifest file defines a Claude Code plugin's me
 | ------------- | ------ | --------------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | `$schema`     | string | JSON Schema URL for editor validation (ignored by Claude Code at load time) | `"https://json.schemastore.org/claude-code-plugin-manifest.json"` |
 | `version`     | string | Semver version. If omitted, falls back to git commit SHA.                   | `"2.1.0"`                                                         |
+| `displayName` | string | Human-readable name shown in the UI. Not used for namespacing. Requires Claude Code v2.1.143+. | `"Deployment Tools"`                                  |
 | `description` | string | Brief explanation of plugin purpose                                         | `"Deployment automation tools"`                                   |
+| `defaultEnabled` | boolean | Whether the plugin is enabled by default when installed. Defaults to `true`. Requires Claude Code v2.1.154+. | `false`                                        |
 | `author`      | object | Author info with optional `name`, `email`, `url` sub-fields                 | `{"name": "Dev Team", "email": "dev@company.com"}`                |
 | `homepage`    | string | Documentation URL                                                           | `"https://docs.example.com"`                                      |
 | `repository`  | string | Source code URL                                                             | `"https://github.com/user/plugin"`                                |
@@ -38,6 +40,17 @@ All paths must be relative to the plugin root and start with `./`. Specifying a 
 | `themes`       | string \| array           | `themes/`                | Color theme files (JSON with `name`, `base`, `overrides`) |
 
 For `hooks`, `mcpServers`, and `lspServers`, multiple sources are **merged** rather than replaced.
+
+**`monitors` and `themes` are experimental.** The current preferred placement for both is under an `experimental` key, not at the top level:
+
+```json
+"experimental": {
+  "monitors": "./monitors/monitors.json",
+  "themes": "./themes/"
+}
+```
+
+The bare top-level `monitors` and `themes` keys still load, but `claude plugin validate` warns against them, and `claude plugin validate --strict` (used in CI) treats that warning as an error. Prefer the `experimental.*` form for new plugins. See [monitors](./monitors-json-options.md) and [themes](./themes-json-options.md).
 
 ## userConfig
 
@@ -95,6 +108,7 @@ Available for substitution in skill/agent content, hook commands, monitor comman
 | ----------------------- | ------------------------------------------------------------------------- |
 | `${CLAUDE_PLUGIN_ROOT}` | Absolute path to plugin install directory. Changes on plugin update.      |
 | `${CLAUDE_PLUGIN_DATA}` | Persistent state dir at `~/.claude/plugins/data/{id}/`. Survives updates. |
+| `${CLAUDE_PROJECT_DIR}` | Absolute path to the project root of the current session.                 |
 
 Both are also exported as environment variables to hook processes and MCP/LSP server subprocesses.
 

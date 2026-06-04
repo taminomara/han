@@ -30,8 +30,10 @@ Each item in the `plugins` array:
 | ------------- | -------- | ---------------- | ------------------------------------------------------------------------ |
 | `name`        | Yes      | string           | Plugin identifier in kebab-case                                          |
 | `source`      | Yes      | string \| object | Where to fetch the plugin (see Source Variants below)                    |
+| `displayName` | No       | string           | Human-readable name shown in the UI; falls back to `name`. Not used for namespacing. Requires Claude Code v2.1.143+. |
 | `description` | No       | string           | Plugin description                                                       |
 | `version`     | No       | string           | Plugin version (overridden by `plugin.json` if both specify)             |
+| `defaultEnabled` | No    | boolean          | Whether the plugin is enabled after install (default `true`). Takes precedence over the same field in `plugin.json`. Requires Claude Code v2.1.154+. |
 | `author`      | No       | object           | `name` (required if present) and `email` (optional)                      |
 | `homepage`    | No       | string           | Plugin documentation URL                                                 |
 | `repository`  | No       | string           | Source code URL                                                          |
@@ -161,7 +163,7 @@ If both `plugin.json` and the marketplace entry specify a version, `plugin.json`
 
 ## Reserved Marketplace Names
 
-These names are reserved for official Anthropic use and cannot be used:
+These names are reserved for official Anthropic use and cannot be used by third-party marketplaces:
 
 - `claude-code-marketplace`
 - `claude-code-plugins`
@@ -169,10 +171,14 @@ These names are reserved for official Anthropic use and cannot be used:
 - `anthropic-marketplace`
 - `anthropic-plugins`
 - `agent-skills`
+- `anthropic-agent-skills`
 - `knowledge-work-plugins`
 - `life-sciences`
+- `claude-for-legal`
+- `claude-for-financial-services`
+- `financial-services-plugins`
 
-Names that impersonate official marketplaces (e.g. `official-claude-plugins`) are also blocked.
+Names that impersonate official marketplaces (e.g. `official-claude-plugins` or `anthropic-tools-v2`) are also blocked.
 
 ## Official Reference
 

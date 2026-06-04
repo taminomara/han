@@ -1,8 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "example-plugin",
+  "displayName": "Example Plugin",
   "version": "1.0.0",
   "description": "An example plugin demonstrating all available plugin.json fields",
+  "defaultEnabled": true,
   "author": {
     "name": "Test Double",
     "email": "hello@testdouble.com",
@@ -23,9 +25,11 @@
     }
   },
   "lspServers": "./.lsp.json",
-  "monitors": "./monitors/monitors.json",
   "outputStyles": "./output-styles/",
-  "themes": "./themes/",
+  "experimental": {
+    "monitors": "./monitors/monitors.json",
+    "themes": "./themes/"
+  },
   "userConfig": {
     "api_endpoint": {
       "type": "string",
