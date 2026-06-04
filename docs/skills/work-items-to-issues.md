@@ -124,6 +124,7 @@ GA announcement: https://github.blog/changelog/2025-08-21-dependencies-on-issues
 - [Skills Index](./README.md). All skills, grouped by purpose.
 - [YAGNI](../yagni.md). The evidence-based "You Aren't Gonna Need It" rule. This skill does not gate on it; enforcement belongs upstream.
 - [`/plan-work-items`](./plan-work-items.md). Pair upstream to produce the work-items file this skill publishes.
+- [`/work-items-to-jira`](./work-items-to-jira.md). The Jira sibling that creates tickets in a project instead of GitHub issues (opt-in `han.atlassian` plugin).
 - [`/post-code-review-to-pr`](./post-code-review-to-pr.md). The sibling GitHub skill for posting a code review to a pull request.
 - [`/update-pr-description`](./update-pr-description.md). The sibling GitHub skill for writing a PR description.
 - [Slice issue format](../../han.github/skills/work-items-to-issues/references/issue-template.md). The per-issue body format and the invariants the publish scripts parse.
