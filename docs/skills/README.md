@@ -90,7 +90,7 @@ The opt-in feedback plugin. It captures observations about the Han suite itself.
 
 The opt-in Atlassian plugin. It publishes Han artifacts to Confluence and Jira through the Atlassian MCP server. The `han` meta-plugin does not bundle it; install it on its own with `/plugin install han.atlassian@han`. Requires a configured Atlassian MCP server. Depends on `han.core`.
 
-- **[`/confluence-project-documentation`](./confluence-project-documentation.md).** Run `/project-documentation` to write or update feature documentation, then publish it to a user-specified Confluence location after confirmation. Requires the user to name the destination (a page URL, or a space plus parent page); it does not search Confluence for the right place.
+- **[`/project-documentation-to-confluence`](./project-documentation-to-confluence.md).** Run `/project-documentation` to write or update feature documentation, then publish it to a user-specified Confluence location after confirmation. Requires the user to name the destination (a page URL, or a space plus parent page); it does not search Confluence for the right place.
 - **[`/work-items-to-jira`](./work-items-to-jira.md).** Create one Jira ticket per slice from a `/plan-work-items` work-items file, in a single target project. Defaults to a Story, unassigned, in the backlog, with the reporter taken from the Atlassian MCP identity; epic parenting, issue type, assignee, and target column are optional overrides. The Jira sibling of `/work-items-to-issues`.
 
 ---

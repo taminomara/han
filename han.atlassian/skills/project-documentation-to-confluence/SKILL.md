@@ -1,5 +1,5 @@
 ---
-name: confluence-project-documentation
+name: project-documentation-to-confluence
 description: >
   Creates or updates project documentation for a feature, system, or component
   and publishes it to a user-specified Confluence location. Runs the core
@@ -17,7 +17,7 @@ argument-hint: [feature-name or doc-path] [confluence location: page URL or spac
 allowed-tools: Read, Glob, Grep, Skill, Agent, Bash(date *), Bash(git config *), Bash(whoami), Bash(mkdir *), Bash(find *), mcp__claude_ai_Atlassian__getAccessibleAtlassianResources, mcp__claude_ai_Atlassian__atlassianUserInfo, mcp__claude_ai_Atlassian__getConfluenceSpaces, mcp__claude_ai_Atlassian__getConfluencePage, mcp__claude_ai_Atlassian__getPagesInConfluenceSpace, mcp__claude_ai_Atlassian__getConfluencePageDescendants, mcp__claude_ai_Atlassian__createConfluencePage, mcp__claude_ai_Atlassian__updateConfluencePage
 ---
 
-# Confluence Project Documentation
+# Project Documentation to Confluence
 
 This skill produces project documentation with the core `/project-documentation`
 skill and then publishes it to a Confluence location that **the user must

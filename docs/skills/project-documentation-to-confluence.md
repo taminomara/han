@@ -1,6 +1,6 @@
-# /confluence-project-documentation
+# /project-documentation-to-confluence
 
-Operator documentation for the `/confluence-project-documentation` skill in the opt-in `han.atlassian` plugin. This document helps you decide *when* and *how* to use the skill. For what the skill does internally, read the skill definition at [`han.atlassian/skills/confluence-project-documentation/SKILL.md`](../../han.atlassian/skills/confluence-project-documentation/SKILL.md).
+Operator documentation for the `/project-documentation-to-confluence` skill in the opt-in `han.atlassian` plugin. This document helps you decide *when* and *how* to use the skill. For what the skill does internally, read the skill definition at [`han.atlassian/skills/project-documentation-to-confluence/SKILL.md`](../../han.atlassian/skills/project-documentation-to-confluence/SKILL.md).
 
 > See also: [Plugin landing page](../../README.md) · [All skills](./README.md) · [All agents](../agents/README.md) · [Choosing a Han plugin](../choosing-a-han-plugin.md)
 
@@ -37,7 +37,7 @@ Operator documentation for the `/confluence-project-documentation` skill in the 
 
 ## How to invoke it
 
-Run `/confluence-project-documentation` in Claude Code.
+Run `/project-documentation-to-confluence` in Claude Code.
 
 The skill ships in the opt-in `han.atlassian` plugin, which the `han` meta-plugin does not bundle. Install it on its own first with `/plugin install han.atlassian@han` (it pulls `han.core` along the way), and make sure the Atlassian MCP server is configured and authenticated. See [Choosing a Han plugin](../choosing-a-han-plugin.md) for where it sits in the suite.
 
@@ -49,9 +49,9 @@ Give it:
 
 Example prompts:
 
-- `/confluence-project-documentation`. *"Document the authentication system and publish it to the Engineering space under the 'Services' page."*
-- `/confluence-project-documentation`. *"Update https://acme.atlassian.net/wiki/spaces/ENG/pages/12345/Payments to match the new Stripe integration."*
-- `/confluence-project-documentation`. *"Create docs for the notification dispatcher (entry point `src/notifications/dispatcher.ts`) as a child page under our 'Architecture' page in the ENG space."*
+- `/project-documentation-to-confluence`. *"Document the authentication system and publish it to the Engineering space under the 'Services' page."*
+- `/project-documentation-to-confluence`. *"Update https://acme.atlassian.net/wiki/spaces/ENG/pages/12345/Payments to match the new Stripe integration."*
+- `/project-documentation-to-confluence`. *"Create docs for the notification dispatcher (entry point `src/notifications/dispatcher.ts`) as a child page under our 'Architecture' page in the ENG space."*
 
 ## What you get back
 
@@ -91,4 +91,4 @@ The skill walks a short, deterministic process around the core documentation run
 - [`/project-documentation`](./project-documentation.md). The core skill this one wraps. Use it directly for local-only documentation.
 - [`/project-discovery`](./project-discovery.md). Run first so the documentation pass finds the docs directory and stack language.
 - [Choosing a Han plugin](../choosing-a-han-plugin.md). Why `han.atlassian` is installed separately from the bundled suite, and what it requires.
-- [`SKILL.md` for /confluence-project-documentation](../../han.atlassian/skills/confluence-project-documentation/SKILL.md). The internal process definition.
+- [`SKILL.md` for /project-documentation-to-confluence](../../han.atlassian/skills/project-documentation-to-confluence/SKILL.md). The internal process definition.
