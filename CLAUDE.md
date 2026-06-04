@@ -33,7 +33,7 @@ Han is a Claude Code plugin suite for solo (or small-team) product engineers. It
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   └── skills/         # Feedback skill directory (han-feedback) with SKILL.md
-├── han.atlassian/      # Opt-in Atlassian plugin: project-documentation-to-confluence, work-items-to-jira (depends on han.core; requires the Atlassian MCP server; NOT bundled by the han meta-plugin)
+├── han.atlassian/      # Opt-in Atlassian plugin: markdown-to-confluence, project-documentation-to-confluence, work-items-to-jira (depends on han.core; requires the Atlassian MCP server; NOT bundled by the han meta-plugin)
 │   ├── .claude-plugin/
 │   │   └── plugin.json
 │   └── skills/         # Atlassian skill directories, each with SKILL.md + references/
@@ -105,7 +105,8 @@ The plugins are shipped from `han.core/`, `han.github/`, `han.reporting/`, `han.
 - **[docs/skills/work-items-to-issues.md](./docs/skills/work-items-to-issues.md).** Publish each item in a `/plan-work-items` work-items file as a GitHub issue in its target repo, with within-repo blockers linked and no label or assignee by default.
 - **[docs/skills/runbook.md](./docs/skills/runbook.md).** Create or update a runbook for a single operational scenario (alert that has fired, incident, recurring task, known failure mode). Applies a YAGNI preflight that requires real evidence before writing.
 - **[docs/skills/han-feedback.md](./docs/skills/han-feedback.md).** Capture structured post-session feedback on the Han skills and agents used across the whole `han.*` plugin family, and optionally post it as a GitHub issue to testdouble/han.
-- **[docs/skills/project-documentation-to-confluence.md](./docs/skills/project-documentation-to-confluence.md).** Run `/project-documentation` to write or update feature documentation, then publish it to a user-specified Confluence location (opt-in `han.atlassian` plugin; requires the Atlassian MCP server).
+- **[docs/skills/markdown-to-confluence.md](./docs/skills/markdown-to-confluence.md).** Publish one local Markdown file to a user-specified Confluence page (create or update), defaulting to an unpublished draft (opt-in `han.atlassian` plugin; requires the Atlassian MCP server).
+- **[docs/skills/project-documentation-to-confluence.md](./docs/skills/project-documentation-to-confluence.md).** Run `/project-documentation` to write feature documentation to a `/tmp/` file, show it for review, then publish it to a user-specified Confluence location with `/markdown-to-confluence` (opt-in `han.atlassian` plugin; requires the Atlassian MCP server).
 - **[docs/skills/work-items-to-jira.md](./docs/skills/work-items-to-jira.md).** Create one Jira ticket per slice from a `/plan-work-items` work-items file, in a single target project, with optional epic, issue type, assignee, and column (opt-in `han.atlassian` plugin; requires the Atlassian MCP server).
 
 ### Agent catalog (`docs/agents/`)

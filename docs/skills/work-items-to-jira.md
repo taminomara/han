@@ -125,7 +125,8 @@ URL: https://support.atlassian.com/jira-software-cloud/docs/what-are-issue-types
 - [YAGNI](../yagni.md). The evidence-based "You Aren't Gonna Need It" rule. This skill does not gate on it; enforcement belongs upstream.
 - [`/plan-work-items`](./plan-work-items.md). Pair upstream to produce the work-items file this skill publishes.
 - [`/work-items-to-issues`](./work-items-to-issues.md). The GitHub sibling that creates issues instead of Jira tickets.
-- [`/project-documentation-to-confluence`](./project-documentation-to-confluence.md). The other `han.atlassian` skill, for publishing documentation to Confluence.
+- [`/project-documentation-to-confluence`](./project-documentation-to-confluence.md). A sibling `han.atlassian` skill, for generating documentation and publishing it to Confluence.
+- [`/markdown-to-confluence`](./markdown-to-confluence.md). A sibling `han.atlassian` skill, for publishing an existing Markdown file to Confluence.
 - [Slice ticket format](../../han.atlassian/skills/work-items-to-jira/references/jira-ticket-template.md). The per-ticket body format and how each slice field maps onto a Jira ticket.
 - [Work-items file format](../../han.atlassian/skills/work-items-to-jira/references/work-items-file-format.md). The source-file shape the skill reads and annotates.
 - [Reference artifact inventory](../../han.atlassian/skills/work-items-to-jira/references/reference-artifact-inventory.md). The include list, exclude list, and the artifacts that never belong in a ticket description.

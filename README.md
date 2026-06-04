@@ -32,7 +32,7 @@ Han ships as multiple plugins:
 * `han.github`: GitHub-facing skills like posting a code review on a PR
 * `han.reporting`: reporting skills like the stakeholder summary
 * `han.feedback`: an opt-in skill for capturing post-session feedback on Han skill runs
-* `han.atlassian`: an opt-in skill for publishing documentation to Confluence (requires an Atlassian MCP server)
+* `han.atlassian`: opt-in skills for publishing Markdown and documentation to Confluence and work items to Jira (requires an Atlassian MCP server)
 
 Installing `han@han` pulls in the bundled suite (the meta-plugin plus `han.core`, `han.github`, and `han.reporting`),
 and is the right choice for almost everyone. If you do not want the GitHub or reporting skills, install `han.core@han` instead. 
