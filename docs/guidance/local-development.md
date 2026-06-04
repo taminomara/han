@@ -54,3 +54,10 @@ Once installed, your local marketplace points at your working tree. Any changes 
 3. Run the skill and see your changes
 
 When you're done testing, remove the local marketplace and re-add the remote `testdouble/han` source to go back to the published versions.
+
+## Quicker alternatives
+
+The local-marketplace setup above is the canonical Han workflow because it mirrors how users install the suite. For quick, throwaway iteration, Claude Code also supports two lighter approaches documented in the official [Create Plugins](https://code.claude.com/docs/en/plugins) guide:
+
+- **`claude --plugin-dir ./han.core`** loads a single plugin directory for one session with no marketplace or install step. Useful for a fast check of one plugin's changes.
+- **`/reload-plugins`** reloads skills, agents, hooks, and plugin MCP/LSP servers without restarting. Changes to a `SKILL.md` body are picked up immediately by the running session, but changes to agents, hooks, and MCP servers need `/reload-plugins` (or a restart) to take effect.

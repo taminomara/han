@@ -114,6 +114,10 @@ The constraint now appears at the top, in a dedicated section that shapes every 
 
 Content that duplicates what the model already sees — linter rules, CLAUDE.md project context that the platform auto-loads, MCP tool documentation from tool schemas, or Claude Code's built-in behaviors — wastes attention budget and creates drift risk when the source changes. This extends the "when to remove entirely" guidance in [Progressive Disclosure](./progressive-disclosure.md) beyond linters to include all platform-provided context. See that doc for full examples and rationale.
 
+### Rule: Remember that loaded skill content persists under a compaction budget
+
+Once a skill is invoked, its SKILL.md content stays in context for the rest of the session. When Claude Code auto-compacts, it carries skills forward within a shared budget of roughly 25,000 tokens, re-attaching the most recently invoked skills first and capping each at about 5,000 tokens. A bloated SKILL.md does not just dilute attention while it runs; it crowds the post-compaction budget, and in a session that invoked many skills, the oldest or largest can be dropped entirely. Keeping the body lean (see [Progressive Disclosure](./progressive-disclosure.md)) is what keeps a skill present and intact after compaction. Source: [Claude Code Skills documentation](https://code.claude.com/docs/en/skills).
+
 ### Rule: Treat stale context as a bug, not tech debt
 
 Stale tokens are worse than absent tokens. When a reference file describes a convention that was abandoned or a script path that was renamed, the model follows the stale instruction faithfully — producing confidently wrong output. The attention mechanism doesn't distinguish "current" from "outdated." Stale tokens compete for attention on equal footing with current ones, but they point the model in the wrong direction. See [Documentation Maintenance](./documentation-maintenance.md) for the full audit process, triggers, and examples.

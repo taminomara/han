@@ -106,6 +106,10 @@ Repo-root changes that do not live inside any plugin directory (`docs/`, `README
 
 The release is tagged `v3.1.0` (the parent version). The changelog records each changed plugin under its own sub-heading with its new version.
 
+### A note on per-plugin tags and version constraints
+
+Claude Code resolves a *version-constrained* dependency (a `dependencies` entry that pins a semver range, like `{ "name": "han.core", "version": "~2.1.0" }`) using per-plugin git tags named `{plugin-name}--v{version}`, for example `han.core--v2.1.0`. The `claude plugin tag --push` command creates these. Han does **not** need them today: every dependency in `han`'s and `han.feedback`'s `plugin.json` is a bare string with no version range, so dependencies float to whatever the marketplace serves and the single suite tag `vX.Y.Z` is sufficient. If a future `han.*` plugin ever pins a dependency to a version range, the matching `{plugin-name}--v{version}` tags become required for resolution. See the [Plugin Dependencies docs](https://code.claude.com/docs/en/plugin-dependencies).
+
 ## Summary Checklist
 
 1. **One version bump per branch.** The first change bumps the version from the baseline on `main` (or from a reset baseline established on the branch).

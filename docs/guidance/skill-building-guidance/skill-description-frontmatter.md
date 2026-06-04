@@ -62,6 +62,12 @@ description: >
   a review to GitHub.
 ```
 
+### Rule: Write descriptions in the third person
+
+Describe what the skill does, not what you or the user can do with it. Anthropic's [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) make this an explicit rule: write "Processes Excel files and extracts pivot tables," not "I can help you with spreadsheets" or "Use me to handle your data." Third-person, capability-first phrasing reads as a stable description of the skill rather than a conversational offer, and it matches how every other description in the listing is phrased.
+
+Anthropic separately notes that tool and skill descriptions deserve as much care as the system prompt itself ([Writing effective tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents)) — the `description` field is not boilerplate, it is the interface Claude routes against.
+
 ### Rule: Weave trigger words into prose — never append keyword lists
 
 Include the words users actually type — synonyms, abbreviations, and common phrasings — but weave them into natural sentences that provide semantic context. Never append a bare keyword list. Keyword lists lack context, making it harder for Claude to judge relevance, and they waste tokens without improving accuracy.

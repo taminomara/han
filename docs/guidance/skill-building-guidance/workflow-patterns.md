@@ -10,6 +10,8 @@ Skills encode workflows — multi-step processes that Claude executes in a speci
 
 These patterns describe the *internal structure* of a skill's workflow — how to organize steps within a single SKILL.md. For guidance on *when to split a skill* into multiple skills or *how to compose* skills together, see [Skill Decomposition](./skill-decomposition.md).
 
+The four patterns below map onto the agent workflow patterns Anthropic describes in [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) (prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer). That post's overarching advice also applies here: start with the simplest structure that works, and add steps or branches only when the task genuinely needs them.
+
 ## Choosing Your Approach: Problem-First vs. Tool-First
 
 Before selecting a pattern, consider which framing fits your skill:
@@ -259,7 +261,7 @@ The Sequential Orchestration pattern includes **validation gates** — automated
 
 ### When to place a human gate
 
-Place a human gate before operations that are expensive or impossible to reverse:
+This is the skill-level form of the checkpoint guidance in [Building effective agents](https://www.anthropic.com/engineering/building-effective-agents): build a point where the workflow pauses for human review before an irreversible action. Place a human gate before operations that are expensive or impossible to reverse:
 - Posting to external systems (GitHub comments, PR reviews, Slack messages)
 - Deleting files, branches, or resources
 - Writing to production systems or shared infrastructure

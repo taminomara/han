@@ -34,7 +34,7 @@ allowed-tools: Read, Grep, Glob, Agent, ExitPlanMode
 ```
 
 **Level 2 — SKILL.md body (loaded on trigger):**
-Loaded only when Claude decides the skill is relevant. Contains the process steps, context injection commands, and execution logic.
+Loaded only when Claude decides the skill is relevant. Contains the process steps, context injection commands, and execution logic. Anthropic and the cross-tool Agent Skills standard both recommend keeping the SKILL.md body under **500 lines**; past that, move detail into `references/`. Treat 500 lines as the ceiling, not the target.
 
 ```markdown
 ## Project Context

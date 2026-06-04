@@ -28,6 +28,13 @@ These issues stem from fundamental limitations in how sub-skill context is
 handled, not from how individual skills are written. No amount of instruction
 tuning or `context: fork` configuration has reliably resolved them.
 
+`context: fork` is a documented Claude Code feature (see the [Skills
+documentation](https://code.claude.com/docs/en/skills) and the field inventory
+in [Skill Frontmatter Fields](./skill-frontmatter-fields.md)); the guidance here
+is not that the feature is unsupported, but that Han deliberately avoids it for
+data-fetch sub-skills because the early-exit failure mode above showed up
+repeatedly in practice. Treat this as a considered choice, not an oversight.
+
 ### Rule: Prefer inline discovery
 
 Instead of calling a sub-skill, skills should handle discovery and data

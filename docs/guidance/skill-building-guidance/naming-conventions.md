@@ -67,7 +67,7 @@ skills/
   test-planning/    # Names the activity; the artifact (a test plan) is implied without suggesting runnable code
 ```
 
-Prefer gerund process names (`test-planning`, `iterative-plan-review`) over implementation verbs (`write-tests`, `generate-docs`) when the skill produces analysis, plans, or documentation rather than runnable artifacts.
+Prefer gerund process names (`test-planning`, `iterative-plan-review`) over implementation verbs (`write-tests`, `generate-docs`) when the skill produces analysis, plans, or documentation rather than runnable artifacts. This matches Anthropic's general naming recommendation: gerund form (`processing-pdfs`, `analyzing-spreadsheets`) is the preferred convention, with noun phrases (`pdf-processing`) and action forms (`process-pdfs`) acceptable alternatives. Avoid vague names like `helper`, `utils`, `tools`, or `data`. See [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices).
 
 **Heuristic:** "If someone reads only this directory name, could they mistake what type of artifact the skill produces?"
 
@@ -82,6 +82,8 @@ skills/
 ```
 
 This ensures the skill is invoked with the same name the user sees in the file system.
+
+In Claude Code the **directory name is what produces the slash command**, and the frontmatter `name` is the display label shown in skill listings. The one exception is a plugin-root `SKILL.md` (a skill defined at the plugin root rather than under `skills/{name}/`), where `name` does set the command because there is no directory to derive it from. Keeping the two equal, as this rule requires, means the distinction never bites. The open standard also requires `name` to match the parent directory: lowercase letters, numbers, and hyphens, max 64 characters, no reserved words (`claude`, `anthropic`).
 
 ### Rule: No README.md inside skill folders
 

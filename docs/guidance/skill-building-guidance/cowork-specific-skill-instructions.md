@@ -238,6 +238,8 @@ Use gerund form (verb + -ing):
 - `processing-pdfs`, `analyzing-spreadsheets`, `managing-databases`
 - Avoid: `helper`, `utils`, `tools`, `documents`
 
+This gerund preference is the general Anthropic convention, not Cowork-specific. [Naming Conventions](./naming-conventions.md) is the canonical doc for skill and plugin naming across the suite; it covers the same gerund rule plus directory-name, dependency-prefix, and case-sensitivity rules.
+
 ---
 
 ## Checklist Before Uploading a Skill

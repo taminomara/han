@@ -6,7 +6,7 @@ Authors:
 - Brian Hughes (@brianvh)
 - River Bailey (@mxriverlynn)
 
-Last Updated: 2026-03-06
+Last Updated: 2026-06-04
 
 References:
 - [Claude Code Plugin Reference](https://code.claude.com/docs/en/plugins-reference)
@@ -19,6 +19,8 @@ References:
 ## Commands: Routing Layer (Deprecated)
 
 Commands have been merged into skills in Claude Code. They should no longer be created as separate entities. Skills now handle both the entry point and the process execution. This section is retained for historical context only.
+
+For accuracy: the official docs treat a `commands/` directory of flat `.md` files as a still-supported legacy format (a `commands/deploy.md` and a `skills/deploy/SKILL.md` both produce `/deploy`), and they recommend `skills/` for new plugins rather than calling `commands/` removed. The practical takeaway is unchanged — build skills, not commands — but existing `commands/` files do still load.
 
 ## Skills: Process Engine
 
