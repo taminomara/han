@@ -1,6 +1,6 @@
 ---
 paths:
-  - "han.core/agents/**/*.md"
+  - "**/agents/**/*.md"
 ---
 
 # Multi-Agent Economics
@@ -9,7 +9,7 @@ When a skill dispatches agents via the `Agent` tool, each agent adds latency and
 
 This doc is about **whether to add more agents**. For choosing which model tier (opus/sonnet/haiku) a given agent should use, see [Model Selection](./agent-model-selection.md). That decision is about matching capability to task complexity, and cost is not a factor there. Here, cost is a factor: multiplying agents multiplies token spend, and each additional agent must clear a quality bar to justify that spend.
 
-**What "multi-agent" means in Han.** Han skills dispatch sub-agents in parallel through the `Agent` tool, and each agent's result is summarized back into the dispatching skill's context. This is *not* the experimental Claude Code [agent-teams](https://code.claude.com/docs/en/agent-teams) feature, in which each teammate is a separate Claude session with its own context window and teammates talk to each other. Agent teams cost significantly more (token usage scales linearly per teammate) and are gated behind `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`. The economics below apply to Han's parallel-dispatch model; agent teams cost strictly more for the same head count.
+**What "multi-agent" means here.** A skill can dispatch sub-agents in parallel through the `Agent` tool, and each agent's result is summarized back into the dispatching skill's context. This is *not* the experimental Claude Code [agent-teams](https://code.claude.com/docs/en/agent-teams) feature, in which each teammate is a separate Claude session with its own context window and teammates talk to each other. Agent teams cost significantly more (token usage scales linearly per teammate) and are gated behind `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS`. The economics below apply to parallel sub-agent dispatch; agent teams cost strictly more for the same head count.
 
 ## The Escalation Cascade
 
@@ -33,7 +33,7 @@ Add a team only when the review problem is genuinely multi-dimensional. The outp
 
 **When to escalate here:** The worker + reviewer pattern produces good results on one dimension but misses others, and combining review domains into one agent degrades each (the generalist trap described in [Domain Focus](./agent-domain-focus.md)).
 
-**Hard cap (Han heuristic):** Han caps teams at 5 agents. Beyond this, coordination costs consistently exceed production benefits in our experience. This is our own operating limit, not a platform rule, but it sits in the same range as the official agent-teams guidance, which recommends 3-5 teammates ([Agent Teams](https://code.claude.com/docs/en/agent-teams)).
+**Hard cap (practical heuristic):** Cap teams at about 5 agents. Beyond this, coordination costs consistently exceed production benefits. This is a practical operating limit, not a platform rule, but it sits in the same range as the official agent-teams guidance, which recommends 3-5 teammates ([Agent Teams](https://code.claude.com/docs/en/agent-teams)).
 
 ## The 45% Threshold
 
@@ -87,7 +87,7 @@ When designing a skill that dispatches agents:
 
 - [Towards a Science of Scaling Agent Systems (Google Research / Google DeepMind / MIT, 2025)](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/). Source for the ~45% capability-saturation threshold, the 39-70% sequential-reasoning degradation range, and the diminishing-returns direction (180 experiments, five architectures, three model families).
 - [Building effective agents (Anthropic)](https://www.anthropic.com/engineering/building-effective-agents). "Agentic systems often trade latency and cost for better task performance"; start simple and add agent complexity only when measurement justifies it.
-- [Agent Teams (Claude Code docs)](https://code.claude.com/docs/en/agent-teams). The experimental multi-session feature distinct from Han's parallel `Agent`-tool dispatch; token cost scales linearly per teammate; recommends 3-5 teammates.
+- [Agent Teams (Claude Code docs)](https://code.claude.com/docs/en/agent-teams). The experimental multi-session feature distinct from parallel `Agent`-tool dispatch; token cost scales linearly per teammate; recommends 3-5 teammates.
 
 Cross-references:
 

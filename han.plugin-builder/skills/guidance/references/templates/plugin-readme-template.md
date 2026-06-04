@@ -85,11 +85,11 @@
 
 ## Installation
 
-Add the Test Double skills marketplace to Claude Code, then install the plugin:
+Add your marketplace to Claude Code, then install the plugin:
 
 ```
-/plugin marketplace add testdouble/han
-/plugin install {plugin-name}@testdouble-han
+/plugin marketplace add your-org/your-marketplace
+/plugin install {plugin-name}@your-marketplace
 ```
 
 ## Skills Reference

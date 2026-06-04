@@ -10,7 +10,7 @@ Every plugin development effort should plan for 3-5 iterations. First drafts enc
 
 A single-pass approach leads to skills that work in the author's head but fail in practice: prompts that are too vague, agent definitions that duplicate skill logic, or reference files that never get used. Each iteration is an opportunity to catch these problems before they compound.
 
-**Example:** The `code-review` skill went through multiple iterations. The first draft bundled review logic with GitHub posting. The second iteration identified this as two concerns and split them (commit `591d01c`). A later iteration extracted inline agent definitions into standalone files (commit `ccdad9e`). Each pass caught problems the previous one encoded as assumptions.
+**Example:** A code-review skill went through multiple iterations. The first draft bundled review logic with the step that posted results to a pull request. The second iteration identified this as two concerns and split them into separate skills. A later iteration extracted inline agent definitions into standalone files. Each pass caught problems the previous one encoded as assumptions.
 
 ### Rule: Challenge assumptions from previous iterations
 
@@ -44,7 +44,7 @@ A "thinking iteration" that only produces notes or plans defers decisions and cr
 
 This applies even to early iterations where the content feels rough. A concrete SKILL.md with known problems is more useful than a perfect plan that hasn't been written down.
 
-**Example:** When developing `project-documentation`, iteration 1 wrote a SKILL.md with inline agent instructions. Iteration 2 extracted agents to standalone files and updated both the agent `.md` files and the SKILL.md to reference them via the `Agent` tool (commit `31042da`). If iteration 2 had only discussed the extraction without writing files, iteration 3 would have started from stale content.
+**Example:** When developing a documentation skill, iteration 1 wrote a SKILL.md with inline agent instructions. Iteration 2 extracted those agents to standalone files and updated both the agent `.md` files and the SKILL.md to reference them via the `Agent` tool. If iteration 2 had only discussed the extraction without writing files, iteration 3 would have started from stale content.
 
 ### Rule: Surface ambiguity as contextual questions
 
@@ -52,7 +52,7 @@ When an iteration reveals ambiguity (unclear scope, multiple valid approaches, u
 
 **Good question (contextual):**
 
-> *"The `investigation` skill currently dispatches both `evidence-based-investigator` and `adversarial-validator` agents. Should these run sequentially (investigator first, then validator challenges findings) or in parallel? Sequential is more thorough but slower; parallel is faster but the validator might challenge incomplete findings."*
+> *"This skill currently dispatches both an investigator agent and a validator agent. Should these run sequentially (investigator first, then validator challenges findings) or in parallel? Sequential is more thorough but slower; parallel is faster but the validator might challenge incomplete findings."*
 
 **Bad question (context-free):**
 

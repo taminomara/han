@@ -6,12 +6,12 @@
   "description": "An example plugin demonstrating all available plugin.json fields",
   "defaultEnabled": true,
   "author": {
-    "name": "Test Double",
-    "email": "hello@testdouble.com",
-    "url": "https://testdouble.com"
+    "name": "Your Name",
+    "email": "you@example.com",
+    "url": "https://example.com"
   },
-  "homepage": "https://github.com/testdouble/han",
-  "repository": "https://github.com/testdouble/han",
+  "homepage": "https://github.com/your-org/your-plugin",
+  "repository": "https://github.com/your-org/your-plugin",
   "license": "MIT",
   "keywords": ["example", "reference", "template"],
   "skills": ["./skills/", "./extra-skills/"],

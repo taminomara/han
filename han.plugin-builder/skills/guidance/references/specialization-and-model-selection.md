@@ -1,6 +1,6 @@
 # Specialization and Model Selection
 
-How specialization in skill and agent definitions interacts with model tier and effort. This is the unifying rationale behind why some agents in this repo run on `haiku` or `sonnet` even when the task looks complex on the surface, and why others stay on `opus` no matter how tightly we write the prompt.
+How specialization in skill and agent definitions interacts with model tier and effort. This is the unifying rationale behind why some agents can run on `haiku` or `sonnet` even when the task looks complex on the surface, and why others stay on `opus` no matter how tightly the prompt is written.
 
 ## The mechanism
 
@@ -24,7 +24,7 @@ The simpler claim *"more specialization = less model needed"* is directionally c
 - **No published study tests *exactly* "Claude Code skill specificity vs. Opus/Sonnet/effort levels."** The mechanism is well-established in the literature. Our specific Claude Code experience is consistent with it but not formally measured in any paper located.
 - **Brittleness trade-off.** Specialized prompts perform worse on out-of-distribution inputs. A general Opus + high-effort run is more robust to surprise. A tight skill definition is more efficient on the path it was built for.
 
-## How this shapes our model choices
+## How this shapes model choices
 
 Three signals to weigh when choosing a model for an agent (and, where supported, effort):
 
@@ -32,11 +32,11 @@ Three signals to weigh when choosing a model for an agent (and, where supported,
 2. **Reasoning novelty.** Synthesis across unbounded inputs, open-ended design → higher tier required.
 3. **Brittleness tolerance.** Agents that anchor downstream work need robustness → bias up one notch.
 
-The pattern that falls out:
+The pattern that falls out, by agent archetype:
 
-- **Drop to `haiku`** where the task is lookup or classification with a fixed output shape (for example, `project-scanner`, `codebase-explorer`, `content-auditor`).
-- **Drop `opus` → `sonnet`** where heavy domain-framework loading is already baked into the prompt: named methodologies, named anti-patterns, fixed rubrics. This is where mechanism #1 above is strongest. Examples in the han plugin: `concurrency-analyst`, `risk-analyst`, `gap-analyzer`, `test-engineer`, `edge-case-explorer`, `adversarial-validator`, `evidence-based-investigator`, `behavioral-analyst`, `structural-analyst`.
-- **Keep `opus`** where synthesis spans unbounded inputs (`software-architect`, `system-architect`, `data-engineer`, `devops-engineer`, `project-manager`, `junior-developer`, `information-architect`, `user-experience-designer`) or where the task is genuinely novel reasoning (open-ended planning, exploit-path construction in `adversarial-security-analyst`).
+- **Drop to `haiku`** for lookup or classification agents with a fixed output shape: the agent reads a bounded input, applies a known rule, and emits a predictable structure. Scanners, extractors, and content auditors that fill a fixed template fit here.
+- **Drop `opus` → `sonnet`** where heavy domain-framework loading is already baked into the prompt: named methodologies, named anti-patterns, fixed rubrics that the agent walks rather than invents. This is where mechanism #1 above is strongest. Most specialist reviewers and analysts that work from an explicit checklist or domain framework fit this tier.
+- **Keep `opus`** where synthesis spans unbounded input that the prompt cannot pre-shape (cross-cutting architecture, system design, coordination across many sources), or where the task is genuinely novel reasoning (open-ended planning, adversarial exploit-path construction). No amount of prompt specialization manufactures the reasoning these tasks need.
 
 ## Sources
 

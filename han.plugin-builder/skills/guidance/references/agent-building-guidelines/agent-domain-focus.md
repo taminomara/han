@@ -1,6 +1,6 @@
 ---
 paths:
-  - "han.core/agents/**/*.md"
+  - "**/agents/**/*.md"
 ---
 
 # Domain Focus in Agent Definitions
@@ -130,7 +130,7 @@ Do not ask a single agent to both produce output and judge its quality. Self-eva
 - Use one agent to generate (investigate, explore, draft)
 - Use a separate agent to evaluate (validate, audit, challenge)
 
-Existing agents in this repo already follow this pattern. For example, `evidence-based-investigator` generates evidence and `adversarial-validator` evaluates it. They are separate agents with separate perspectives.
+Pair a generator with a separate evaluator. For example, a generator agent that gathers evidence produces the findings, and a separate evaluator agent that challenges those findings audits them. They are separate agents with separate perspectives.
 
 ## Summary Checklist
 
@@ -140,7 +140,7 @@ Existing agents in this repo already follow this pattern. For example, `evidence
 4. List 5-10 named anti-patterns with detection signals relevant to the agent's domain.
 5. No flattery, superlatives, or motivational framing. Let vocabulary do the routing.
 6. Assign a single role per agent. Generate or evaluate, not both.
-7. All vocabulary, anti-patterns, and protocols must be inlined in the agent file (see [External File References](agent-external-files.md)).
+7. Inline all vocabulary, anti-patterns, and protocols in the agent file (see [External File References](agent-external-files.md)).
 
 ## Cross-References
 

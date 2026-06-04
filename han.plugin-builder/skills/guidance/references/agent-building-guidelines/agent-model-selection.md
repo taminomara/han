@@ -1,11 +1,11 @@
 ---
 paths:
-  - "han.core/agents/**/*.md"
+  - "**/agents/**/*.md"
 ---
 
 # Choosing the Right Model for Agent Definitions
 
-Agents support a `model` frontmatter field that skills do not. Choosing the right model is about matching capability and speed to the task the agent performs. **Cost is not a factor in model selection for our agents.** Choose based on what the task demands, not price.
+Agents support a `model` frontmatter field that skills do not. Choosing the right model is about matching capability and speed to the task the agent performs. **Cost is not a factor in model selection.** Choose based on what the task demands, not price.
 
 ## The `model` Field
 
@@ -96,24 +96,26 @@ Use `haiku`. Signs that an agent fits haiku:
 
 ## A Note on Cost
 
-Cost should not influence model selection for our agents. The goal is to pick the model that best fits the task's cognitive demands. Optimizing for cost leads to under-powered agents that produce poor results. A false economy that wastes developer time reviewing bad output and re-running tasks.
+Cost should not influence model selection. The goal is to pick the model that best fits the task's cognitive demands. Optimizing for cost leads to under-powered agents that produce poor results. A false economy that wastes developer time reviewing bad output and re-running tasks.
 
-## Evidence from Existing Agents
+## Evidence from Agent Archetypes
 
-### Han Plugin Agents
+### Mapping Archetypes to Tiers
 
-Examples from the han plugin illustrate the decision criteria:
+These archetypes illustrate the decision criteria. Match the agent you are building to the closest archetype:
 
-| Agent                        | Model    | Rationale                                                                                     |
-|------------------------------|----------|-----------------------------------------------------------------------------------------------|
-| `codebase-explorer`          | `haiku`  | Fast lookups across config and structure; speed over depth.                                    |
-| `content-auditor`            | `haiku`  | Fact extraction and classification against a list. Pattern matching.                           |
-| `edge-case-explorer`         | `sonnet` | Open-ended exploration across six dimensions; qualitative judgment on likelihood and severity. |
-| `test-engineer`              | `sonnet` | Synthesizes findings across many files; weighs value vs brittleness tradeoffs for test planning.|
-| `evidence-based-investigator`| `sonnet` | Follows defined investigation protocols; gathers evidence along structured paths.              |
-| `adversarial-validator`      | `sonnet` | Validates against known criteria; executes structured challenge strategies.                    |
-| `project-manager`            | `opus`   | Facilitation and synthesis across specialist input; high-judgment.                             |
-| `software-architect`         | `opus`   | Synthesizes structural/behavioral/concurrency findings into SOLID recommendations.             |
+| Agent Archetype                                              | Model    | Rationale                                                                                     |
+|-------------------------------------------------------------|----------|-----------------------------------------------------------------------------------------------|
+| Structure-and-config explorer                               | `haiku`  | Fast lookups across config and structure; speed over depth.                                    |
+| Fact extractor / classifier against a fixed list            | `haiku`  | Fact extraction and classification against a list. Pattern matching.                           |
+| Open-ended edge-case explorer                               | `sonnet` | Open-ended exploration across several dimensions; qualitative judgment on likelihood and severity. |
+| Test planner across many files                              | `sonnet` | Synthesizes findings across many files; weighs value vs brittleness tradeoffs for test planning.|
+| Protocol-following investigator                             | `sonnet` | Follows defined investigation protocols; gathers evidence along structured paths.              |
+| Rubric-based validator                                      | `sonnet` | Validates against known criteria; executes structured challenge strategies.                    |
+| Facilitator synthesizing many specialists                   | `opus`   | Facilitation and synthesis across specialist input; high-judgment.                             |
+| Architect synthesizing cross-cutting findings               | `opus`   | Synthesizes structural/behavioral/concurrency findings into SOLID recommendations.             |
+
+The shape: fast lookup and classification agents fit haiku; structured-protocol agents working against fixed rubrics fit sonnet; open-ended synthesis agents weighing competing factors over unbounded input fit opus.
 
 ### Claude Code Built-in Agents
 

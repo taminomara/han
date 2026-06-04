@@ -1,6 +1,6 @@
 ---
 paths:
-  - "han.core/agents/**/*.md"
+  - "**/agents/**/*.md"
 ---
 
 # Graceful Degradation
@@ -38,8 +38,6 @@ If git is not available, skip recency analysis and note this limitation.
 Run `git log --since="30 days ago" --name-only` to identify recently modified files.
 Prioritize test coverage for files changed in the last 30 days.
 ```
-
-(E4 in `han.core/agents/test-engineer.md` line 70. E5 in `han.core/agents/edge-case-explorer.md` line 38.)
 
 **Noting the limitation** means including a line in the agent's output such as:
 

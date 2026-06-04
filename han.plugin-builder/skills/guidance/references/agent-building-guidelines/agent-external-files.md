@@ -1,6 +1,6 @@
 ---
 paths:
-  - "han.core/agents/**/*.md"
+  - "**/agents/**/*.md"
 ---
 
 # External File References in Agent Definitions
@@ -21,8 +21,8 @@ Agents live as flat files in a shared directory:
 
 ```
 agents/
-  evidence-based-investigator.md
-  adversarial-validator.md
+  generator-agent.md
+  evaluator-agent.md
 ```
 
 Skills each get their own directory with room for sibling folders:
@@ -76,7 +76,7 @@ The [Context Injection Commands](../skill-building-guidance/context-injection-co
 
 ## Agent Frontmatter Fields
 
-Han agents set only `name`, `description`, `tools`, and `model` today, but the [Subagents documentation](https://code.claude.com/docs/en/sub-agents) supports more. Only `name` and `description` are required. The others, briefly:
+Many agents set only `name`, `description`, `tools`, and `model`, but the [Subagents documentation](https://code.claude.com/docs/en/sub-agents) supports more. Only `name` and `description` are required. The others, briefly:
 
 | Field | What it does |
 |---|---|
@@ -97,26 +97,26 @@ Han agents set only `name`, `description`, `tools`, and `model` today, but the [
 
 ### Plugin agents ignore three of these (security boundary)
 
-When an agent is loaded **from a plugin** (which is how every Han agent ships), Claude Code ignores its `hooks`, `mcpServers`, and `permissionMode` frontmatter. This is a documented security boundary, not a bug: a plugin cannot silently grant itself hooks, MCP access, or a looser permission mode on the operator's machine. Do not rely on any of these three fields in a Han agent definition; they will be dropped. Source: [Subagents documentation](https://code.claude.com/docs/en/sub-agents).
+When an agent is loaded **from a plugin** (which is how every plugin agent ships), Claude Code ignores its `hooks`, `mcpServers`, and `permissionMode` frontmatter. This is a documented security boundary, not a bug: a plugin cannot silently grant itself hooks, MCP access, or a looser permission mode on the operator's machine. Do not rely on any of these three fields in a plugin agent definition; they will be dropped. Source: [Subagents documentation](https://code.claude.com/docs/en/sub-agents).
 
 ### Subagents cannot spawn subagents
 
-This is a platform rule, not just a Han convention: a subagent cannot dispatch another subagent. Nested delegation must go through skills or be chained from the main conversation. Han's agents reflect this by not carrying the `Agent` tool (see [Agent Dispatch Namespacing](../skill-building-guidance/agent-dispatch-namespacing.md)).
+This is a platform rule: a subagent cannot dispatch another subagent. Nested delegation must go through skills or be chained from the main conversation. Reflect this by not giving your agents the `Agent` tool (see [Agent Dispatch Namespacing](../skill-building-guidance/agent-dispatch-namespacing.md)).
 
-## Existing Agents as Evidence
+## The Pattern in Practice
 
-Agents in the han plugin demonstrate this pattern. Each is fully self-contained with all content inlined. For example:
+Well-built agents are fully self-contained with all content inlined. For example:
 
-- **evidence-based-investigator.md.** Defines 5 investigation protocols entirely inline (Search for Direct Evidence, Trace Code Paths, Check Git History, Examine Test Coverage, Map Dependencies). No external references.
-- **codebase-explorer.md.** Defines exploration strategy, universal checklist, and feature-type-specific checklists entirely inline. No external references.
+- An investigation agent defines its investigation protocols entirely inline (search for direct evidence, trace code paths, check git history, examine test coverage, map dependencies). No external references.
+- An exploration agent defines its exploration strategy, universal checklist, and feature-type-specific checklists entirely inline. No external references.
 
-No agent references external files, scripts, or uses context injection commands.
+A well-built agent does not reference external files or scripts, and does not use context injection commands.
 
 ## What to Do Instead
 
 When building agents that need substantial reference content:
 
-1. **Inline the content.** Write protocols, strategies, and reference material directly in the agent `.md` file. Both existing agents demonstrate this pattern effectively.
+1. **Inline the content.** Write protocols, strategies, and reference material directly in the agent `.md` file.
 2. **Keep agents focused.** Agents should orchestrate and make judgment calls. If an agent needs complex procedural steps or reference data, that work likely belongs in a skill.
 3. **Delegate to skills.** Agents can dispatch skills for operations that need `references/`, `scripts/`, or context injection. This follows the composition rule: *"agents orchestrate, skills execute."*
 
