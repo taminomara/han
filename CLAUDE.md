@@ -136,11 +136,16 @@ This is the body of contributor guidance for building skills, agents, and plugin
 Top-level guidance documents for contributors writing skills, agents, and configuration:
 
 - **[han.plugin-builder/skills/guidance/references/plugin-entity-taxonomy.md](./han.plugin-builder/skills/guidance/references/plugin-entity-taxonomy.md).** Definitions of skills, agents, and hooks, and which to reach for. Read first when adding a new entity to the plugin.
-- **[han.plugin-builder/skills/guidance/references/plugin-readme.md](./han.plugin-builder/skills/guidance/references/plugin-readme.md).** Guidelines for plugin README structure.
-- **[han.plugin-builder/skills/guidance/references/local-development.md](./han.plugin-builder/skills/guidance/references/local-development.md).** Local development setup for working on the plugin.
 - **[han.plugin-builder/skills/guidance/references/iterative-plugin-development.md](./han.plugin-builder/skills/guidance/references/iterative-plugin-development.md).** Development workflow for evolving a plugin over time.
-- **[han.plugin-builder/skills/guidance/references/semantic-versioning.md](./han.plugin-builder/skills/guidance/references/semantic-versioning.md).** Versioning rules for plugin releases.
 - **[han.plugin-builder/skills/guidance/references/specialization-and-model-selection.md](./han.plugin-builder/skills/guidance/references/specialization-and-model-selection.md).** How to pick models for agents based on the work they do.
+
+### Han-specific contributor and maintainer docs (`docs/`)
+
+These are specific to the Han repo and its suite, so they live in `docs/` rather than in the general authoring guidance.
+
+- **[docs/local-development.md](./docs/local-development.md).** How to use a local clone of the Han repo as a marketplace source so branch changes are immediately testable. Read when setting up to develop or test changes to the Han suite locally.
+- **[docs/semantic-versioning.md](./docs/semantic-versioning.md).** The Han suite's versioning policy: how the parent `han` plugin and its children version independently, and how releases are tagged. Owned alongside `/han-release`.
+- **[docs/plugin-readme.md](./docs/plugin-readme.md).** The README conventions Han plugins follow (root-level README for humans, no READMEs inside skill directories).
 
 Subdirectories:
 

@@ -8,10 +8,10 @@ Every plugin needs a README.md at its root directory for human readers on GitHub
 
 Place a `README.md` in the plugin's root directory (next to `.claude-plugin/`). This file is for human readers browsing the repository on GitHub. It is not loaded by the plugin system and has no effect on skill behavior.
 
-Skill directories must NOT have their own README files. All skill documentation belongs in `SKILL.md` and `references/`. See [Naming Conventions](skill-building-guidance/naming-conventions.md) for details.
+Skill directories must NOT have their own README files. All skill documentation belongs in `SKILL.md` and `references/`. See [Naming Conventions](../han.plugin-builder/skills/guidance/references/skill-building-guidance/naming-conventions.md) for details.
 
 ```
-example-plugin/
+han/
   README.md              # Plugin README. For humans on GitHub.
   .claude-plugin/
     plugin.json
@@ -68,7 +68,7 @@ Single-skill plugins and plugins where all skills are independent skip this sect
 
 **When to include:**
 ```markdown
-# Example Plugin
+# Han Plugin
 
 {description}
 

@@ -72,14 +72,11 @@ Schema references for the JSON manifests that define a plugin and its marketplac
 - [monitors.json Schema Reference](.claude/plugin-building-guidance/claude-marketplace-and-plugin-configuration/monitors-json-options.md) — Schema for the experimental monitors configuration (persistent background processes that deliver notifications). Read only when building monitor components.
 - [themes.json Schema Reference](.claude/plugin-building-guidance/claude-marketplace-and-plugin-configuration/themes-json-options.md) — Schema for experimental plugin theme files. Read only when shipping a theme with a plugin.
 
-## Plugin development and release
+## Plugin development
 
-Process guidance for building, versioning, and documenting a plugin over its lifetime.
+Process guidance for building and evolving a plugin over its lifetime.
 
-- [Local Development](.claude/plugin-building-guidance/local-development.md) — How to use your local repo clone as a marketplace source so branch changes are immediately testable in any Claude instance on your machine. Read when setting up to develop or test plugin changes locally.
 - [Iterative Plugin Development](.claude/plugin-building-guidance/iterative-plugin-development.md) — The iterative process (plan for 3-5 passes, challenge the prior pass's assumptions each round) for evolving skills and agents that rarely work on the first draft. Read when developing or substantially revising any entity.
-- [Semantic Versioning for Plugins](.claude/plugin-building-guidance/semantic-versioning.md) — Rules for major / minor / patch version bumps in plugin.json and keeping them in sync with marketplace.json. Read when releasing or versioning a plugin change.
-- [Plugin README](.claude/plugin-building-guidance/plugin-readme.md) — Why every plugin needs a root README (for humans on GitHub, not loaded by the system) and why skill directories must not have one. Read when adding or organizing a plugin's documentation.
 - [Specialization and Model Selection](.claude/plugin-building-guidance/specialization-and-model-selection.md) — The research-backed rationale for why tighter specialization lets a smaller model at lower effort match a larger one on narrow tasks, without raising the capability ceiling. Read when reasoning about the specialization-versus-model-tier trade-off across skills and agents.
 
 ## Templates and examples
