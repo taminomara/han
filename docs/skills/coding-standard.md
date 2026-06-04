@@ -7,7 +7,7 @@ Operator documentation for the `/coding-standard` skill in the han plugin. This 
 ## TL;DR
 
 - **What it does.** Creates and updates coding standards for the current project. From scratch, by converting an existing document, or by updating an existing standard.
-- **When to use it.** You want to formalize a convention the team already follows, or to research and establish a new one, with real code examples from the codebase.
+- **When to use it.** You want to formalize a convention the team already follows, or establish a new one grounded in codebase evidence, with real code examples from the codebase.
 - **What you get back.** A hierarchically-named coding-standard document under `docs/coding-standards/` with metadata, `paths:` YAML frontmatter, Correct-usage examples, and What-to-avoid examples, plus an entry in one or more per-file-type index files under `.claude/rules/coding-standards/` so Claude Code loads only a small index when a matching file is read and then pulls the full standard only if it decides the standard applies.
 
 ## Key concepts
@@ -50,7 +50,7 @@ Give it:
 Example prompts:
 
 - `/coding-standard`. *"Create a coding standard for error handling based on what we already do in this codebase."*
-- `/coding-standard`. *"Research unit tests vs integration tests and create a standard for when to use which, with examples relevant to this project."*
+- `/coding-standard`. *"Create a standard for when to use unit tests vs integration tests, with examples drawn from this codebase."*
 - `/coding-standard docs/adr/data-soft-deletes.md`. *"Convert the soft-deletes ADR into a coding standard."*
 - `/coding-standard`. *"Update the existing API naming conventions standard. The new one is under `/v2`."*
 
