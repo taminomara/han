@@ -92,26 +92,34 @@ done
 
 # Write one PNG to <branch> at its Contents API path. Creates or overwrites,
 # fetching the current sha on that branch first so the PUT is idempotent.
-# Prints "added"/"updated" on stdout; gh errors flow to stderr. Returns gh's
-# exit status so the caller can distinguish a branch-protection rejection from
-# a genuine failure.
+# Prints "added"/"updated" on stdout; gh errors flow to stderr. Returns the
+# PUT's exit status so the caller can distinguish a branch-protection rejection
+# from success. The `|| return $?` after each PUT is load-bearing: the trailing
+# echo would otherwise become the function's last command and mask a failed
+# PUT with status 0 — and because the probe calls put_file inside an `if`
+# condition, `set -e` is suppressed in this body and will not catch it either.
 put_file() {
   local branch="$1" api_path="$2" src="$3" sym="$4" file="$5"
   local content_b64 existing_sha
   content_b64=$(base64_encode "$src")
-  existing_sha=$(gh api "$api_path?ref=$branch" --jq .sha 2>/dev/null || true)
+  # Gate on gh's exit status, not on the captured output. On a 404 (file not
+  # yet present) gh prints the error body to stdout and does not apply --jq, so
+  # capturing with `|| true` would leave the JSON error in existing_sha and
+  # wrongly take the update path. The `|| existing_sha=""` resets it to empty
+  # when the GET fails, so a missing file is correctly treated as an add.
+  existing_sha=$(gh api "$api_path?ref=$branch" --jq .sha 2>/dev/null) || existing_sha=""
   if [ -n "$existing_sha" ]; then
     gh api --method PUT "$api_path" \
       -f message="issue-assets: update $file for $sym" \
       -f content="$content_b64" \
       -f branch="$branch" \
-      -f sha="$existing_sha" >/dev/null
+      -f sha="$existing_sha" >/dev/null || return $?
     echo updated
   else
     gh api --method PUT "$api_path" \
       -f message="issue-assets: add $file for $sym" \
       -f content="$content_b64" \
-      -f branch="$branch" >/dev/null
+      -f branch="$branch" >/dev/null || return $?
     echo added
   fi
 }
