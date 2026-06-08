@@ -274,3 +274,18 @@ Two independent `adversarial-validator` agents challenged the evidence, the fix,
 - **Why Correct:** The cut content is provably non-routing — the lean analyst agents route just as precisely without it (E5), the densest spans already exist in the bodies (E14), and the priority cutting ladder the suite already codifies (E10) maps directly onto the findings; the always-loaded cost is real and measured (E6, E7, and the issue's `/context` output, V1).
 - **Validation Outcome:** Direction confirmed and baselines reproduced exactly (V10, V1), but validation corrected the savings down ~15-20%, preserved four load-bearing phrases first classed as body-grade (V2-V5), and removed one misidentified deletion target (V6); revised realistic reclaim is ~2,570 tokens.
 - **Remaining Risks:** No mechanical routing test exists (V11), so each tranche needs human review and a pre-cut unique-anchor grep (risks 1-2 above); pre-existing one-way boundaries should be repaired in-scope (risk 3).
+
+## Implementation Results
+
+All four tranches were implemented and pushed on branch `investigate-context-footprint-51`, one commit each.
+
+| Tranche | Scope | Reclaimed |
+|---------|-------|-----------|
+| A | on-call-engineer (2939→1591), junior-developer (2686→1963), project-manager (2591→1986 chars) | ~669 tokens |
+| B | information-architect, data-engineer, user-experience-designer, system-architect trimmed; devops-engineer gained the on-call-engineer reverse pointer (V5); software-architect unchanged | ~86 tokens (net of the boundary repair) |
+| C | 23 skill descriptions trimmed via the cutting ladder; 5 already-lean skills untouched | ~1,489 tokens |
+| D | new `agent-description-length.md` budget doc; `agent-domain-focus.md`, rule index, and CLAUDE.md wired to it | guidance only |
+
+**Measured total: ~8,975 chars / ~2,243 tokens removed from the always-loaded description footprint across all agents and skills (19% reduction), main vs. HEAD.** Slightly under the ~2,570 estimate because Tranche B's safe cuts were smaller than projected (the mid-size agents were more load-bearing, as validation predicted) and the devops→on-call boundary repair intentionally added tokens.
+
+Preservations verified after implementation: "metastable failure" and "event sourcing and CQRS" retained as unique anchors; "hard boundary at the application source line" kept; all 16 junior-developer / 17 project-manager sibling names kept; work-items-to-issues→post-code-review-to-pr boundary kept; only the ADR↔runbook distant-sibling boundary removed; all 28 SKILL.md frontmatters parse and every folded skill-name reference survives YAML folding. No long-form doc was broken: the docs describe behavior and methodology (unchanged), and every term moved out of an agent description still lives in that agent's body.
