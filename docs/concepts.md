@@ -6,7 +6,7 @@ Han is built out of two kinds of things: **skills** and **agents**. If you read 
 
 ## TL;DR
 
-- A **skill** is a deterministic process you run with a slash command (like `/code-review`). Think: flowchart.
+- A **skill** is a deterministic process you usually run with a slash command (like `/code-review`), though Claude can also auto-invoke it when your request matches the skill's description. Think: flowchart.
 - An **agent** is a specialist persona with judgment, dispatched by a skill or by you (like `adversarial-security-analyst`). Think: teammate.
 - Skills dispatch agents. The skill follows its flowchart, sends the agent off to do a judgment-heavy subtask (investigate a bug, review architecture, critique a plan), then folds the finding back into its output.
 - **Sizing** decides how many agents get dispatched. The skills that fan out to a swarm classify the work as small, medium, or large first, default to small, and scale the team and the iteration depth from there. See [Sizing](./sizing.md) for the full model.
@@ -19,9 +19,10 @@ That is the whole model. Everything else is vocabulary.
 
 ## Skills: the process layer
 
-A skill is a fixed sequence of steps that Claude Code runs when you type its slash command.
+A skill is a fixed sequence of steps that Claude Code runs. Typing the slash command is the primary way to trigger it, but not the only one.
 
-- You invoke it: `/code-review`, `/plan-a-feature`, `/investigate`.
+- You invoke it: `/code-review`, `/plan-a-feature`, `/investigate`. This is the deliberate, primary path.
+- Claude may also auto-invoke it. Skill descriptions are written to match user intent, so a request like "can you make sure this code is solid?" can route into `/code-review` without you typing the command. This is on by default (the frontmatter field `disable-model-invocation` defaults to `false`); no Han skill turns it off. Either way the skill runs the same protocol.
 - It follows a defined protocol. Every reader who runs the same skill gets the same shape of output.
 - It is documented by a `SKILL.md` file inside `han.core/skills/{name}/` (or `han.github/skills/{name}/` for the GitHub skills).
 - It may dispatch one or more agents for the steps that need judgment.
