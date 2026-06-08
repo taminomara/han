@@ -1,15 +1,12 @@
 ---
 name: test-planning
 description: >
-  Produce a standalone test plan by analyzing code for test coverage gaps and
-  edge cases. Use when you need to create, generate, or draft a test plan for a
-  branch, need to analyze test coverage, or need to identify what tests to write
-  for specific files or directories. Does not write test code — produces a plan
-  document only; use tdd to implement behavior test-first through a
-  red-green-refactor loop. Does not refine or iterate on existing plans — use
-  iterative-plan-review to improve a previously drafted work plan. Does not review
-  code quality, security, or style — use code-review for full code review.
-  Does not evaluate architectural testability or structural coupling — use
+  Produce a standalone test plan by analyzing code for test coverage gaps and edge cases. Use when
+  you need to create, generate, or draft a test plan for a branch, need to analyze test coverage,
+  or need to identify what tests to write for specific files or directories. Does not write test
+  code — use tdd to implement behavior test-first. Does not refine existing plans — use
+  iterative-plan-review. Does not review code quality, security, or style — use code-review for
+  full code review. Does not evaluate architectural testability or structural coupling — use
   architectural-analysis for architectural assessment.
 argument-hint: "[optional: file paths, directories, or description of what to test]"
 allowed-tools: Bash(git *), Bash(find *), Bash(ls *), Read, Grep, Glob, Agent

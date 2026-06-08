@@ -1,16 +1,13 @@
 ---
 name: project-documentation
 description: >
-  Creates and maintains project documentation for features, systems, and
-  components. Discovers project structure dynamically to work across any
-  technology stack. Use when documenting how a feature, system, or component
-  works — including writing, updating, or organizing docs. Does not scan or
-  detect the project's technology stack — use project-discovery for repository
-  analysis and config detection. Does not create architectural decision records
-  — use architectural-decision-record for ADRs. Does not create or
-  update coding standards — use coding-standard instead. Does not generate PR
-  descriptions — use update-pr-description for that. Does not produce runbooks
-  for operational scenarios — use runbook for that.
+  Creates and maintains project documentation for features, systems, and components. Use when
+  documenting how a feature, system, or component works — including writing, updating, or
+  organizing docs. Does not scan or detect the project's technology stack — use project-discovery
+  for repository analysis and config detection. Does not create architectural decision records —
+  use architectural-decision-record for ADRs. Does not create or update coding standards — use
+  coding-standard instead. Does not generate PR descriptions — use update-pr-description for that.
+  Does not produce runbooks for operational scenarios — use runbook for that.
 argument-hint: [feature-name or document-path]
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(date *), Bash(mkdir *), Bash(find *)
 ---

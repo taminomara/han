@@ -1,6 +1,12 @@
 ---
 name: html-summary
-description: Convert a stakeholder summary markdown file into a single self-contained HTML executive report — bottom line and decision asks up front, supporting detail later — styled with a Test Double-derived palette and self-contained mermaid diagrams. Use when the user wants to turn a stakeholder summary, executive summary, or business summary into an HTML report, generate an HTML version of a summary doc, or produce a shareable HTML file from a summary markdown. Requires an existing markdown summary file. Produces an HTML sibling file only; does not modify the source markdown, commit, push, or publish anything.
+description: >
+  Convert a stakeholder summary markdown file into a single self-contained HTML executive report —
+  bottom line and decision asks up front, supporting detail later — styled with a Test
+  Double-derived palette and self-contained mermaid diagrams. Use when the user wants to turn a
+  stakeholder summary, executive summary, or business summary into an HTML report, generate an
+  HTML version of a summary doc, or produce a shareable HTML file from a summary markdown.
+  Produces an HTML sibling file only; does not publish anything.
 ---
 
 # HTML Summary

@@ -1,17 +1,14 @@
 ---
 name: "investigate"
 description: >
-  Evidence-based investigation of issues, bugs, API calls, integrations, and
-  other aspects of software development that need a deep dive to find the root
-  cause and solutions. Use when you need to debug, troubleshoot, diagnose, or
-  figure out why something is broken — especially when in-depth analysis of the
-  reasons and an adversarial validation of the proposed solution are needed. Does
-  not review code for quality or style — use code-review for auditing changes or
-  post-code-review-to-pr for posting review feedback to GitHub. Does not assess
-  architectural health or structural risk — use architectural-analysis for
-  architectural concerns. Does not research open-ended options, prior art, or
-  how something works when nothing is broken — use research for that. Does
-  not capture feedback on Han's own skills — use han-feedback for that.
+  Evidence-based investigation of issues, bugs, API calls, integrations, and other aspects of
+  software development that need a deep dive to find the root cause and solutions. Use when you
+  need to debug, troubleshoot, diagnose, or figure out why something is broken. Does not review
+  code for quality or style — use code-review for auditing changes or post-code-review-to-pr for
+  posting review feedback to GitHub. Does not assess architectural health or structural risk — use
+  architectural-analysis for architectural concerns. Does not research open-ended options, prior
+  art, or how something works when nothing is broken — use research for that. Does not capture
+  feedback on Han's own skills — use han-feedback for that.
 allowed-tools: Read, Glob, Grep, Agent
 ---
 

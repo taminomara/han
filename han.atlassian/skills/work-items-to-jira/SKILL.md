@@ -1,16 +1,12 @@
 ---
 name: work-items-to-jira
 description: >
-  Break a work-items.md file (produced by /plan-work-items) into independently-grabbable
-  Jira tickets, one per slice, in a single Jira project. Use when you want to turn a
-  work-items file into Jira tickets, publish work items as Jira issues, or create
-  implementation tickets that can be worked on and tracked in Jira. Requires a configured
-  Atlassian MCP server and a target Jira project (or board). Defaults to creating each
-  slice as a Story, unassigned, in the backlog; an optional parent (an epic, so each item
-  becomes a standard issue under it, or a story, so each item becomes a subtask under it),
-  a different issue type, an assignee, and a target column are all optional overrides. Does
-  not produce the work-items file itself — use plan-work-items to break a plan into work
-  items first. Does not post to GitHub — use work-items-to-issues for GitHub issues.
+  Break a work-items.md file (produced by /plan-work-items) into independently-grabbable Jira
+  tickets, one per slice, in a single Jira project. Use when you want to turn a work-items file
+  into Jira tickets, publish work items as Jira issues, or create implementation tickets that can
+  be worked on and tracked in Jira. Requires a configured Atlassian MCP server. Does not produce
+  the work-items file itself — use plan-work-items to break a plan into work items first. Does not
+  post to GitHub — use work-items-to-issues for GitHub issues.
 argument-hint: [path to work-items.md] [--project <KEY> or --board <name>] [--parent <KEY> epic or story (optional; --epic is a deprecated alias)] [--type <issue type, default Story>] [--assignee <accountId/email> (optional)] [--column <name, default Backlog>]
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(find *), mcp__claude_ai_Atlassian__getAccessibleAtlassianResources, mcp__claude_ai_Atlassian__atlassianUserInfo, mcp__claude_ai_Atlassian__getVisibleJiraProjects, mcp__claude_ai_Atlassian__getJiraProjectIssueTypesMetadata, mcp__claude_ai_Atlassian__lookupJiraAccountId, mcp__claude_ai_Atlassian__createJiraIssue, mcp__claude_ai_Atlassian__editJiraIssue, mcp__claude_ai_Atlassian__getJiraIssue, mcp__claude_ai_Atlassian__getTransitionsForJiraIssue, mcp__claude_ai_Atlassian__transitionJiraIssue, mcp__claude_ai_Atlassian__searchJiraIssuesUsingJql
 ---

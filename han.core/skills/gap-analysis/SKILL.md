@@ -1,19 +1,12 @@
 ---
 name: "gap-analysis"
 description: >
-  Performs a gap analysis between two artifacts (a current state and a desired
-  state) and produces a plain-language, stakeholder-readable report indexed by
-  stable gap IDs. Use when the user wants to compare, evaluate, audit, or
-  reconcile one artifact against another — including spec-vs-implementation,
-  PRD-vs-shipped-feature, design-vs-build, or requirements-vs-code gaps, or any
-  "what's missing from X compared to Y" question. Orchestrates the gap-analyzer
-  agent for the primary analysis, then runs a validator-and-augmenter swarm by
-  default to corroborate, contradict, and enrich the findings across actor
-  perspectives; the user may opt out with `no swarm`. Recommends a swarm team
-  size (small / medium / large) based on gap count and the domains the gaps
-  touch. Does not investigate runtime bugs — use investigate. Does not assess
-  module-level architecture — use architectural-analysis. Does not research
-  open-ended options with no second artifact to compare against — use research.
+  Performs a gap analysis between two artifacts (a current state and a desired state) and produces
+  a plain-language, stakeholder-readable report indexed by stable gap IDs. Use when the user wants
+  to compare, evaluate, audit, or reconcile one artifact against another. Does not investigate
+  runtime bugs — use investigate. Does not assess module-level architecture — use
+  architectural-analysis. Does not research open-ended options with no second artifact to compare
+  against — use research.
 arguments: size
 argument-hint: "[size: small | medium | large] [current state artifact, desired state artifact, optional: scope and modes]"
 allowed-tools: Read, Write, Glob, Grep, Agent, Bash(find *), Bash(git *)

@@ -1,20 +1,11 @@
 ---
 name: "plan-implementation"
 description: >
-  Builds a feature implementation plan from an existing feature specification
-  (or equivalent context) through a project-manager-led team conversation. Use
-  when the user wants to plan how to implement, build, deliver, or ship a
-  feature that has already been specified — including "plan the implementation
-  of X", "how do we build this", or "turn this spec into an implementation
-  plan". Launches specialist sub-agents sized to the feature, always including
-  project-manager as coordinator and junior-developer as generalist
-  stress-tester, and iterates rounds until the plan is ready or only user input
-  remains. Produces three cross-referenced files beside the source spec:
-  feature-implementation-plan.md, implementation-decision-log.md, and
-  implementation-iteration-history.md. Does not specify what the feature should
-  do — use plan-a-feature first. Does not refine or stress-test an
-  already-written plan — use iterative-plan-review. Typically paired with
-  plan-work-items downstream to break the plan into work items.
+  Builds a feature implementation plan from an existing feature specification (or equivalent
+  context) through a project-manager-led team conversation. Use when the user wants to plan how to
+  implement, build, deliver, or ship a feature that has already been specified. Does not specify
+  what the feature should do — use plan-a-feature first. Does not refine or stress-test an
+  already-written plan — use iterative-plan-review.
 arguments: size
 argument-hint: "[size: small | medium | large] [feature specification path, optional: additional context]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(find *), Bash(git *)

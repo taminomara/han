@@ -1,20 +1,12 @@
 ---
 name: "iterative-plan-review"
 description: >
-  Sharpens and stress-tests an existing plan file through multiple
-  codebase-grounded review passes, editing it in place and recording every
-  finding and iteration in cross-referenced companion files. Use this skill
-  whenever the user wants to iterate on, refine, tighten, or improve a plan —
-  including terse commands like "iterate", "refine it", or "iterate for
-  correctness" where a plan is present in context. Also use it when the user
-  asks to verify, validate, or confirm feasibility of an approach ("can you
-  verify this will work", "is this sound") — the signal is that the user wants
-  critical evaluation of an approach, not execution of it. Produces two
-  companion files in an artifacts/ subfolder next to the plan:
-  review-findings.md and review-iteration-history.md. Do NOT use for
-  implementing plan steps, generating new plans from scratch, writing test
-  plans, code review, or bug investigation. Can be paired with plan-work-items
-  downstream after the plan is refined.
+  Sharpens and stress-tests an existing plan file through multiple codebase-grounded review
+  passes, editing it in place and recording every finding and iteration in cross-referenced
+  companion files. Use this skill whenever the user wants to iterate on, refine, tighten, or
+  improve a plan. Also use it when the user asks to verify, validate, or confirm feasibility of an
+  approach. Does not implement plan steps, write test plans, review code, or investigate bugs, and
+  does not generate new plans from scratch — use plan-a-feature for a new plan.
 arguments: size
 argument-hint: "[size: small | medium | large] [context or path to plan file]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(find *)

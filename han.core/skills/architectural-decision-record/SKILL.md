@@ -1,14 +1,11 @@
 ---
 name: architectural-decision-record
 description: >
-  Create, extract, or convert an ADR (architectural decision record) using the
-  ADR template. Use when creating new ADRs, extracting an ADR from existing
-  documentation, converting a document into an ADR, recording an architecture or
-  design decision, or updating the status of an existing ADR. Does not create or
-  update enforceable coding standards or conventions — use coding-standard for
-  that. Does not write feature or system documentation — use
-  project-documentation instead. Does not produce runbooks for operational
-  scenarios — use runbook for that.
+  Create, extract, or convert an ADR (architectural decision record) using the ADR template. Use
+  when creating new ADRs, extracting an ADR from existing documentation, converting a document
+  into an ADR, recording an architecture or design decision, or updating the status of an existing
+  ADR. Does not create or update enforceable coding standards or conventions — use coding-standard
+  for that. Does not write feature or system documentation — use project-documentation instead.
 argument-hint: [topic-or-title or document-path]
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(mkdir *), Bash(find *)
 ---
