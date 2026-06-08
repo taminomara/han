@@ -1,20 +1,14 @@
 ---
 name: project-documentation-to-confluence
 description: >
-  Creates or updates project documentation for a feature, system, or component
-  and publishes it to a user-specified Confluence location. Runs the core
-  project-documentation skill to produce the documentation to a local file, lets
-  the user review it, then, after explicit confirmation, publishes it to
-  Confluence with the markdown-to-confluence skill. Use when the user wants
-  feature or system documentation written to Confluence, posted to a Confluence
-  space or page, or synced to a Confluence location. Requires a configured
-  Atlassian MCP server and requires the user to provide the target Confluence
-  location — it does not search Confluence for the right place. Does not document
-  to local files only — use project-documentation for that. Does not publish an
-  arbitrary existing markdown file — use markdown-to-confluence for that. Does
-  not create architectural decision records — use architectural-decision-record.
-  Does not create coding standards — use coding-standard. Does not produce
-  runbooks — use runbook.
+  Creates or updates project documentation for a feature, system, or component and publishes it to
+  a user-specified Confluence location. Use when the user wants feature or system documentation
+  written to Confluence, posted to a Confluence space or page, or synced to a Confluence location.
+  Requires a configured Atlassian MCP server. Does not document to local files only — use
+  project-documentation for that. Does not publish an arbitrary existing markdown file — use
+  markdown-to-confluence for that. Does not create architectural decision records — use
+  architectural-decision-record. Does not create coding standards — use coding-standard. Does not
+  produce runbooks — use runbook.
 argument-hint: [feature-name or doc-path] [confluence location: page URL or space + parent]
 allowed-tools: Read, Glob, Grep, Skill, Agent, Bash(date *), Bash(git config *), Bash(whoami), Bash(mkdir *), Bash(find *), mcp__claude_ai_Atlassian__getAccessibleAtlassianResources
 ---

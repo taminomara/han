@@ -1,18 +1,13 @@
 ---
 name: runbook
 description: >
-  Create or update a runbook for an operational scenario — an incident an
-  alert fires for, a recurring scheduled task, or a known failure mode on a
-  live service — using a consistent template. Use when writing, drafting,
-  authoring, or updating a runbook for an alert, incident, on-call procedure,
-  scheduled maintenance, or operational SOP. Each invocation produces one
-  runbook at a time. Applies a YAGNI preflight that requires the scenario to
-  be real (an alert that has fired, a recurring task that exists, or a live
-  failure mode on a service that receives traffic) before producing the
-  runbook. Does not produce feature or system documentation — use
-  project-documentation. Does not record architectural decisions — use
-  architectural-decision-record. Does not create coding standards — use
-  coding-standard.
+  Create or update a runbook for an operational scenario — an incident an alert fires for, a
+  recurring scheduled task, or a known failure mode on a live service — using a consistent
+  template. Use when writing, drafting, authoring, or updating a runbook for an alert, incident,
+  on-call procedure, scheduled maintenance, or operational SOP. Applies a YAGNI preflight
+  requiring the scenario to be real before producing the runbook. Does not produce feature or
+  system documentation — use project-documentation. Does not record architectural decisions — use
+  architectural-decision-record. Does not create coding standards — use coding-standard.
 argument-hint: [topic or scenario, or path to existing runbook to update]
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(git config *), Bash(whoami), Bash(date *), Bash(mkdir *), Bash(find *)
 ---

@@ -1,17 +1,12 @@
 ---
 name: han-feedback
 description: >
-  Capture structured feedback on the Han skills and agents used in the current
-  session and optionally post it as a GitHub issue to testdouble/han. Works
-  across the whole han.* plugin family: han.core, han.github, han.reporting,
-  han.feedback, and any future han.* plugin. Use at the end of any session
-  where one or more han.* skills or agents ran, to rate a run, log what worked
-  and what didn't, or submit observations for maintainers. Produces a dated
-  markdown feedback file under ~/.claude/han-feedback/ and walks through a
-  sensitive-content review before offering to post. Does not review code,
-  investigate bugs, or research options; use code-review, investigate, or
-  research for those. Does not provide feedback on skills or agents from
-  non-Han plugins.
+  Capture structured feedback on the Han skills and agents used in the current session and
+  optionally post it as a GitHub issue to testdouble/han. Use at the end of any session where one
+  or more han.* skills or agents ran, to rate a run, log what worked and what didn't, or submit
+  observations for maintainers. Does not review code, investigate bugs, or research options; use
+  code-review, investigate, or research for those. Does not provide feedback on skills or agents
+  from non-Han plugins.
 allowed-tools: Read, Write, Bash(ls *), Bash(mkdir *), Bash(gh *), Bash(date *)
 ---
 

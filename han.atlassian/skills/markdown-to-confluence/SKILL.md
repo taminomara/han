@@ -1,16 +1,12 @@
 ---
 name: markdown-to-confluence
 description: >
-  Publishes a local Markdown file to a user-specified Confluence location,
-  creating a new page or updating an existing one through the Atlassian MCP
-  server. Use when the user wants to post, publish, push, or sync a Markdown
-  file to a Confluence space or page. Requires a configured Atlassian MCP server
-  and requires the user to provide the target Confluence location — it does not
-  search Confluence for the right place. Defaults to saving an unpublished draft
-  so nothing goes live unintentionally. Does not write or generate the Markdown
-  itself — point it at an existing file, or use project-documentation-to-confluence
-  for the document-then-publish flow. Does not publish to Jira — use
-  work-items-to-jira.
+  Publishes a local Markdown file to a user-specified Confluence location, creating a new page or
+  updating an existing one through the Atlassian MCP server. Use when the user wants to post,
+  publish, push, or sync a Markdown file to a Confluence space or page. Requires a configured
+  Atlassian MCP server. Does not write or generate the Markdown itself — point it at an existing
+  file, or use project-documentation-to-confluence for the document-then-publish flow. Does not
+  publish to Jira — use work-items-to-jira.
 argument-hint: [path to markdown file] [confluence location: page URL or space + parent] [--mode draft|live (default draft)]
 allowed-tools: Read, Glob, Grep, Bash(find *), mcp__claude_ai_Atlassian__getAccessibleAtlassianResources, mcp__claude_ai_Atlassian__atlassianUserInfo, mcp__claude_ai_Atlassian__getConfluenceSpaces, mcp__claude_ai_Atlassian__getConfluencePage, mcp__claude_ai_Atlassian__getPagesInConfluenceSpace, mcp__claude_ai_Atlassian__getConfluencePageDescendants, mcp__claude_ai_Atlassian__createConfluencePage, mcp__claude_ai_Atlassian__updateConfluencePage
 ---

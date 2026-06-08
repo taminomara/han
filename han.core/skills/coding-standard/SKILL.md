@@ -1,16 +1,12 @@
 ---
 name: coding-standard
 description: >
-  Creates and updates coding standards, conventions, rules, and guidelines for
-  the current project. Use when creating new standards from scratch, converting
-  existing documents into coding standards, or updating existing standards —
-  including evaluating whether a proposed standard belongs in automated tooling
-  like linters or formatters instead. Does not create architectural decision
-  records — use architectural-decision-record for ADRs. Does not write feature or system
-  documentation — use project-documentation for that. Does not research
-  open-ended options or prior art that is not destined for a standard — use
-  research. Does not produce runbooks for operational scenarios — use runbook
-  for that.
+  Creates and updates coding standards, conventions, rules, and guidelines for the current
+  project. Use when creating new standards from scratch, converting existing documents into coding
+  standards, or updating existing standards. Does not create architectural decision records — use
+  architectural-decision-record for ADRs. Does not write feature or system documentation — use
+  project-documentation for that. Does not research open-ended options — use research. Does not
+  produce runbooks for operational scenarios — use runbook for that.
 argument-hint: [standard-topic or document-path]
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(mkdir *), Bash(find *)
 ---

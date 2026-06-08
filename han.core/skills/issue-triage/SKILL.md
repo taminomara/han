@@ -1,15 +1,12 @@
 ---
 name: issue-triage
 description: >
-  Triage a raw, vague issue or bug report into a structured document that names
-  what is known, what is missing, and what to do next. Use when an incoming
-  issue, bug report, or problem description is too vague or incomplete for
-  investigation or planning: classify the issue type, identify missing
-  information, assess severity and reproducibility, and recommend the right next
-  han skill. Does not investigate root causes or trace code paths — use
-  investigate for debugging, diagnosis, and root cause analysis. Does not plan
-  features or build solutions — use plan-a-feature or plan-implementation for
-  that.
+  Triage a raw, vague issue or bug report into a structured document that names what is known,
+  what is missing, and what to do next. Use when an incoming issue, bug report, or problem
+  description is too vague or incomplete for investigation or planning, and recommend the right
+  next han skill. Does not investigate root causes or trace code paths — use investigate for
+  debugging, diagnosis, and root cause analysis. Does not plan features or build solutions — use
+  plan-a-feature or plan-implementation for that.
 argument-hint: "[issue text, bug report, or path to a report file; optional output path]"
 allowed-tools: Read, Write, Bash(find *), Bash(mkdir *)
 ---

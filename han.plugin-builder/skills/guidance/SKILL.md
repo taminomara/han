@@ -1,18 +1,11 @@
 ---
 name: guidance
 description: >
-  Authoritative guidance for building Claude Code skills, agents, and plugins,
-  plus an init step that installs that guidance into the current repository.
-  Use when building, authoring, designing, reviewing, or hardening a skill,
-  agent, hook, or plugin — including questions about SKILL.md frontmatter,
-  skill descriptions, progressive disclosure, allowed-tools, agent model
-  selection, plugin.json or marketplace.json, semantic versioning, or whether
-  a capability should be a skill or an agent. Run with `init` or `initialize`
-  to vendor the full guidance set into `.claude/plugin-building-guidance/` and
-  write a path-scoped rule index at `.claude/rules/plugin-building-guidance.md`,
-  so the right guidance surfaces automatically while editing skill and agent
-  files without this plugin staying installed. Does not write feature code,
-  review application code, or build non-plugin features.
+  Authoritative guidance for building Claude Code skills, agents, and plugins, plus an init step
+  that installs that guidance into the current repository. Use when building, authoring,
+  designing, reviewing, or hardening a skill, agent, hook, or plugin. Run with `init` to vendor
+  the guidance into the current repository as a path-scoped rule index. Does not write feature
+  code, review application code, or build non-plugin features.
 allowed-tools: Read, Glob, Grep, Bash(find *)
 ---
 
