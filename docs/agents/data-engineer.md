@@ -13,7 +13,7 @@ Operator documentation for the `data-engineer` agent in the han plugin. This doc
 ## Key concepts
 
 - **Signature question: *"What problem does that solve?"*** Applied to every table, column, index, constraint, document shape, stream contract, and ORM choice. Unanswered versions become Open Questions.
-- **Eleven protocols.** Model fit, normal-form analysis, Codd's rules, dimensional modeling, ACID/BASE trade-offs, index strategy, named access failures (N+1, write skew, lost update, hot-path scan), migration discipline, engine-fit, transport contracts, code-data boundary, and governance (PII/PHI/PCI, GDPR/HIPAA/SOC 2/PCI).
+- **Eleven protocols.** Model fit, normalization and Codd's rules, dimensional modeling, ACID/BASE trade-offs, index strategy, named access failures (N+1, write skew, lost update, hot-path scan), migration discipline, engine-fit, transport contracts, code-data boundary, and governance (PII/PHI/PCI, GDPR/HIPAA/SOC 2/PCI).
 - **Expand-and-contract sequencing.** Every destructive remediation goes expand → backfill → cut over → contract so teams can ship safely.
 - **P0/P1/P2 remediations.** Every blocker carries a next step the team can ship today plus improvements for later sprints and quarters.
 

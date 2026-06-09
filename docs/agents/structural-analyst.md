@@ -94,3 +94,5 @@ URL: https://martinfowler.com/books/refactoring.html
 - [`/architectural-analysis`](../skills/architectural-analysis.md). Always dispatches this agent.
 - [`/code-review`](../skills/code-review.md). Conditionally dispatches this agent when the change touches module boundaries.
 - [`/plan-a-feature`](../skills/plan-a-feature.md). Dispatches this agent as an opt-in specialist, included on request.
+- [`/iterative-plan-review`](../skills/iterative-plan-review.md). Conditionally dispatches this agent when the review covers module boundaries, coupling, or dependency direction.
+- [`/plan-implementation`](../skills/plan-implementation.md). Conditionally dispatches this agent when the plan covers module boundaries, coupling, or dependency direction.

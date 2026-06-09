@@ -38,6 +38,7 @@ An adversarial DevOps / Site Reliability engineer that audits a feature, change,
 - Exploit-path vulnerability analysis. Use `adversarial-security-analyst`. The devops-engineer focuses on operational posture (rotation, scoping, detection, blast radius, compliance controls) and deliberately does not re-derive exploit paths.
 - File-level code review for correctness, style, or maintainability. Use `/code-review`.
 - Architectural SOLID / coupling / cohesion review. Use `/architectural-analysis`.
+- Code-level application-source resilience review (missing timeouts, retries without backoff, non-idempotent retry paths, catch-and-swallow handlers). Use [`on-call-engineer`](./on-call-engineer.md). The hard boundary is the application source line: devops-engineer covers infrastructure, pipelines, IaC, and observability config; on-call-engineer covers application source code. The two are designed to be dispatched together for a ship-readiness pass.
 - Bug triage or root-cause investigation. Use `/investigate` or `evidence-based-investigator`.
 - Writing or iterating IaC. The agent does not modify infrastructure. It produces a findings report.
 
