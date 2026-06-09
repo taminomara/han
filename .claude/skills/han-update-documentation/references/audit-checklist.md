@@ -2,7 +2,7 @@
 
 Verification rules applied to every entity in scope. The skill's mode (branch vs. sweep) determines *which* entities are in scope. This checklist determines *what* is checked for each one. Apply every rule that fits the entity's type. Record each finding with the file path and a concrete fix; do not paper over discrepancies.
 
-`{plugin}` below means the skill root the skill came from: one of `han.core`, `han.github`, `han.reporting`, `han.feedback`. Agents live only under `han.core`.
+`{plugin}` below means the skill root the skill came from: any discovered `han.*/skills` directory except `han.plugin-builder/skills` (the detect script reports the current list). Agents live only under the agent root (`han.core/agents`).
 
 ## Skills (`{plugin}/skills/{name}/SKILL.md` + `docs/skills/{name}.md`)
 
@@ -17,7 +17,7 @@ Verification rules applied to every entity in scope. The skill's mode (branch vs
 
 ### Long-form doc (`docs/skills/{name}.md`)
 
-1. **Long-form doc exists.** Every skill across the four skill roots has a matching long-form doc. Missing doc is a hard finding — create it from `docs/templates/skill-long-form-template.md` rather than leaving the gap.
+1. **Long-form doc exists.** Every skill across the discovered skill roots has a matching long-form doc. Missing doc is a hard finding — create it from `docs/templates/skill-long-form-template.md` rather than leaving the gap.
 2. **Orientation frame intact.** First line is `# /{name}`; the second paragraph names the audience and links to `{plugin}/skills/{name}/SKILL.md`. The `> See also:` orientation line is present.
 3. **TL;DR present.** Three lines: what / when / what-you-get-back. Each one sentence.
 4. **Sections follow the template.** Key concepts, When to use it, How to invoke it, What you get back, How to get the most out of it, YAGNI (when applicable), Cost and latency, In more detail (optional), Sources, Related documentation.
@@ -76,7 +76,7 @@ Verification rules applied to every entity in scope. The skill's mode (branch vs
 
 ## Indexes (`docs/skills/README.md`, `docs/agents/README.md`)
 
-1. **Every skill (across the four skill roots) and every agent (in `han.core/agents`) appears in the index** under exactly one group.
+1. **Every skill (across the discovered skill roots) and every agent (in the agent root) appears in the index** under exactly one group.
 2. **No index entry points at a non-existent file.**
 3. **Group headings still describe their groups accurately.** When a category was renamed or merged, the heading updates.
 4. **Each entry's scent line is current.**
