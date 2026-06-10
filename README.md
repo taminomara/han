@@ -27,15 +27,18 @@ Add the Test Double skills marketplace to Claude Code, then install the plugin:
 ```
 
 Han ships as multiple plugins:
-* **`han`**: the parent plugin that brings in `han.core`, `han.planning`, `han.coding`, `han.github`, and `han.reporting`
-* `han.core`: the research, analysis, and documentation skills plus every agent
-* `han.planning`: the planning skills you reach for before implementation: `/plan-a-feature`, `/plan-implementation`, `/plan-a-phased-build`, `/plan-work-items`, and `/iterative-plan-review`
-* `han.coding`: the coding skills you reach for while working in code: `/tdd`, `/refactor`, `/code-review`, `/architectural-analysis`, `/test-planning`, `/investigate`, and `/coding-standard`
-* `han.github`: GitHub-facing skills like posting a code review on a PR
-* `han.reporting`: reporting skills like the stakeholder summary
-* `han.feedback`: an opt-in skill for capturing post-session feedback on Han skill runs
-* `han.atlassian`: opt-in skills for publishing Markdown and documentation to Confluence and work items to Jira (requires an Atlassian MCP server)
-* `han.plugin-builder`: an opt-in plugin carrying the guidance for building your own skills, agents, and plugins
+
+| Plugin | Type | What it brings |
+| --- | --- | --- |
+| **`han`** | parent | the parent plugin that brings in `han.core`, `han.planning`, `han.coding`, `han.github`, and `han.reporting` |
+| `han.core` | bundled | research, analysis, and documentation skills plus every agent |
+| `han.planning` | bundled | planning skills you reach for before implementation |
+| `han.coding` | bundled | coding skills you reach for while working in code |
+| `han.github` | bundled | GitHub-facing skills like posting a code review on a PR |
+| `han.reporting` | bundled | reporting skills like the stakeholder summary |
+| `han.feedback` | opt-in | skill for capturing post-session feedback on Han skill runs |
+| `han.atlassian` | opt-in | skills for publishing docs and work items to Atlassian products |
+| `han.plugin-builder` | opt-in | carries the guidance for building your own skills, agents, and plugins |
 
 Installing `han@han` pulls in the bundled suite (the meta-plugin plus `han.core`, `han.planning`, `han.coding`, `han.github`, and `han.reporting`),
 and is the right choice for almost everyone. If you do not want the planning, coding, GitHub, or reporting skills, install `han.core@han` instead;
