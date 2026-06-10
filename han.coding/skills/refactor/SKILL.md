@@ -158,11 +158,13 @@ Take the plan items in order. For each:
    resolved). **Paste the runner's summary line.** Paste full output only
    when something fails or looks unexpected.
 3. **Green: cross the item off** and move to the next.
-4. **Red: revert this step** (`git checkout`/`git restore` the touched
-   files, or undo the edits when the tree was dirty at start). Do not patch
-   forward over a red suite; a failed step means the mechanic was unsafe or
-   the coverage was thinner than it looked. Diagnose, then either retry with
-   a smaller step or defer the item with what you learned.
+4. **Red: revert this step.** When git is available and the tree was clean
+   at start, `git checkout`/`git restore` the touched files. When git is
+   absent, or the tree was already dirty at start, undo the edits directly
+   instead, so reverting this step does not discard the user's other work.
+   Do not patch forward over a red suite; a failed step means the mechanic
+   was unsafe or the coverage was thinner than it looked. Diagnose, then
+   either retry with a smaller step or defer the item with what you learned.
 5. **Stop rules.** If the step needed files outside its declared blast
    radius, or the only way to make it work changes observable behavior, or
    two consecutive plan items have been reverted: stop, report where things
