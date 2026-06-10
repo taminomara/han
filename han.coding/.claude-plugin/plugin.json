@@ -1,0 +1,8 @@
+{
+  "name": "han.coding",
+  "description": "Code-writing and execution skills for the Han suite. Home of the tdd skill, which drives a feature or behavior through a BDD-framed red-green-refactor loop with an enforced observed-failure gate. Depends on han.core; bundled by the han meta-plugin.",
+  "version": "1.0.0",
+  "dependencies": [
+    "han.core"
+  ]
+}

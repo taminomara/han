@@ -10,7 +10,7 @@
     {
       "name": "han",
       "source": "./han",
-      "description": "Meta-plugin that installs the bundled Han suite. Has no components of its own; it depends on han.core, han.github, and han.reporting so installing it pulls them all in. Does not bundle the opt-in han.feedback or han.plugin-builder plugins.",
+      "description": "Meta-plugin that installs the bundled Han suite. Has no components of its own; it depends on han.core, han.coding, han.github, and han.reporting so installing it pulls them all in. Does not bundle the opt-in han.feedback or han.plugin-builder plugins.",
       "version": "3.2.0"
     },
     {
@@ -18,6 +18,12 @@
       "source": "./han.core",
       "description": "Evidence-based planning, investigation, and documentation skills for software projects. Includes issue triage, deep-dive investigations with root cause analysis, iterative plan refinement, architectural decision records (ADRs), project and feature documentation, coding standards, code reviews, test planning, and adversarial security vulnerability analysis.",
       "version": "1.1.1"
+    },
+    {
+      "name": "han.coding",
+      "source": "./han.coding",
+      "description": "Code-writing and execution skills for the Han suite. Home of the tdd skill, which drives a feature or behavior through a BDD-framed red-green-refactor loop with an enforced observed-failure gate. Depends on han.core; bundled by the han meta-plugin.",
+      "version": "1.0.0"
     },
     {
       "name": "han.github",
