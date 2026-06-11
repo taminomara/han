@@ -49,14 +49,14 @@ does not use that Claude-only dependency metadata, so install the
 resource-bearing Han packages directly:
 
 ```
-codex plugin add han.core@han
-codex plugin add han.planning@han
-codex plugin add han.coding@han
-codex plugin add han.github@han
-codex plugin add han.reporting@han
+codex plugin add han-core@han
+codex plugin add han-planning@han
+codex plugin add han-coding@han
+codex plugin add han-github@han
+codex plugin add han-reporting@han
 ```
 
-Install `han.feedback`, `han.atlassian`, or `han.plugin-builder` separately
+Install `han-feedback`, `han-atlassian`, or `han-plugin-builder` separately
 when you want those opt-in packages.
 
 Han ships as multiple plugins:

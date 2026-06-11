@@ -1,5 +1,5 @@
 {
-  "name": "han.plugin-builder",
+  "name": "han-plugin-builder",
   "version": "1.1.0",
   "description": "Guidance and tooling for building Han-compatible skills, agents, and plugins.",
   "author": {

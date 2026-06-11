@@ -1,5 +1,5 @@
 {
-  "name": "han.atlassian",
+  "name": "han-atlassian",
   "version": "1.1.0",
   "description": "Atlassian-facing Han skills for publishing Markdown and plans to Confluence and Jira.",
   "author": {

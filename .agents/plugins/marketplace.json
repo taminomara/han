@@ -5,7 +5,7 @@
   },
   "plugins": [
     {
-      "name": "han.core",
+      "name": "han-core",
       "source": {
         "source": "local",
         "path": "./han.core"
@@ -17,7 +17,7 @@
       "category": "Developer Tools"
     },
     {
-      "name": "han.planning",
+      "name": "han-planning",
       "source": {
         "source": "local",
         "path": "./han.planning"
@@ -29,7 +29,7 @@
       "category": "Developer Tools"
     },
     {
-      "name": "han.coding",
+      "name": "han-coding",
       "source": {
         "source": "local",
         "path": "./han.coding"
@@ -41,7 +41,7 @@
       "category": "Developer Tools"
     },
     {
-      "name": "han.github",
+      "name": "han-github",
       "source": {
         "source": "local",
         "path": "./han.github"
@@ -53,7 +53,7 @@
       "category": "Developer Tools"
     },
     {
-      "name": "han.reporting",
+      "name": "han-reporting",
       "source": {
         "source": "local",
         "path": "./han.reporting"
@@ -65,7 +65,7 @@
       "category": "Developer Tools"
     },
     {
-      "name": "han.feedback",
+      "name": "han-feedback",
       "source": {
         "source": "local",
         "path": "./han.feedback"
@@ -77,7 +77,7 @@
       "category": "Developer Tools"
     },
     {
-      "name": "han.atlassian",
+      "name": "han-atlassian",
       "source": {
         "source": "local",
         "path": "./han.atlassian"
@@ -89,7 +89,7 @@
       "category": "Developer Tools"
     },
     {
-      "name": "han.plugin-builder",
+      "name": "han-plugin-builder",
       "source": {
         "source": "local",
         "path": "./han.plugin-builder"
