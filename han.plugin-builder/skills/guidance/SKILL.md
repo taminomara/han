@@ -2,11 +2,13 @@
 name: guidance
 description: >
   Authoritative guidance for building Claude Code skills, agents, and plugins, plus init and
-  update steps that install and refresh that guidance in the current repository. Use when
-  building, authoring, designing, reviewing, or hardening a skill, agent, hook, or plugin. Run
-  with `init` to vendor the guidance into the current repository as a path-scoped rule index, or
-  `update` to refresh an already-vendored copy and its rule index. Does not write feature code,
-  review application code, or build non-plugin features.
+  update steps that install and refresh that guidance in the current repository. Use when you
+  need the rules or best practices for a skill, agent, hook, or plugin — designing, reviewing,
+  hardening, or checking one against the guidance. Run with `init` to vendor the guidance into
+  the current repository as a path-scoped rule index, or `update` to refresh an already-vendored
+  copy and its rule index. Does not run an interview to build a new skill or agent from scratch —
+  use skill-builder or agent-builder. Does not write feature code, review application code, or
+  build non-plugin features.
 allowed-tools: Read, Glob, Grep, Bash(find *)
 ---
 
