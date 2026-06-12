@@ -54,7 +54,7 @@ Example prompts:
 
 - **Guidance Mode.** The relevant guidance applied to your situation, with the source document cited (for example `skill-building-guidance/skill-description-frontmatter.md`) so you can read it in full.
 - **Initialization Mode.** The three plugin-building skills vendored into `.claude/skills/` as `plugin-guidance`, `plugin-skill-builder`, and `plugin-agent-builder`, plus a path-scoped rule index at `.claude/rules/plugin-building-guidance.md`. The skill reports the vendored skills, the total file count, and the `paths:` globs, and leaves the new files staged for you to review (it does not commit).
-- **Update Mode.** The same vendoring operation as initialization, run only after confirming the skills are already installed; it replaces the vendored skills and regenerates the rule index, again left staged.
+- **Update Mode.** The same vendoring operation as initialization, run only after confirming the skills are already installed; it replaces every vendored skill in full — each `SKILL.md` and the guidance documents under `plugin-guidance/references/`, dropping any file the plugin has since removed — and regenerates the rule index, again left staged.
 
 ## How to get the most out of it
 

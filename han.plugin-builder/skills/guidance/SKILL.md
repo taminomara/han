@@ -84,7 +84,9 @@ plugin remaining installed.
 Refresh the vendored skills and their rule index in a repository that already
 has them, so contributors get the current skills and guidance after this plugin
 has been updated. Updating is the same vendoring operation as Initialization
-Mode — it replaces the vendored skills and regenerates the rule index — but it
+Mode — it replaces every vendored skill in full (each `SKILL.md` and the
+guidance documents under `plugin-guidance/references/`, removing any files that
+the plugin source has since dropped) and regenerates the rule index — but it
 first confirms the skills are actually installed before touching anything.
 
 1. Check whether the skills are already installed at the expected location.
@@ -100,9 +102,11 @@ first confirms the skills are actually installed before touching anything.
    its steps. If they decline, stop without writing anything.
 3. If the skills **are** installed, run
    `${CLAUDE_SKILL_DIR}/scripts/init-guidance.sh` from the repository root. The
-   script replaces the vendored skills under `.claude/skills/` with fresh copies
-   and regenerates the rule index at `.claude/rules/plugin-building-guidance.md`.
-   Capture its output.
+   script removes each vendored skill directory and re-copies it fresh from the
+   plugin source, so every `SKILL.md` and every guidance document under
+   `plugin-guidance/references/` is replaced with the current version (and any
+   file the plugin has since removed is dropped), then regenerates the rule
+   index at `.claude/rules/plugin-building-guidance.md`. Capture its output.
 4. Report to the user what was refreshed: the three vendored skills, the total
    file count, the rule index path, and the `paths:` globs.
 5. Do not commit. Leave the changes staged for the user to review.
