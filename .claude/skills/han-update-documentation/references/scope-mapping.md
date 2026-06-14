@@ -4,7 +4,7 @@ Maps a changed file path to the documentation entities that must be reviewed for
 
 A single changed file can pull multiple entities into scope. Always add every entity the path touches.
 
-`{plugin}` below means any of the four skill roots: `han.core`, `han.github`, `han.reporting`, `han.feedback`. Agents live only under `han.core`.
+`{plugin}` below means any discovered skill root — every `han.*/skills` directory except `han.plugin-builder/skills` (its `guidance` skill is authoring guidance, not a documented product skill). The detect script reports the current list between `skill-roots-start` and `skill-roots-end`; read it from there rather than assuming a fixed set, so a newly added plugin is covered automatically. Agents live only under the agent root (`han.core/agents`).
 
 ## Mapping table
 

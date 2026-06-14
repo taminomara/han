@@ -5,8 +5,9 @@ description: >
   updating an existing one through the Atlassian MCP server. Use when the user wants to post,
   publish, push, or sync a Markdown file to a Confluence space or page. Requires a configured
   Atlassian MCP server. Does not write or generate the Markdown itself — point it at an existing
-  file, or use project-documentation-to-confluence for the document-then-publish flow. Does not
-  publish to Jira — use work-items-to-jira.
+  file, or use project-documentation-to-confluence for the document-then-publish flow, or
+  plan-a-feature-to-confluence for the plan-then-publish flow. Does not publish to Jira — use
+  work-items-to-jira.
 argument-hint: [path to markdown file] [confluence location: page URL or space + parent] [--mode draft|live (default draft)]
 allowed-tools: Read, Glob, Grep, Bash(find *), mcp__claude_ai_Atlassian__getAccessibleAtlassianResources, mcp__claude_ai_Atlassian__atlassianUserInfo, mcp__claude_ai_Atlassian__getConfluenceSpaces, mcp__claude_ai_Atlassian__getConfluencePage, mcp__claude_ai_Atlassian__getPagesInConfluenceSpace, mcp__claude_ai_Atlassian__getConfluencePageDescendants, mcp__claude_ai_Atlassian__createConfluencePage, mcp__claude_ai_Atlassian__updateConfluencePage
 ---
@@ -47,6 +48,13 @@ confirm it exists and has content. If no file path was provided, or the path
 does not resolve to a readable file, ask the user for the path with
 `AskUserQuestion` and do not proceed without one. This is the exact content that
 will be posted; do not rewrite, summarize, or restructure it.
+
+A body may legitimately contain embedded Confluence storage macros mixed into the
+Markdown — for example, an orchestrating skill such as
+`han.atlassian:plan-a-feature-to-confluence` rewrites its cross-page links into
+title-based page-link macros (the `<ac:link><ri:page ri:content-title="..."/>…</ac:link>`
+form, link body included) before handing the file over. Post these verbatim along
+with the rest of the body; do not strip or escape them.
 
 ## Step 2: Resolve the Target Confluence Location (required)
 
@@ -104,7 +112,8 @@ unpublished draft.
 Read the Markdown file from Step 1 and publish it with the Atlassian MCP server.
 The Confluence MCP tools accept Markdown directly via `contentFormat: "markdown"`,
 so post the document body as-is — no manual conversion to storage/XHTML is
-needed.
+needed. Any embedded storage macros (such as the `ac:link` page-link macros
+described in Step 1) ride along in the same body; post them verbatim.
 
 Apply the publish mode from Step 3 with the create/update tool's status
 parameter: **draft** → `status: "draft"` (unpublished draft), **live** →

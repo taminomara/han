@@ -6,7 +6,8 @@ description: >
   written to Confluence, posted to a Confluence space or page, or synced to a Confluence location.
   Requires a configured Atlassian MCP server. Does not document to local files only — use
   project-documentation for that. Does not publish an arbitrary existing markdown file — use
-  markdown-to-confluence for that. Does not create architectural decision records — use
+  markdown-to-confluence for that. Does not plan or specify a new feature to Confluence — use
+  plan-a-feature-to-confluence for that. Does not create architectural decision records — use
   architectural-decision-record. Does not create coding standards — use coding-standard. Does not
   produce runbooks — use runbook.
 argument-hint: [feature-name or doc-path] [confluence location: page URL or space + parent]
