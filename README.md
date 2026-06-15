@@ -80,6 +80,10 @@ For the full picture and a quick "which one do you need?" guide, see [Choosing a
   skills on top of Han.
 - [Build a plugin that depends on Han](./docs/how-to/build-a-plugin-that-depends-on-han.md). Ship a plugin
   that builds on Han's skills and agents.
+- [Create a new skill](./docs/how-to/create-a-new-skill.md). Build a new slash command from scratch with
+  `/skill-builder`.
+- [Create a new agent](./docs/how-to/create-a-new-agent.md). Build a new subagent from scratch with
+  `/agent-builder`.
 - [Contributing](./CONTRIBUTING.md). Adding or editing skills, agents, and documentation.
 - [Changelog](./CHANGELOG.md). What's new in each version of the plugin.
 
