@@ -32,7 +32,7 @@ Operator documentation for the `/research` skill in the han plugin. This documen
 **Do not invoke for:**
 
 - **A bug, failure, or root cause.** Use [`/investigate`](../han-coding/investigate.md) for evidence-based diagnosis of something broken.
-- **Specifying a feature.** Use [`/plan-a-feature`](./plan-a-feature.md) to turn a decision into a behavioral spec.
+- **Specifying a feature.** Use [`/plan-a-feature`](../han-planning/plan-a-feature.md) to turn a decision into a behavioral spec.
 - **Creating or updating a coding standard.** Use [`/coding-standard`](../han-coding/coding-standard.md).
 - **Comparing two concrete artifacts for gaps.** Use [`/gap-analysis`](./gap-analysis.md).
 - **Assessing an existing module's architecture.** Use [`/architectural-analysis`](../han-coding/architectural-analysis.md).
@@ -128,7 +128,7 @@ URL: https://hbr.org/2007/09/performing-a-project-premortem
 - [Plugin landing page](../../../README.md). The front door. Start here if you arrived from outside the docs tree.
 - [Skills Index](../README.md). All skills, grouped by purpose.
 - [`/investigate`](../han-coding/investigate.md). The symptom-shaped sibling. Use it when something is broken; use `/research` when you have a question.
-- [`/plan-a-feature`](./plan-a-feature.md). Pair downstream: turn a recommended option into a behavioral spec.
+- [`/plan-a-feature`](../han-planning/plan-a-feature.md). Pair downstream: turn a recommended option into a behavioral spec.
 - [`research-analyst`](../../agents/han-core/research-analyst.md). The agent the skill dispatches for the web / prior-art / option-comparison angles.
 - [`adversarial-validator`](../../agents/han-core/adversarial-validator.md). The agent that attacks the evidence and recommendation before the report is presented.
 - [`codebase-explorer`](../../agents/han-core/codebase-explorer.md). Dispatched for the codebase-grounded angle when a repository bears on the question.
