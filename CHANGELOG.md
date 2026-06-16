@@ -1,5 +1,68 @@
 # Han Release Notes
 
+## v4.0.0
+
+This release renames every plugin in the suite from a dotted name to a hyphenated name: `han.core` becomes `han-core`, `han.coding` becomes `han-coding`, `han.planning` becomes `han-planning`, `han.github` becomes `han-github`, `han.reporting` becomes `han-reporting`, `han.feedback` becomes `han-feedback`, `han.atlassian` becomes `han-atlassian`, and `han.plugin-builder` becomes `han-plugin-builder`. The parent meta-plugin `han` keeps its name and moves to 4.0.0; every renamed child goes major as well: `han-core` to 2.0.0, `han-planning` to 2.0.0, `han-coding` to 2.0.0, `han-github` to 2.0.0, `han-reporting` to 2.0.0, `han-feedback` to 2.0.0, `han-atlassian` to 2.0.0, and `han-plugin-builder` to 2.0.0. The rename is breaking because a plugin name is both its install identity and the namespace prefix for its agents (dispatching `han.core:research-analyst` is now `han-core:research-analyst`), so any saved install reference, dependency entry, or namespaced agent dispatch using the old dotted name breaks and must move to the hyphenated name. The rename was required for Codex marketplace support: a dot in a plugin name breaks Codex, where the name doubles as the skill and agent namespace prefix, so the whole suite needed Codex-safe (dot-free) names. This release also adds the new opt-in `han-linear` plugin at 1.0.0, carrying the `work-items-to-linear` skill.
+
+### han v4.0.0
+
+#### Breaking: plugins renamed from dots to hyphens
+
+Every plugin in the suite was renamed from its dotted name to a hyphenated name: `han.core` to `han-core`, `han.coding` to `han-coding`, `han.planning` to `han-planning`, `han.github` to `han-github`, `han.reporting` to `han-reporting`, `han.feedback` to `han-feedback`, `han.atlassian` to `han-atlassian`, and `han.plugin-builder` to `han-plugin-builder`. The parent `han` plugin keeps its name. A plugin name is its install identity and the namespace prefix for that plugin's agents, so a namespaced dispatch like `han.core:research-analyst` is now `han-core:research-analyst`. Any saved install reference, `dependencies` entry, or namespaced agent dispatch using an old dotted name must move to the hyphenated name. The rename was driven by Codex: a dot in a plugin name breaks Codex, where the name doubles as the skill and agent namespace prefix, so supporting the Codex marketplace required dot-free names across the suite. New guidance `han-plugin-builder/skills/guidance/references/claude-marketplace-and-plugin-configuration/plugin-naming.md` records the rule that a plugin name must be kebab-case with no dot.
+
+#### Codex marketplace support
+
+The suite gains a Codex marketplace manifest at `.agents/plugins/marketplace.json` in the repo root, and every plugin directory gains a `.codex-plugin/plugin.json`. This is the suite-level change that motivated the rename, since Codex cannot use a dotted plugin name. Contributed by [@oppegard](https://github.com/oppegard) in #68, which added the Codex plugin scaffolding, switched the suite to Codex-safe plugin names, clarified the Codex install limits, and pointed the Codex metadata to Test Double.
+
+#### Documentation
+
+The documentation sweep under `docs/` moved the long-form skill and agent docs from dotted paths to hyphenated paths: `docs/skills/han.core/...` became `docs/skills/han-core/...` and the agent docs moved the same way. Broken cross-skill links were fixed, `docs/skills/han-linear/work-items-to-linear.md` was added, and `CLAUDE.md`, `README.md`, `CONTRIBUTING.md`, `docs/semantic-versioning.md`, `docs/choosing-a-han-plugin.md`, and the skills and agents indexes were updated to the hyphenated names. `CLAUDE.md` notes `plugin-naming.md` in its config-guidance map, and `han-linear` was wired into the top-level docs.
+
+### han-core v2.0.0
+
+Renamed from `han.core` to `han-core`, a breaking change to its install identity and to the namespace prefix for its agents (`han.core:research-analyst` is now `han-core:research-analyst`). Its Codex `.codex-plugin/plugin.json` packaging was added. The skill and agent file contents did not otherwise change; their files moved with the rename.
+
+### han-planning v2.0.0
+
+Renamed from `han.planning` to `han-planning`, a breaking change to its install identity and agent namespace prefix. Its Codex `.codex-plugin/plugin.json` packaging was added. The skill file contents did not otherwise change; their files moved with the rename.
+
+### han-coding v2.0.0
+
+Renamed from `han.coding` to `han-coding`, a breaking change to its install identity and agent namespace prefix. Its Codex `.codex-plugin/plugin.json` packaging was added. The skill file contents did not otherwise change; their files moved with the rename.
+
+### han-github v2.0.0
+
+Renamed from `han.github` to `han-github`, a breaking change to its install identity and agent namespace prefix. Its Codex `.codex-plugin/plugin.json` packaging was added. The skill file contents did not otherwise change; their files moved with the rename.
+
+### han-reporting v2.0.0
+
+Renamed from `han.reporting` to `han-reporting`, a breaking change to its install identity and agent namespace prefix. Its Codex `.codex-plugin/plugin.json` packaging was added. The skill file contents did not otherwise change; their files moved with the rename.
+
+### han-feedback v2.0.0
+
+Renamed from `han.feedback` to `han-feedback`, a breaking change to its install identity and agent namespace prefix. Its Codex `.codex-plugin/plugin.json` packaging was added. The skill file contents did not otherwise change; their files moved with the rename.
+
+### han-atlassian v2.0.0
+
+Renamed from `han.atlassian` to `han-atlassian`, a breaking change to its install identity and agent namespace prefix. Its Codex `.codex-plugin/plugin.json` packaging was added. The skill file contents did not otherwise change; their files moved with the rename.
+
+### han-plugin-builder v2.0.0
+
+Renamed from `han.plugin-builder` to `han-plugin-builder`, a breaking change to its install identity and agent namespace prefix. Its Codex `.codex-plugin/plugin.json` packaging was added. The `guidance` skill also gained the vendoring work from #71 by [@mxriverlynn](https://github.com/mxriverlynn), so `/guidance init` vendors the plugin-building skills alongside the guidance. The skill file contents did not otherwise change beyond that work; their files moved with the rename.
+
+### han-linear v1.0.0 (new)
+
+A new opt-in plugin carrying the `work-items-to-linear` skill, contributed by [@nafeger](https://github.com/nafeger) in #61. The skill creates one Linear issue per slice from a `/plan-work-items` work-items file, resolving the target team's real states, labels, Projects, and members through the Linear MCP server and linking within-file dependencies as native Linear "blocked by" relations. The `--assignee` flag resolves through `get_user` so the `me` token works (WARN-001). `han-linear` depends on `han-core`, requires a configured Linear MCP server, and is not bundled by the `han` meta-plugin, so it is installed on its own.
+
+### Pull requests in this release
+
+- Plugin builder guidance - vendoring the skills with the guidance (#71) — [@mxriverlynn](https://github.com/mxriverlynn)
+- Add han.linear plugin: work-items-to-linear skill (#61) — [@nafeger](https://github.com/nafeger)
+- Support Codex marketplace (#68) — [@oppegard](https://github.com/oppegard)
+- Hyphenate names (#72) — [@mxriverlynn](https://github.com/mxriverlynn)
+
+Full changelog: https://github.com/testdouble/han/blob/v4.0.0/CHANGELOG.md#v400
+
 ## v3.4.1
 
 This release vendors the plugin-building skills, not the guidance alone, when `/guidance init` runs in a repository, and documents the result. The parent `han` plugin moves to 3.4.1 and `han-plugin-builder` moves to 1.2.1. No other plugins change.
