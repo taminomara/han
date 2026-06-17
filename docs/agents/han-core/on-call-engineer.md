@@ -191,6 +191,12 @@ URL: https://danluu.com/postmortem-lessons/
 - [`concurrency-analyst`](./concurrency-analyst.md). Pair on async-heavy code. This agent flags blocking-I/O-in-async; the concurrency analyst goes deeper into races, locks, and deadlocks.
 - [`behavioral-analyst`](./behavioral-analyst.md). Pair on changes that cross module boundaries. This agent operates at the call site; behavioral-analyst operates at the module-boundary altitude.
 - [`adversarial-validator`](./adversarial-validator.md). Pair for a second opinion on the report.
+- [`/architectural-analysis`](../../skills/han-coding/architectural-analysis.md). Adds this agent to its roster on a medium or large run when the module raises code-level resilience concerns.
+- [`/code-review`](../../skills/han-coding/code-review.md). Conditionally dispatches this agent when the change carries code-level resilience risk.
+- [`/gap-analysis`](../../skills/han-core/gap-analysis.md). Dispatches this agent as a swarm specialist when the gaps touch application-source resilience.
+- [`/iterative-plan-review`](../../skills/han-planning/iterative-plan-review.md). Conditionally dispatches this agent in team mode when the plan touches code-level resilience.
+- [`/plan-a-feature`](../../skills/han-planning/plan-a-feature.md). Dispatches this agent into the spec-stage team on a resilience signal.
+- [`/plan-implementation`](../../skills/han-planning/plan-implementation.md). Dispatches this agent into the implementation team on a resilience signal.
 - [Research backing this agent](../../research/on-call-engineer-research.md). The evidence-based research informing the agent's vocabulary, scope boundary, and tone calibration.
 - [agent-domain-focus.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/agent-domain-focus.md). Why the agent uses precise domain vocabulary and named anti-patterns.
 - [agent-model-selection.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/agent-model-selection.md). Rationale for the `opus` model tier.

@@ -194,6 +194,12 @@ URL: https://martinfowler.com/bliki/StranglerFigApplication.html
 - [Agents Index](../README.md). All agents, grouped by role.
 - [`data-engineer`](./data-engineer.md). Pair on production migrations. This agent covers rollout-level progressive delivery; `data-engineer` covers schema-level expand-and-contract.
 - [`adversarial-security-analyst`](./adversarial-security-analyst.md). Pair on changes touching auth, secrets, or regulated surfaces. This agent covers operational readiness; the security analyst covers exploit paths.
+- [`/architectural-analysis`](../../skills/han-coding/architectural-analysis.md). Adds this agent to its roster on a medium or large run when the module raises production-readiness concerns.
+- [`/code-review`](../../skills/han-coding/code-review.md). Conditionally dispatches this agent when the change approaches production.
+- [`/gap-analysis`](../../skills/han-core/gap-analysis.md). Dispatches this agent as a swarm specialist when the gaps touch deployment, observability, or rollout.
+- [`/iterative-plan-review`](../../skills/han-planning/iterative-plan-review.md). Conditionally dispatches this agent in team mode when the plan touches production readiness.
+- [`/plan-a-feature`](../../skills/han-planning/plan-a-feature.md). Dispatches this agent into the spec-stage team on a production-readiness signal.
+- [`/plan-implementation`](../../skills/han-planning/plan-implementation.md). Dispatches this agent into the implementation team on a production-readiness signal.
 - [agent-domain-focus.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/agent-domain-focus.md). Why the agent uses precise domain vocabulary and named anti-patterns.
 - [agent-model-selection.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/agent-model-selection.md). Rationale for the `opus` model tier.
 - [graceful-degradation.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/graceful-degradation.md). Why the agent handles missing git and missing IaC inline.

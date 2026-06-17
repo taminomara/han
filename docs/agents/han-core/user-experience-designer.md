@@ -151,6 +151,10 @@ URL: https://www.nngroup.com/articles/personas-jobs-be-done/
 - [Plugin landing page](../../../README.md). The front door. Start here if you arrived from outside the docs tree.
 - [Agents Index](../README.md). All agents, grouped by role.
 - [`information-architect`](./information-architect.md). Sibling agent for documentation / content-structure IA. Dispatch in parallel when a surface blends an interactive UI with a content-heavy docs surface.
+- [`/gap-analysis`](../../skills/han-core/gap-analysis.md). Dispatches this agent as a swarm specialist when the gaps touch a user-facing surface.
+- [`/iterative-plan-review`](../../skills/han-planning/iterative-plan-review.md). Conditionally dispatches this agent in team mode when the plan touches user-facing flows, UI, interaction, or accessibility.
+- [`/plan-a-feature`](../../skills/han-planning/plan-a-feature.md). Conditionally dispatches this agent into the spec-stage team when the feature touches user-facing flows, UI, interaction, or accessibility.
+- [`/plan-implementation`](../../skills/han-planning/plan-implementation.md). Conditionally dispatches this agent when the implementation plan touches user-facing flows, UI, interaction, or accessibility.
 - [agent-domain-focus.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/agent-domain-focus.md). Why the agent uses precise domain vocabulary and named anti-patterns.
 - [agent-model-selection.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/agent-model-selection.md). Rationale for the `opus` model tier.
 - [graceful-degradation.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/graceful-degradation.md). Why the agent handles missing git and missing accessibility tooling inline.

@@ -7,7 +7,8 @@ description: >
   system, or initiative, and produces a plain-language phased build outline. Does not produce
   implementation detail — use plan-implementation. Does not specify behavior that has not been
   decided — use plan-a-feature. Does not perform gap analysis between two artifacts — use
-  gap-analysis.
+  gap-analysis. Does not break a plan into independently-grabbable work items — use
+  plan-work-items.
 argument-hint: "[source context path or description, optional: output folder path, optional: shaping context]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(find *), Bash(mkdir *)
 ---

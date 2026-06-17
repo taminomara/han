@@ -67,6 +67,10 @@ Two things to know about how the content lands:
 
 If you keep it local only at the confirmation step, you still keep the `/tmp/` plan folder; nothing is published.
 
+## If a publish fails partway
+
+The tree is published in a single create pass. If one create call fails after others have already succeeded, the skill reports which file failed and its error, and names the pages it already created. Those already-created pages carry title-based links that point at the pages that did not get created, so those links dangle until the missing pages exist under their intended titles. Do not simply re-run the whole skill to recover: a re-run would re-create the pages that already succeeded, producing duplicate-title pages that break title resolution for the whole tree. Instead, create the missing page or pages by hand under their intended titles, or delete the partial tree in Confluence and publish again from clean. Your `/tmp/` originals are untouched either way.
+
 ## How to get the most out of it
 
 - **Have the destination ready.** The fastest run is the one where you paste the page URL or name the space and parent up front, so the skill never has to stop and ask.

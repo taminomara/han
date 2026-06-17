@@ -44,6 +44,8 @@ Example prompts:
 - `/stakeholder-summary docs/features/share/feature-specification.md`
 - `/stakeholder-summary docs/features/share/feature-specification.md — emphasize the customer-trust angle for leadership`
 
+If a `stakeholder-summary.md` already exists in the target directory, the skill asks whether to overwrite it, append a timestamp suffix, or stop. It never overwrites an existing summary without asking.
+
 ## What you get back
 
 One file: `stakeholder-summary.md`, written in the same directory as the source spec. It opens with a title heading, then has six sections in fixed order:

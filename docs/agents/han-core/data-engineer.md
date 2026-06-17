@@ -216,6 +216,12 @@ URL: https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Che
 - [Agents Index](../README.md). All agents, grouped by role.
 - [`devops-engineer`](./devops-engineer.md). Pair on production migrations. This agent covers the schema-level expand-and-contract; `devops-engineer` covers the rollout-level progressive delivery.
 - [`adversarial-security-analyst`](./adversarial-security-analyst.md). Pair on regulated data changes. This agent covers data-level governance; the security analyst covers exploit paths.
+- [`/architectural-analysis`](../../skills/han-coding/architectural-analysis.md). Adds this agent to its roster on a medium or large run when the module touches schema, storage, or data access.
+- [`/code-review`](../../skills/han-coding/code-review.md). Conditionally dispatches this agent when the change touches schema, queries, migrations, or data access.
+- [`/gap-analysis`](../../skills/han-core/gap-analysis.md). Dispatches this agent as a swarm specialist when the gaps touch a data-design surface.
+- [`/investigate`](../../skills/han-coding/investigate.md). Dispatches this agent when the investigation centers on schema, queries, or data access.
+- [`/iterative-plan-review`](../../skills/han-planning/iterative-plan-review.md). Conditionally dispatches this agent in team mode when the plan touches data design.
+- [`/plan-implementation`](../../skills/han-planning/plan-implementation.md). Dispatches this agent into the implementation team on a data-design signal.
 - [agent-domain-focus.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/agent-domain-focus.md). Why the agent uses precise domain vocabulary and named anti-patterns.
 - [agent-model-selection.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/agent-model-selection.md). Rationale for the `opus` model tier.
 - [graceful-degradation.md](../../../han-plugin-builder/skills/guidance/references/agent-building-guidelines/graceful-degradation.md). Why the agent handles missing git and missing migrations inline.

@@ -13,6 +13,7 @@ Operator documentation for the `/issue-triage` skill in the han plugin. This doc
 
 ## Key concepts
 
+- **Work only from what the reporter wrote.** This is the load-bearing constraint. The skill does not infer facts the report omits. If the report does not state it, the triage marks it missing rather than guessing from project context or prior knowledge. Inference would turn the triage into a hallucinated narrative instead of a record of what is known and what is absent.
 - **Issue type drives the gap list.** Different issue types have different missing-information profiles. A bug needs reproduction steps and environment details. A feature request needs use case and success criteria. The skill classifies first, then determines what is absent for that type.
 - **Severity is an estimate.** The skill cannot assess severity with certainty from a vague report. It makes the best judgment from what is in the report and marks severity Unknown when impact is not inferable.
 - **Triage stops before investigation.** The skill does not read the codebase for root cause. It reads the report and project context only enough to suggest suspected areas. Investigation starts after triage completes.
