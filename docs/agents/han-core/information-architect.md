@@ -7,7 +7,7 @@ Operator documentation for the `information-architect` agent in the han plugin. 
 ## TL;DR
 
 - **What it does.** Audits a documentation set for findability, orientation, and comprehension problems.
-- **When to dispatch it.** A README, plugin docs tree, API reference, or ADR collection needs a principled structural audit before or during a rewrite. Also dispatched by `/plan-a-phased-build`, by `/coding-standard` (to audit the draft standard for findability and scannability), by `/test-planning` (to confirm the plan leads with plain language), by `/project-documentation` (to audit the information architecture of the docs), and by `/gap-analysis` (to design the report template).
+- **When to dispatch it.** A README, plugin docs tree, API reference, or ADR collection needs a principled structural audit before or during a rewrite. Also dispatched by `/plan-a-phased-build`, by `/coding-standard` (to audit the draft standard for findability and scannability), by `/test-planning` (to confirm the plan leads with plain language), by `/project-documentation` (to audit the information architecture of the docs), by `/code-overview` (to refine the drafted overview for progressive disclosure before the reader sees it), and by `/gap-analysis` (to design the report template).
 - **What you get back.** An IA findings report with numbered findings tied to IA principles and named reader audiences, plus structural recommendations sequenced ship-now vs. track-and-improve.
 
 ## Key concepts
@@ -34,6 +34,7 @@ An adversarial information architect that audits a documentation set (a README, 
 - `/coding-standard` is auditing the draft standard for findability and scannability before presenting it.
 - `/test-planning` is confirming the test plan leads with plain language a reader can act on.
 - `/project-documentation` is auditing the information architecture of the docs it produces.
+- `/code-overview` is refining the overview it drafted, so the document leads with the most important understanding and reads well for someone unfamiliar with the target.
 - `/gap-analysis` is designing the report template the gap findings will be written into.
 
 **Do not dispatch for:**

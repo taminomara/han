@@ -54,10 +54,14 @@ Example prompts:
 
 A single Markdown overview file written to a scratch location **outside the repository** (for example under your system temp directory). The skill shows you the path; open it where the Mermaid charts render. The file is not committed and is not maintained — it is a point-in-time orientation aid.
 
-The document follows one structure per mode, under a shared grammar:
+The document follows one structure per mode, under a shared grammar. It opens with a title and a short intro paragraph naming what is being examined (not a metadata block), then:
 
-- **Code mode:** a header (target, mode, generation context) → *What it does and why* → *Main flow* (a Mermaid chart with a scope label) → *Context and uses* → *Where to start*.
-- **PR mode:** the same header → *What this change does and why* → *Changes by intent* (grouped by the outcome each group delivers) → *How the change flows* (a Mermaid chart with a scope label) → *What to watch when reviewing* (navigational only).
+- **Code mode:** *What it does and why* → *Main flow* (a Mermaid chart with a scope label) → *Context and uses* → *Where to start*.
+- **PR mode:** *What this change does and why* → *Changes by intent* (grouped by the outcome each group delivers) → *How the change flows* (a Mermaid chart with a scope label) → *What to watch when reviewing* (navigational only).
+
+In PR mode, when the pull request has screenshots, the overview embeds them inline next to the text they illustrate, so you do not have to switch back to the PR to see them.
+
+Before you see it, the draft passes a readability pass: `information-architect` and `junior-developer` review the document for progressive disclosure and clarity, and the skill rewrites it from their recommendations. They review the document, not the code — the overview still raises no findings about the work itself.
 
 When the target is too large to cover fully at the chosen size, the overview adds a coverage note immediately after the header, naming what it did not cover and the next size up, so you know the picture is partial before you study the charts.
 
@@ -82,7 +86,7 @@ Classification defaults to small and escalates only on a clear signal; a borderl
 
 ## Cost and latency
 
-The skill runs on the default model tier and dispatches a lean roster: one to five `han-core:codebase-explorer` agents in parallel, scaled to size, followed by a single synthesis pass the skill performs itself. The most expensive single step is the parallel exploration wave at large size. It is built for quick, on-demand orientation, so it is cheap at small size and safe to run often; it is read-only and re-runnable, so there is no approval gate before it works.
+The skill runs on the default model tier and dispatches a lean roster: one to five `han-core:codebase-explorer` agents in parallel, scaled to size, then a synthesis pass the skill performs itself, then a two-agent readability pass (`information-architect` and `junior-developer`, in parallel) whose recommendations the skill applies. The most expensive single step is the parallel exploration wave at large size. It is built for quick, on-demand orientation, so it is cheap at small size and safe to run often; it is read-only and re-runnable, so there is no approval gate before it works.
 
 ## In more detail
 
@@ -121,5 +125,6 @@ URL: https://www.spinellis.gr/codereading/
 - [`/architectural-analysis`](./architectural-analysis.md). Reach for this when you need a structural, coupling, and risk assessment rather than an orientation.
 - [`/investigate`](./investigate.md). Reach for this when something is broken and you need a root cause, not an overview.
 - [Sizing](../../sizing.md). The cross-skill sizing model. Explains the small / medium / large bands, the default-to-small rule, and the `$size` override.
-- [`codebase-explorer`](../../agents/han-core/codebase-explorer.md). The one agent this skill dispatches, scaled to size, to discover entry points, context, uses, and flow.
+- [`codebase-explorer`](../../agents/han-core/codebase-explorer.md). The agent this skill dispatches, scaled to size, to discover entry points, context, uses, and flow.
+- [`information-architect`](../../agents/han-core/information-architect.md), [`junior-developer`](../../agents/han-core/junior-developer.md). The two agents that review the drafted overview for progressive disclosure and readability before you see it.
 - [`SKILL.md` for /code-overview](../../../han-coding/skills/code-overview/SKILL.md). The internal process definition.

@@ -8,6 +8,10 @@ remove the guidance comments, and keep the section order exactly as written.
 
 ## Shared rules (apply to both modes)
 
+- **Open with an orienting paragraph, not a metadata block.** The document begins
+  with a title and a short intro paragraph naming what is being examined. Do not
+  emit `Mode:`, `Generated:`, or a bare `Target:` field — that metadata does not
+  help the reader; fold anything worth keeping into the intro sentence.
 - **Progressive disclosure.** The most important understanding comes first;
   detail unfolds beneath it. A reader who stops after the lead section still
   knows what the target is and why it exists.
@@ -23,17 +27,23 @@ remove the guidance comments, and keep the section order exactly as written.
 - **No quality judgment.** The document never raises findings, severities, or
   recommended changes. It explains; it does not review.
 - **Flow charts render as Mermaid** fenced code blocks (` ```mermaid `).
+- **Screenshots (PR mode).** When the pull request includes screenshots, embed
+  each one inline (`![caption](url)`) directly under the change or flow step it
+  illustrates, so the visual sits with its description. Keep the URL exactly as
+  captured. Omit when the PR has none; never invent a placeholder image.
 
 ---
 
 ## Code mode — explaining code as it is now
 
 ```markdown
-# Code Overview: {target}
+# Code Overview: {short name of the target}
 
-- **Mode:** code (explaining the code as it is now)
-- **Target:** {file, directory, or symbol}
-- **Generated:** {date} · size {small | medium | large}
+{Intro paragraph: one or two sentences naming what code is being examined — the
+file, directory, or symbol and the part of the system it belongs to — so the
+reader knows the scope before the overview begins. Do not list mode, target
+path, date, or size as metadata fields; weave whatever is worth saying into this
+sentence.}
 
 <!-- Coverage note: include ONLY when coverage is partial. Delete this block otherwise. -->
 > **Coverage note.** This overview covers {what was covered}. It does not cover
@@ -74,11 +84,13 @@ would open first to begin working, with one line each on what each is for.}
 ## PR mode — explaining a set of changes
 
 ```markdown
-# Change Overview: {pull request or branch}
+# Change Overview: {short name of the pull request or branch}
 
-- **Mode:** PR (explaining what the changes do and why)
-- **Target:** {PR reference, or the current branch's changes}
-- **Generated:** {date} · size {small | medium | large}
+{Intro paragraph: one or two sentences naming what is being examined — which
+pull request or branch, what part of the system it touches, and its rough scale
+— so the reader knows the scope before the overview begins. Do not list mode,
+target URL, date, or size as metadata fields; weave whatever is worth saying
+into this sentence.}
 
 <!-- Coverage note: include ONLY when coverage is partial. Delete this block otherwise. -->
 > **Coverage note.** This overview covers {what was covered}. It does not cover
@@ -97,6 +109,9 @@ If the change is a single logical unit, drop the grouping and write one
 narrative paragraph instead of the list below. -->
 
 - **{outcome the group delivers}:** {what changed to deliver it, and why}.
+
+  <!-- If a PR screenshot illustrates this group, embed it right here: -->
+  ![{what the screenshot shows}]({image url})
 - **{outcome the group delivers}:** {what changed to deliver it, and why}.
 
 ## How the change flows

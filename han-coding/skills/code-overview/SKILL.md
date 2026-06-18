@@ -26,7 +26,7 @@ allowed-tools: Read, Glob, Grep, Agent, Write, Bash(git *), Bash(gh *), Bash(fin
 
 Read these before doing anything. They constrain every step below.
 
-- **The skill orchestrates and synthesizes; the agents discover.** The skill resolves the target, classifies size, dispatches exploration, and writes the overview. `han-core:codebase-explorer` agents gather the surrounding code and context the synthesis draws on — they do not write the overview. The skill itself produces the grouping, the charts, and the orientation in both modes.
+- **The skill orchestrates and synthesizes; the agents discover, then refine.** The skill resolves the target, classifies size, dispatches exploration, and writes the overview. `han-core:codebase-explorer` agents gather the surrounding code and context the synthesis draws on — they do not write the overview. After the draft is written, `han-core:information-architect` and `han-core:junior-developer` review it for progressive disclosure and readability; the skill applies their recommendations. The skill itself produces the grouping, the charts, the orientation, and the final rewrite.
 - **Read-only, always.** The skill explains; it never edits the target. It writes only its own scratch overview file. BECAUSE the job is understanding, not modification — this keeps the skill safe to point at unfamiliar code.
 - **No quality judgment, ever.** The overview raises no findings, severities, or recommended changes — including in the PR-mode "what to watch" section, which is navigational only. BECAUSE reviewing a PR's quality is `code-review`'s job; this skill only helps the operator understand the PR before they review it. Crossing this line collapses the boundary between the two skills.
 - **Ephemeral, not documentation.** The overview is written to a scratch file outside the repository and is never committed into the repository's documentation tree. BECAUSE durable feature and system docs are `project-documentation`'s job; this skill is an understand-now orientation aid.
@@ -75,8 +75,10 @@ Read these before doing anything. They constrain every step below.
 
 **PR mode.** Gather the change set:
 
-- **Current branch's changes** (no target given): determine the default branch (`git symbolic-ref refs/remotes/origin/HEAD` or fall back to `main`/`master`), then capture `git diff {default-branch}...HEAD` for committed work and `git diff` plus `git diff --cached` for uncommitted work. Run each diff as its own Bash command so large diffs stream incrementally. Also capture `git log {default-branch}..HEAD --pretty=format:%B` for the change's intent.
-- **A named pull request** (explicit reference): run `gh pr view {ref} --json title,body,headRefName,baseRefName` for intent and `gh pr diff {ref}` for the change set. If the pull request cannot be reached (it does not exist, or access is unavailable), say so and offer code mode against a local target instead.
+- **Current branch's changes** (no target given): determine the default branch (`git symbolic-ref refs/remotes/origin/HEAD` or fall back to `main`/`master`), then capture `git diff {default-branch}...HEAD` for committed work and `git diff` plus `git diff --cached` for uncommitted work. Run each diff as its own Bash command so large diffs stream incrementally. Also capture `git log {default-branch}..HEAD --pretty=format:%B` for the change's intent. When `gh` is available, also run `gh pr view --json title,body,comments` (no ref — resolves the PR for the current branch) so the change's stated intent and any screenshots are in scope; if no PR exists for the branch, skip this without failing.
+- **A named pull request** (explicit reference): run `gh pr view {ref} --json title,body,comments` for intent and screenshots, and `gh pr diff {ref}` for the change set. If the pull request cannot be reached (it does not exist, or access is unavailable), say so and offer code mode against a local target instead.
+
+**Capture screenshots.** When a PR body or a comment contains embedded images — Markdown `![alt](url)` or `<img src="url">`, typically GitHub-hosted (`user-attachments`, `githubusercontent.com`) — record each image's URL together with the nearby caption or heading that says what it shows. These let the overview show a visual next to the text that describes it, so the reader does not have to switch back to the PR. If the PR has no images, capture nothing here.
 
 Identify the set of files the change touches; that set scopes the exploration in Step 4.
 
@@ -96,14 +98,31 @@ Wait for the whole wave to return before synthesizing. If the target proves too 
 
 Read [references/overview-template.md](./references/overview-template.md) and render the structure for the resolved mode, drawing on the explorers' findings and the input from Step 3. The skill writes the overview; the explorers' raw findings are not pasted in.
 
-**Code mode** renders, in order: a header (target, mode, generation context); a coverage note **only if** coverage was partial; **What it does and why**; **Main flow** (a Mermaid chart with a one-line scope label); **Context and uses** (context and uses kept distinguishable); **Where to start** (the concrete entry points the operator opens first).
+Open the document with a title and a short **intro paragraph naming what is being examined** — the file, directory, symbol, pull request, or branch, and the part of the system it belongs to. Do NOT emit a `Mode:`, `Generated:`, or bare `Target:` metadata block; that metadata does not help the reader. Fold anything worth keeping into the intro sentence.
 
-**PR mode** renders, in order: the same header; the same conditional coverage note; **What this change does and why**; **Changes by intent** (grouped by the reader-visible outcome each group delivers — not by file, layer, or author motivation; a single logical change is one narrative with no grouping header); **How the change flows** (a Mermaid chart with a scope label, placed after the grouped changes BECAUSE the reviewer must know what changed before that chart is meaningful); **What to watch when reviewing** (navigational only — where the change is hardest to follow and why; never a quality or risk judgment).
+**Code mode** renders, in order: the title and intro paragraph; a coverage note **only if** coverage was partial; **What it does and why**; **Main flow** (a Mermaid chart with a one-line scope label); **Context and uses** (context and uses kept distinguishable); **Where to start** (the concrete entry points the operator opens first).
 
-Apply the per-section detail rule from the template: minimal technical detail in the purpose, flow, and context sections; concrete named entry points in the handoff section. Give every chart a scope label. When coverage is partial, place the coverage note immediately after the header so the reader calibrates before investing in the charts.
+**PR mode** renders, in order: the same title and intro paragraph; the same conditional coverage note; **What this change does and why**; **Changes by intent** (grouped by the reader-visible outcome each group delivers — not by file, layer, or author motivation; a single logical change is one narrative with no grouping header); **How the change flows** (a Mermaid chart with a scope label, placed after the grouped changes BECAUSE the reviewer must know what changed before that chart is meaningful); **What to watch when reviewing** (navigational only — where the change is hardest to follow and why; never a quality or risk judgment).
 
-## Step 6: Write the Scratch File and Present
+**Place any captured screenshots inline next to the text they illustrate** — embedded as `![caption](url)` directly under the Changes-by-intent item or the flow step they depict, BECAUSE a visual next to its description spares the reader a trip back to the PR. Keep the image URL exactly as captured. Omit screenshots entirely when the PR had none; never invent or placeholder an image.
 
-Write the rendered overview to a scratch file **outside the repository** — for example `${TMPDIR:-/tmp}/code-overview-{short-target-slug}.md`. Never write it into the repository's documentation tree; this overview is ephemeral.
+Apply the per-section detail rule from the template: minimal technical detail in the purpose, flow, and context sections; concrete named entry points in the handoff section. Give every chart a scope label. When coverage is partial, place the coverage note immediately after the intro paragraph so the reader calibrates before investing in the charts.
 
-Then present to the user in a short message: the scratch-file path, the mode and size used (and why), and any coverage gap the overview noted. Do not paste the whole overview into the conversation; point the user at the file, where the Mermaid charts render.
+## Step 6: Write the Scratch File
+
+Write the rendered overview to a scratch file **outside the repository** — for example `${TMPDIR:-/tmp}/code-overview-{short-target-slug}.md`. Never write it into the repository's documentation tree; this overview is ephemeral. The next step reviews and rewrites this file in place.
+
+## Step 7: Review and Refine for Readability
+
+Dispatch `han-core:information-architect` and `han-core:junior-developer` in parallel — one `Agent` call each, in a single message — to review the draft overview for progressive disclosure and reader-friendliness. Pass each the scratch-file path and these instructions:
+
+- **`han-core:information-architect`** — review the document's structure for progressive disclosure, information scent, and orientation: does the most important understanding come first; do the headings carry scent; is the reading order right for someone unfamiliar with the target; do the chart scope labels and any coverage note give the reader enough wayfinding. Return concrete, ordered rewrite recommendations (reorder, relabel, cut, or split sections).
+- **`han-core:junior-developer`** — read the document cold as a generalist and flag where it is hard to follow, assumes unstated context, over-explains, or buries the point. Return concrete recommendations for friendlier, clearer phrasing.
+
+Tell both agents explicitly: **review the overview document for readability only — do not review the underlying code, and do not raise findings about it.** BECAUSE this skill makes no quality judgment about the code; this pass improves the document, not the work it describes. The agents return recommendations; they do not edit the file.
+
+Apply their recommendations directly, rewriting the scratch file in place. Keep the spec-content discipline: the result is still an orientation aid with no quality findings, minimal technical detail in the purpose/flow/context sections, and concrete entry points in the handoff section. When the two agents conflict, prefer the change that makes the document easier for an unfamiliar reader to act on.
+
+## Step 8: Present
+
+Present to the user in a short message: the scratch-file path, the mode and size used (and why), and any coverage gap the overview noted. Do not paste the whole overview into the conversation; point the user at the file, where the Mermaid charts render.
