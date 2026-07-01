@@ -83,7 +83,8 @@ Launch `han-core:project-manager` (`subagent_type: "han-core:project-manager"`) 
 - The full plan or context content from Step 1.
 - The artifact inventory from Step 4.
 - The Rules section of this skill verbatim.
-- A directive to draft vertical slices: each work item is a narrow but complete path through the appropriate layers (schema, API, UI, tests), demoable or verifiable on its own. Classify each work item as **HITL** (requires human interaction: an architectural decision, a design review) or **AFK** (can be implemented and merged without a sync). Prefer AFK over HITL. Prefer many thin work items over few thick ones.
+- A directive to draft vertical slices: each work item is a narrow but complete path through the appropriate layers (schema, API, UI, tests), demoable or verifiable on its own. Classify each work item as **HITL** (requires human interaction: an architectural decision, a design review) or **AFK** (can be implemented and merged without a sync), and record that classification in the item's **Type** field. Prefer AFK over HITL. Prefer many thin work items over few thick ones.
+- A directive to derive each work item's **Expected paths** (the repo-root-relative files the item is expected to create or modify) from the plan's named touch points and, where the plan does not name files, the codebase exploration from Step 3 (naming the intended path for a file the item creates). Expected paths is a best-effort declaration the operator confirms: when the plan gives no file-level detail for an item, flag that item's paths as low-confidence in the breakdown rather than inventing a precise set. Follow [references/work-item-template.md](./references/work-item-template.md).
 - A directive to return the proposed breakdown as a numbered list. Do not write any files.
 
 Return the han-core:project-manager's output verbatim. Proceed to Step 6.
@@ -115,4 +116,4 @@ Write one `work-items.md` in the folder resolved in Step 2. The file layout (tit
 
 Write incrementally per the operating principle: write the title and intro first, then append each work item as it is finalized. Save after each.
 
-When the file is complete, give the user a short in-channel summary: the file path, the count of work items by type (HITL / AFK), and the next concrete action (typically "review the breakdown, then start the first AFK work item").
+When the file is complete, give the user a short in-channel summary: the file path, the count of work items by type (HITL / AFK), and the next concrete action. The default next action is "review the breakdown, then start the first AFK work item" (for example with `/tdd`). When the whole set is AFK and the `implement-work-items` skill is available (the `han-coding` autonomous driver that builds, verifies, reviews, and commits each item in turn), also offer driving the set end to end with it as the autonomous alternative.

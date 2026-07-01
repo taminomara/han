@@ -55,7 +55,7 @@ Example prompts that work well:
 
 One file on disk plus an in-channel summary:
 
-- **`work-items.md`** in the resolved folder. The stakeholder-readable artifact. It opens with a title line and an intro paragraph that links the parent plan (or names the source context) and explains the `W-N` ID scheme. When a single reference artifact applies to more than one work item, a **Shared reference artifacts** preamble cites it once. Then one section per work item, in dependency order. Each work item carries: `Summary` (with an inline plan reference), `Description`, optional `Design references`, `References`, `Tests`, `Acceptance criteria`, and `Depends on`.
+- **`work-items.md`** in the resolved folder. The stakeholder-readable artifact. It opens with a title line and an intro paragraph that links the parent plan (or names the source context) and explains the `W-N` ID scheme. When a single reference artifact applies to more than one work item, a **Shared reference artifacts** preamble cites it once. Then one section per work item, in dependency order. Each work item carries: `Summary` (with an inline plan reference), `Description`, optional `Design references`, `References`, `Tests`, `Acceptance criteria`, `Type` (`AFK` or `HITL`, so an autonomous driver knows which items it can build unattended), `Expected paths` (the repo-root-relative files the item is expected to touch, which an autonomous driver checks changed files against), and `Depends on`.
 - An **in-channel summary** with the file path, a count of work items by type (HITL / AFK), and the next concrete action.
 
 ## How to get the most out of it

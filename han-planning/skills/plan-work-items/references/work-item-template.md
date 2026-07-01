@@ -33,6 +33,11 @@ Each work item in `work-items.md` uses this template. Required fields appear in 
 - [ ] Criterion 1
 - [ ] Criterion 2
 
+**Type.** `AFK` or `HITL`. Required.
+
+**Expected paths.**
+- `<repo-root-relative path this work item creates or modifies>`. One path per bullet, never absolute or a cross-repository URL. A rename lists both the old and the new path. Required.
+
 **Depends on.** `<W-N>` (within this file), comma-separated for multiple, or `None.`
 ```
 
