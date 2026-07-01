@@ -67,91 +67,230 @@ step and override any instinct to move faster.
 
 ## Step 1: Prepare and Validate (read-only)
 
-Run only read-only checks in this step, so a refusal or a declined plan leaves
-the repository untouched. Do not branch or commit anything here.
+Run only read-only checks in this step. Do not create a branch, write a file, or
+commit anything here, so a refusal or a declined plan leaves the repository
+untouched. Every refusal below names the condition, the reason, and the remedy,
+then stops the run before anything is branched or committed.
 
-**Preflight.** Confirm the probed Claude Code version (see Project Context) is
-v2.1.172 or later. Refuse to start below it, naming the version found and the
-remedy (upgrade Claude Code), because the review fan-out needs nested sub-agents
-and the core has no reduced-coverage fallback.
+### 1.1 Version preflight
 
-Then, still read-only:
+Read the `Claude Code version` from Project Context. If it's below `2.1.172`,
+refuse: name the version found and tell the operator to upgrade Claude Code,
+because the review fan-out needs nested sub-agents and the core has no
+reduced-coverage fallback.
 
-- Resolve the target `work-items.md` and the optional inputs: gate threshold,
-  fix-loop cap, build/fix model, branch name, and a `--verify` override.
-- Resolve the project's verification commands from the project's own
-  configuration: read CLAUDE.md's `## Project Discovery` section for the test,
-  lint, and build commands; fall back to `project-discovery.md`; then infer from
-  the project's manifest. When none resolve, use scope-check-only mode. Confirm
-  the tooling those commands need is available.
-- Confirm the working tree is clean apart from the run's own planning artifacts.
-- Where verification commands exist, confirm the suite is green.
-- Confirm the target branch does not already carry a prior run's
-  planning-artifacts commit.
-- Validate the items: a well-formed dependency graph (no cycles, no duplicate
-  identifiers, every `Depends on` naming a present item), the presence of the
-  `expected-paths` and `Type` fields on every item, and that no item is typed
-  `HITL`.
+### 1.2 Resolve inputs
 
-Refuse on an empty file, a file with no buildable items, or any `HITL`-typed
-item: these are startup refusals, not partial runs. Name the condition, the
-reason, and the remedy in every refusal.
+Resolve the target `work-items.md` from the argument or the conversation; if it
+cannot be found or read, refuse and name the path tried. Resolve the optional
+inputs and their defaults:
 
-*(The version comparison, the exact detection and validation checks, the
-planning-artifact identification, and the prior-run marker check are authored in
-W-3.)*
+- `--gate` (default `warning`): the severity at and above which a review finding
+  blocks the gate (any Critical or Warning by default).
+- `--fix-cap` (default `3`): the maximum fix rounds per item (consumed in W-4;
+  previewed here).
+- `--model` (default `inherit`): the model the build and fix sub-agents run on.
+  `inherit` runs them on the operator's session model (there is no variable that
+  reads the session model; `inherit` is the value that selects it).
+- `--branch` (default `feat/<feature-dir>`, where `<feature-dir>` is the
+  basename of the folder holding the work-items file): the branch the per-item
+  commits land on.
+- `--verify "CMD"` (default: auto-detected, see 1.3): an override for the
+  project's verification commands.
+
+### 1.3 Detect the environment
+
+Run `${CLAUDE_SKILL_DIR}/scripts/detect-driver-context.sh` once and capture its
+output: git availability, the current and default branch, the uncommitted-file
+list (between the `uncommitted-start` and `uncommitted-end` markers), and the
+manifest-inferred commands. If it reports `git-available: false`, refuse: this
+skill commits per item and cannot run without git.
+
+Resolve the project's verification commands in this order: read CLAUDE.md's
+`## Project Discovery` section for the test, lint, and build commands; fall back
+to `project-discovery.md`; fall back to the script's manifest-inferred commands.
+A `--verify` override replaces the detected set. When nothing resolves, the run
+uses **scope-check-only** mode (the changed-file check with no test, lint, or
+build re-run).
+
+For every resolved verification command, confirm its tool is on PATH (for
+example with `which`). If any required tool is missing, refuse and name every
+missing command together, telling the operator to install them and make them
+runnable, or to narrow the verification set with `--verify`, before re-invoking.
+
+### 1.4 Identify the planning artifacts
+
+The planning artifacts are the work-items file plus the local `.md` files it
+links in its preamble (the intro paragraph and any Shared reference artifacts
+section) as its context: the spec, plan, and research it references. Parse those
+links from the preamble. Source files the work items target do not qualify. This
+set is committed first in Step 2 and is the one exception to the clean-tree
+check.
+
+### 1.5 Confirm a clean tree and green suite
+
+From the script's uncommitted-file list, treat the run's planning artifacts
+(1.4) and the driver's own `.implement-work-items/` directory as allowed. If any
+other file is uncommitted, refuse and tell the operator to commit or stash it
+first, because the unrelated-change check runs before anything is committed so
+nothing extra is folded into the first commit.
+
+Where verification commands resolved, run them once now and confirm the suite is
+green. If it is red, refuse: the driver cannot tell newly introduced breakage
+from pre-existing breakage, so name the remedy (get the suite green, or narrow
+the verification command to exclude the known-failing tests, then re-invoke). In
+scope-check-only mode there is no suite to run, so skip this check.
+
+### 1.6 Refuse a prior-run branch
+
+Check whether the target branch already carries a prior run's planning-artifacts
+commit by looking for the `Implement-Work-Items-Run` trailer in its history with
+`git log`. If it is present, refuse and name the branch: the run is single-pass
+with no resume, so re-running on this branch would rebuild already-committed
+items. Direct the operator to a fresh branch.
+
+### 1.7 Validate the work items
+
+Parse the work items from the file: each heading of the form `## <W-N>` (the
+work-item template heading) begins an item whose body runs to the next heading.
+Then validate, refusing on the first failure with the offending items named:
+
+- **Not empty.** The file has at least one buildable work item. An empty file or
+  one with no buildable items is a startup refusal.
+- **Fields present.** Every item carries an `**Expected paths.**` block and a
+  `**Type.**` field. If either is missing on any item, refuse and tell the
+  operator to re-run the work-item producer or add the field.
+- **All AFK.** No item is typed `HITL`. Refuse any `HITL`-typed item: this core
+  drives only `AFK` items; tell the operator to remove or replace them, or wait
+  for the HITL follow-on.
+- **Well-formed graph.** Build the dependency graph from each item's
+  `**Depends on.**` field. Refuse on a duplicate item identifier, a `Depends on`
+  that names an absent item, a self-dependency, or a cycle, naming each fault and
+  its fix (de-duplicate the id, repair the reference, break the cycle).
+
+Build the run order as a topological sort of the graph, preserving the file's
+order wherever the graph allows it.
 
 ## Step 2: Confirm the Plan, then Set Up
 
-Show the operator the run plan and wait for a single confirmation before any
-repository mutation. In the preview, state the effective run configuration (the
-review gate threshold, the fix-loop cap, the build/fix model, the branch the
-per-item commits will land on, the verification configuration or
-scope-check-only mode in plain language, and the planning-artifact set that will
-be committed first), then list the items in dependency order, each named with
-its build skill (`han-coding:tdd`).
+### 2.1 Preview and confirm
+
+Show the operator the run plan in plain language: the effective gate threshold,
+the fix-loop cap, the build/fix model, the branch the per-item commits will land
+on, the verification configuration (the resolved commands, or that the run is
+**scope-check-only** because the project defines none, naming what will and will
+not be checked), and the planning-artifact set that will be committed first.
+Then list the items in run order, each named with its build skill
+(`han-coding:tdd`). Wait for the operator to **confirm** or **decline**.
 
 On **decline**, stop and confirm that no branch was created and nothing was
-committed. On **confirm**, and only then, mutate the repository: create the
-dedicated branch, commit the planning artifacts as the first commit (carrying
-the prior-run marker), detect the project's commit convention, and initialize
-the uncommitted work-state file.
+committed.
 
-*(The preview rendering, branch creation, planning-artifact commit,
-commit-convention detection, and work-state initialization are authored in W-3.)*
+### 2.2 Set up (only after confirm)
 
-## Step 3: Per-Item Loop (Build, Verify, Review, Fix, Commit)
+Only after the operator confirms, mutate the repository, in this order. If any
+step fails (the branch cannot be created, the commit is rejected by a hook),
+report exactly what failed and stop before processing any item.
 
-Process items one at a time in dependency order. For each item, drive this fixed
-loop, owning the verification and the commit yourself:
+1. Create the dedicated branch (the resolved `--branch`, or the
+   `feat/<feature-dir>` default).
+2. Create the driver's artifact directory and make it self-ignoring, so git
+   never sees its contents: create `.implement-work-items/` and write a
+   `.gitignore` there whose only line is `*`.
+3. Detect the commit convention: read CLAUDE.md or `project-discovery.md` for a
+   stated convention; default to Conventional Commits (`type(scope): subject`)
+   when none is stated.
+4. Mark the branch as a driver run. If any planning artifacts (1.4) are
+   uncommitted, commit them as the first commit, staged explicitly by path,
+   carrying an `Implement-Work-Items-Run: <feature-dir>` trailer (the marker 1.6
+   reads). If they are already committed so there is nothing to stage, make an
+   empty commit (`git commit --allow-empty`) carrying the same trailer rather
+   than failing, so the branch is marked either way.
+5. Initialize the **work-state file** `.implement-work-items/state.md`. It contains
+   the run configuration (work-items path, branch, gate threshold, fix-loop cap,
+   build/fix model, and the verification configuration or scope-check-only) followed
+   by each item's status. Initialize every item to `pending`. As the loop runs,
+   mark the active item `in-progress`, then `done` with its commit reference and
+   review-record path, or `halted` with the reason.
 
-1. **Build.** Dispatch a build sub-agent through the `Agent` tool with a per-call
-   model, instructing it to run `han-coding:tdd` and copying the
-   [build-report contract](./references/build-report-contract.md) verbatim into
-   the prompt. The sub-agent leaves its changes in the working tree and returns
-   the compact report; it never commits.
-2. **Verify.** Re-run the project's own verification commands directly (not
-   through the sub-agent), and run the scope check comparing the changed files
-   against the item's `expected-paths`, after exclusions.
-3. **Review.** Dispatch one review sub-agent at depth 1 through the `Agent` tool.
-   It retains the `Agent` tool so it can run `han-coding:code-review` and fan out
-   that skill's specialist panel at depth 2. Copy the
-   [review-verdict contract](./references/review-verdict-contract.md) verbatim
-   into the prompt and direct it to persist the durable record at
-   `.implement-work-items/reviews/<W-N>.md` and return only the condensed
-   verdict.
-4. **Fix to the gate.** When verify reports failures or the review returns a
-   finding at or above the gate threshold, run the bounded fix loop.
-5. **Commit.** When verification is green and the review clears the gate, stage
-   the item's own code changes explicitly by path (never `git add -A`), commit
-   one clean commit for the item, and record the item done in the work-state
-   file with its commit reference and review-record path.
+## Step 3: Per-Item Loop (Build, Verify, Review, Commit)
 
-Halt the whole run through the Halt Procedure below on any state you cannot
-resolve unattended.
+Process items one at a time in run order. Keep the run legible: narrate each item
+as it begins (the item, its position in the run order, and the phase starting),
+each sub-agent dispatch, and each verification command with a one-line result.
+Update `.implement-work-items/state.md` as the item moves through the loop. Drive
+this loop for each item, owning the verification and the commit yourself.
 
-*(The happy-path logic and the pre-fix halts are authored in W-3; the bounded
-fix loop and its fix-round halts are authored in W-4.)*
+### 3.1 Build
+
+Dispatch a build sub-agent through the `Agent` tool, passing the resolved
+`--model` as its `model` (the default `inherit` runs it on the operator's session
+model), instructing it to run `han-coding:tdd` on this item and to build against
+the item's `References` and the committed spec or plan the work-items file names.
+Hand it the item, and copy the
+[build-report contract](./references/build-report-contract.md) verbatim into the
+prompt. The sub-agent leaves its changes in the working tree and returns the
+compact report; it does not commit.
+
+Parse the report fail-closed against the contract. If parse fails (contract's
+halt conditions are met), apply Halt Procedure.
+
+### 3.2 Verify (independent)
+
+Do not trust the report's FINAL GATE. Verify the item independently, in two
+parts:
+
+1. **Run the project's verification commands** yourself, one at a time (not
+   through the sub-agent). Distinguish a command that **runs and reports
+   failures** (a genuine test, lint, or build failure) from one that **fails to
+   execute** (a missing tool, a service down, a full disk): the latter is a
+   tooling-or-environment halt, not a code failure (Halt Procedure). In
+   scope-check-only mode there are no commands to run.
+2. **Scope check.** Compare the item's changed files (`git status` and `git diff`
+   against the item's base commit) to its `Expected paths`, treating each added,
+   modified, or deleted path (a rename is a delete plus an add, so an item that
+   renames a file must declare both paths). Exclude files the project ignores,
+   any code-generation or sync output produced by the build or verify steps,
+   and the driver's own `.implement-work-items/` artifacts. A build that changed
+   no files after exclusions, or a changed file outside the declared paths,
+   halts the run (Halt Procedure), naming the file.
+
+### 3.3 Review
+
+Dispatch one review sub-agent at depth 1 through the `Agent` tool, using a
+general-purpose sub-agent that retains the `Agent` tool so `han-coding:code-review`
+can fan out its specialist panel at depth 2. Direct it to run
+`han-coding:code-review` on the item's changes, giving it the item and the spec
+sections the item references so it judges the change against what the item asked
+for, and to persist the full review record at
+`.implement-work-items/reviews/<W-N>.md`. Copy the
+[review-verdict contract](./references/review-verdict-contract.md) verbatim into
+the prompt, and direct it to return only the condensed verdict.
+
+Parse the verdict fail-closed against the contract. If parse fails (contract's
+halt conditions are met), apply Halt Procedure.
+
+### 3.4 Gate and fix
+
+The item clears the gate when verification passed and the verdict reports no
+finding at or above the configured threshold.
+
+When verification reported failures, or the verdict lists a gate-blocking
+finding, the bounded fix loop runs (authored in W-4). Until then, a gate-blocking
+finding or a verification failure halts the run through the Halt Procedure, with
+the residual findings or the failing output as its supporting evidence. This is
+the safe cap-zero behavior; W-4 adds the fix rounds that try to clear the gate
+before halting.
+
+### 3.5 Commit
+
+When the item clears the gate, commit it as one clean commit following the
+detected convention, staging only the item's own code changes explicitly by path
+(never `git add -A`) and never the driver's artifacts. Record the item `done` in
+the work-state file with the commit's short reference and the review-record path,
+report the commit reference to the operator, and advance to the next item. If the
+commit is rejected (a pre-commit hook, a lock), halt (Halt Procedure), leaving
+the verified, reviewed work in the tree.
 
 ### Halt Procedure
 
