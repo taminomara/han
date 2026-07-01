@@ -14,7 +14,7 @@ Operator documentation for the `/implement-work-items` skill in the han plugin. 
 
 - **The per-item loop.** Each item runs a fixed build, verify, review, fix, commit loop. The driver dispatches the build to a `/tdd` sub-agent and the review to a `/code-review` sub-agent, but runs verification and every commit itself, so the sub-agents never commit and their "all green" is never trusted on faith.
 - **Halt the whole run.** The core has no interactive recovery menu. The first item the driver cannot finish cleanly halts the entire run, leaving the completed items committed and the halting item's work in the tree. Every halt uses one five-part frame: status line, one-sentence reason, tree-state disclosure, supporting evidence, and what to do next.
-- **The scope check.** After building an item, the driver compares the changed files against that item's declared `expected-paths` (produced by `/plan-work-items`). A change outside the declared paths halts the run rather than being silently committed. Project-ignored files, generation or sync output, and the driver's own artifacts are excluded from the comparison.
+- **The scope check.** After building an item, the driver compares the changed files against that item's declared `Expected paths` (produced by `/plan-work-items`). A change outside the declared paths halts the run rather than being silently committed. Project-ignored files, generation or sync output, and the driver's own artifacts are excluded from the comparison.
 - **The planning-artifact commit.** The run's first commit is the work items file and the spec, plan, and research it references, carrying a marker trailer that lets a later invocation refuse to rebuild a branch that already carries a run. Each item's own code then lands as its own subsequent commit.
 - **Scope-check-only mode.** When the project defines no verification commands, the driver says so in the plan preview and gates on the scope check alone (no test, lint, or build re-run). Confirming the plan is the conscious confirm of that reduced gate.
 
@@ -59,7 +59,7 @@ Committed code on a dedicated branch, not a report. Specifically:
 
 ## How to get the most out of it
 
-- **Pair it downstream of `/plan-work-items`.** The driver reads the `expected-paths` and `Type` fields that skill produces. Run [`/plan-work-items`](../han-planning/plan-work-items.md) first; if an item's paths were flagged low-confidence because the plan gave no file-level detail, sharpen them before the run so the scope check is meaningful.
+- **Pair it downstream of `/plan-work-items`.** The driver reads the `Expected paths` and `Type` fields that skill produces. Run [`/plan-work-items`](../han-planning/plan-work-items.md) first; if an item's paths were flagged low-confidence because the plan gave no file-level detail, sharpen them before the run so the scope check is meaningful.
 - **Use a real test suite to exercise the real gate.** The build, independent verification, and fix loop only get exercised on a project that defines verification commands and has a green suite. Point the driver at a repository with a real `pytest`/`npm test`/`go test` and so on. On a docs-only repository the run takes the scope-check-only path and never runs the verify or fix machinery.
 - **Know the platform prerequisite.** The review stage runs in a sub-agent that fans out `/code-review`'s specialist panel one level deeper. That needs **Claude Code v2.1.172 or later**; below it the run halts rather than degrading the review, because the core carries no reduced-coverage fallback.
 - **Grant the runner if verification will not run.** The driver's `allowed-tools` covers the common runners (`npm`, `pytest`, `go`, `cargo`, `make`, and so on). A project whose verify command falls outside that set surfaces as a tooling-unavailable halt; add a Bash grant in the project's CLAUDE.md or route the command through `make`.
@@ -97,7 +97,7 @@ URL: https://code.claude.com/docs/en/sub-agents.md
 
 - [Plugin landing page](../../../README.md). The front door. Start here if you arrived from outside the docs tree.
 - [YAGNI](../../yagni.md). The evidence-based "You Aren't Gonna Need It" rule. The driver ships the simplest slice of a larger design; the deferrals follow this rule's format.
-- [`/plan-work-items`](../han-planning/plan-work-items.md). Produces the `work-items.md` this skill consumes, including the `expected-paths` and `Type` fields the driver reads. Run it first.
+- [`/plan-work-items`](../han-planning/plan-work-items.md). Produces the `work-items.md` this skill consumes, including the `Expected paths` and `Type` fields the driver reads. Run it first.
 - [`/tdd`](./tdd.md). The build skill the driver dispatches for every item, and for every fix round.
 - [`/code-review`](./code-review.md). The review skill the driver dispatches as its per-item gate; its panel and severity vocabulary are what the condensed verdict summarizes.
 - [Skill building guidance](../../../han-plugin-builder/skills/guidance/references/skill-building-guidance/). The progressive-disclosure, description-frontmatter, script-execution, and bash-permission rules this skill follows.

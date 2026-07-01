@@ -13,8 +13,16 @@ description: >
   tdd). Does not review code without driving the loop (use code-review). Requires
   Claude Code v2.1.172 or later for the review fan-out.
 argument-hint: "[path to work-items.md] [--gate critical|warning] [--fix-cap N] [--model M] [--branch NAME] [--verify \"CMD\"]"
-allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(git *), Bash(find *), Bash(claude --version), Bash(npm *), Bash(npx *), Bash(pnpm *), Bash(yarn *), Bash(pytest *), Bash(python3 *), Bash(go *), Bash(cargo *), Bash(make *), Bash(bundle *), Bash(rake *)
+allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(git *), Bash(find *), Bash(claude --version), Bash(npm *), Bash(npx *), Bash(pnpm *), Bash(yarn *), Bash(pytest *), Bash(python3 *), Bash(go *), Bash(cargo *), Bash(make *), Bash(bundle *), Bash(rake *), Bash(mix *), Bash(mvn *), Bash(gradle *), Bash(dotnet *)
 ---
+
+# Implement Work Items
+
+This skill mutates a real repository: it creates a branch and writes one commit
+per completed work item. It is an orchestration skill that dispatches build and
+review sub-agents, runs the project's verification itself, and owns every
+commit. It never asks the sub-agents to commit. These constraints shape every
+step and override any instinct to move faster.
 
 ## Project Context
 
@@ -23,47 +31,6 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(git *), Bash(find *), 
 - current branch: !`git branch --show-current 2>/dev/null || true`
 - CLAUDE.md: !`find . -maxdepth 1 -name "CLAUDE.md" -type f`
 - project-discovery.md: !`find . -maxdepth 3 -name "project-discovery.md" -type f`
-
-## Constraints (read before anything else)
-
-This skill mutates a real repository: it creates a branch and writes one commit
-per completed work item. It is an orchestration skill that dispatches build and
-review sub-agents, runs the project's verification itself, and owns every
-commit. It never asks the sub-agents to commit. These constraints shape every
-step and override any instinct to move faster.
-
-- **The review fan-out needs nested sub-agents.** The review stage runs in a
-  sub-agent (depth 1) that fans out `han-coding:code-review`'s specialist panel
-  (depth 2), which requires Claude Code v2.1.172 or later. The running version
-  is probed at load (see Project Context) and Step 1 refuses to start below it,
-  because the core carries no reduced-coverage single-reviewer fallback and a
-  below-version review verdict cannot be trusted as a full-coverage pass.
-- **A verification command that will not run is a tooling-unavailable halt.**
-  `allowed-tools` grants a fixed per-prefix set of runners, so a target
-  project's verify command outside that set cannot execute. Treat it as a
-  tooling-unavailable halt, never a silent skip, and name the remedy in the halt
-  (grant the prefix in the project's CLAUDE.md, or route the command through
-  `make`).
-- **Never `git add -A`; the driver's own artifacts stay out of history.** Every
-  per-item commit stages the item's own code changes explicitly by path. The
-  driver's working artifacts live in a git-excluded directory inside the plan
-  folder, `.implement-work-items/` (the uncommitted work-state file at
-  `.implement-work-items/state.md` and the per-item durable review records at
-  `.implement-work-items/reviews/<W-N>.md`). These are excluded from the
-  changed-file scope check and from every commit. A stray add-all that folds a
-  work-state file or a review record into a code commit breaks the clean-history
-  invariant.
-- **Fail closed on any untrustworthy sub-agent return.** The build-report and
-  review-verdict contracts are imposed by dispatch instruction; the platform
-  does not validate the returns against a schema. Parse every return
-  defensively and treat a malformed or incomplete report as untrustworthy, which
-  halts the run. The two contracts are defined in
-  [references/build-report-contract.md](./references/build-report-contract.md)
-  and [references/review-verdict-contract.md](./references/review-verdict-contract.md);
-  their text is copied verbatim into the matching dispatch prompt so the
-  sub-agent returns exactly what the driver parses.
-
-# Implement Work Items
 
 ## Step 1: Prepare and Validate (read-only)
 
@@ -114,9 +81,13 @@ uses **scope-check-only** mode (the changed-file check with no test, lint, or
 build re-run).
 
 For every resolved verification command, confirm its tool is on PATH (for
-example with `which`). If any required tool is missing, refuse and name every
-missing command together, telling the operator to install them and make them
-runnable, or to narrow the verification set with `--verify`, before re-invoking.
+example with `which`) and runnable under this skill's Bash grants. If a required
+tool is missing, or a command's runner falls outside those grants so it cannot
+execute, refuse and name every affected command together: tell the operator to
+install the tool and make it runnable, grant its prefix in the project's
+CLAUDE.md, route the command through `make`, or narrow the verification set with
+`--verify`, before re-invoking. An un-runnable verification command is a
+tooling-unavailable refusal, never a silent skip.
 
 ### 1.4 Identify the planning artifacts
 
@@ -143,11 +114,12 @@ scope-check-only mode there is no suite to run, so skip this check.
 
 ### 1.6 Refuse a prior-run branch
 
-Check whether the target branch already carries a prior run's planning-artifacts
-commit by looking for the `Implement-Work-Items-Run` trailer in its history with
-`git log`. If it is present, refuse and name the branch: the run is single-pass
-with no resume, so re-running on this branch would rebuild already-committed
-items. Direct the operator to a fresh branch.
+Check whether the target branch already exists and carries a prior run's marker.
+If the branch does not exist yet, it carries no prior run and this check passes.
+If it exists, look for the `Implement-Work-Items-Run` trailer in its history with
+`git log`; if the trailer is present, refuse and name the branch, because the run
+is single-pass with no resume and re-running on it would rebuild
+already-committed items. Direct the operator to a fresh branch.
 
 ### 1.7 Validate the work items
 
@@ -171,13 +143,26 @@ Then validate, refusing on the first failure with the offending items named:
 Build the run order as a topological sort of the graph, preserving the file's
 order wherever the graph allows it.
 
+### 1.8 Resolve the base branch
+
+Resolve the base the run will branch from, to show in the preview. Prefer, in
+order: a local `main` or `master`; then `origin/main`, `origin/master`,
+`upstream/main`, or `upstream/master`. Never default to the current HEAD: the
+skill may be invoked from another feature's branch or a detached state, so the
+current branch is not a safe base. If none of those bases exist, or the intended
+base is genuinely ambiguous, ask the operator which base to branch from before
+proceeding. This is a read-only clarification, not the run's one confirmation.
+The `git fetch --all` that freshens the base, and the branch creation itself,
+happen in Step 2.2.
+
 ## Step 2: Confirm the Plan, then Set Up
 
 ### 2.1 Preview and confirm
 
 Show the operator the run plan in plain language: the effective gate threshold,
 the fix-loop cap, the build/fix model, the branch the per-item commits will land
-on, the verification configuration (the resolved commands, or that the run is
+on and the base it branches from (Step 1.8), the verification configuration (the
+resolved commands, or that the run is
 **scope-check-only** because the project defines none, naming what will and will
 not be checked), and the planning-artifact set that will be committed first.
 Then list the items in run order, each named with its build skill
@@ -192,8 +177,9 @@ Only after the operator confirms, mutate the repository, in this order. If any
 step fails (the branch cannot be created, the commit is rejected by a hook),
 report exactly what failed and stop before processing any item.
 
-1. Create the dedicated branch (the resolved `--branch`, or the
-   `feat/<feature-dir>` default).
+1. Run `git fetch --all` to freshen remote-tracking refs, then create the
+   dedicated branch (the resolved `--branch`, or the `feat/<feature-dir>`
+   default) off the base resolved in Step 1.8, never off the current HEAD.
 2. Create the driver's artifact directory and make it self-ignoring, so git
    never sees its contents: create `.implement-work-items/` and write a
    `.gitignore` there whose only line is `*`.
@@ -223,9 +209,10 @@ this loop for each item, owning the verification and the commit yourself.
 
 ### 3.1 Build
 
-Dispatch a build sub-agent through the `Agent` tool, passing the resolved
-`--model` as its `model` (the default `inherit` runs it on the operator's session
-model), instructing it to run `han-coding:tdd` on this item and to build against
+Dispatch a build sub-agent (general-purpose) through the `Agent` tool, passing
+the resolved `--model` as its `model` (the default `inherit` runs it on the
+operator's session model), instructing it to run `han-coding:tdd` on this item
+and to build against
 the item's `References` and the committed spec or plan the work-items file names.
 Hand it the item, and copy the
 [build-report contract](./references/build-report-contract.md) verbatim into the
@@ -288,14 +275,17 @@ output as the halt's supporting evidence.
 Otherwise run up to `--fix-cap` rounds, narrating each as `fix round N of <cap>`.
 Each round:
 
-1. **Fix.** Dispatch a fresh fix sub-agent through the `Agent` tool with the
-   resolved `--model`, instructing it to run `han-coding:tdd`. Give it the
-   original build context (the item, its `References`, the spec sections), the
-   review's durable record at `.implement-work-items/reviews/<W-N>.md`, and the
-   current cumulative diff (the working tree against the item's base commit).
-   Copy the [build-report contract](./references/build-report-contract.md)
-   verbatim; parse the return fail-closed and apply the Halt Procedure on its
-   halt conditions.
+1. **Fix.** Dispatch a fresh fix sub-agent (general-purpose) through the `Agent`
+   tool with the resolved `--model`, instructing it to run `han-coding:tdd`. Give
+   it the original build context (the item, its `References`, the spec sections)
+   and the current cumulative diff (the working tree against the item's base
+   commit, the commit at item start). When the round follows a review that
+   returned findings, also give it the durable review record at
+   `.implement-work-items/reviews/<W-N>.md`; when the round follows a
+   verification failure, give it the failing verification output instead (no
+   review record exists on that path). Copy the
+   [build-report contract](./references/build-report-contract.md) verbatim; parse
+   the return fail-closed and apply the Halt Procedure on its halt conditions.
 2. **Re-verify.** Run the verification commands and the scope check as in 3.2. A
    command that **fails to execute** halts as a tooling-or-environment problem
    (Halt Procedure), not a not-cleared round. An **out-of-path change** halts
@@ -312,7 +302,8 @@ Each round:
    fix.
 
 If the cap is reached with the gate still not clear, halt (Halt Procedure) with
-the residual findings listed and reported as **gate not cleared**. Reserve
+the residual findings or failing verification output listed and reported as
+**gate not cleared**. Reserve
 "unsatisfiable" for a build sub-agent's own escalation that the item cannot be
 built as written (3.1); a cap-reached halt is "gate not cleared", not
 "unsatisfiable".
