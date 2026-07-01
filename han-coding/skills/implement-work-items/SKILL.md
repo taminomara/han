@@ -255,32 +255,67 @@ parts:
    no files after exclusions, or a changed file outside the declared paths,
    halts the run (Halt Procedure), naming the file.
 
+If a verification command reported failures (part 1), do not continue to the
+review: route to the fix loop (3.4) directly, so the panel never reviews
+known-broken code.
+
 ### 3.3 Review
 
-Dispatch one review sub-agent at depth 1 through the `Agent` tool, using a
-general-purpose sub-agent that retains the `Agent` tool so `han-coding:code-review`
-can fan out its specialist panel at depth 2. Direct it to run
-`han-coding:code-review` on the item's changes, giving it the item and the spec
-sections the item references so it judges the change against what the item asked
-for, and to persist the full review record at
-`.implement-work-items/reviews/<W-N>.md`. Copy the
-[review-verdict contract](./references/review-verdict-contract.md) verbatim into
-the prompt, and direct it to return only the condensed verdict.
+When verification passed, dispatch one review sub-agent at depth 1 through the
+`Agent` tool, using a general-purpose sub-agent that retains the `Agent` tool so
+`han-coding:code-review` can fan out its specialist panel at depth 2. Direct it
+to run `han-coding:code-review` on the item's changes, giving it the item and the
+spec sections the item references so it judges the change against what the item asked
+for, and to persist the full review record at `.implement-work-items/reviews/<W-N>.md`.
+Copy the [review-verdict contract](./references/review-verdict-contract.md)
+verbatim into the prompt, and direct it to return only the condensed verdict.
 
 Parse the verdict fail-closed against the contract. If parse fails (contract's
 halt conditions are met), apply Halt Procedure.
 
-### 3.4 Gate and fix
+### 3.4 Fix to the gate (bounded loop)
 
-The item clears the gate when verification passed and the verdict reports no
-finding at or above the configured threshold.
+The item clears the gate when verification passed and the review verdict reports
+no finding at or above the configured threshold; a cleared item goes straight to
+the commit (3.5).
 
-When verification reported failures, or the verdict lists a gate-blocking
-finding, the bounded fix loop runs (authored in W-4). Until then, a gate-blocking
-finding or a verification failure halts the run through the Halt Procedure, with
-the residual findings or the failing output as its supporting evidence. This is
-the safe cap-zero behavior; W-4 adds the fix rounds that try to clear the gate
-before halting.
+Enter the fix loop when the initial verification reported failures, or the
+initial review returned a gate-blocking finding. A `--fix-cap` of `0` enters no
+round: halt immediately on that first verification failure or gate-blocking
+finding (the safe cap-zero behavior), with the residual findings or the failing
+output as the halt's supporting evidence.
+
+Otherwise run up to `--fix-cap` rounds, narrating each as `fix round N of <cap>`.
+Each round:
+
+1. **Fix.** Dispatch a fresh fix sub-agent through the `Agent` tool with the
+   resolved `--model`, instructing it to run `han-coding:tdd`. Give it the
+   original build context (the item, its `References`, the spec sections), the
+   review's durable record at `.implement-work-items/reviews/<W-N>.md`, and the
+   current cumulative diff (the working tree against the item's base commit).
+   Copy the [build-report contract](./references/build-report-contract.md)
+   verbatim; parse the return fail-closed and apply the Halt Procedure on its
+   halt conditions.
+2. **Re-verify.** Run the verification commands and the scope check as in 3.2. A
+   command that **fails to execute** halts as a tooling-or-environment problem
+   (Halt Procedure), not a not-cleared round. An **out-of-path change** halts
+   immediately, naming the file (Halt Procedure), not a not-cleared round. A
+   command that **reports failures** is a **not-cleared round**: loop to the next
+   fix without re-reviewing, so the panel never reviews known-broken code. A
+   **pass** advances to re-review. In scope-check-only mode there are no commands,
+   so re-verify can only pass or halt on an out-of-path change; it never produces
+   a verification-failure not-cleared round.
+3. **Re-review.** Dispatch the review sub-agent again as in 3.3. An
+   **untrustworthy verdict** halts immediately (Halt Procedure), not a
+   not-cleared round. A **clean verdict** clears the gate: commit the item (3.5).
+   **Gate-blocking findings** make it a **not-cleared round**: loop to the next
+   fix.
+
+If the cap is reached with the gate still not clear, halt (Halt Procedure) with
+the residual findings listed and reported as **gate not cleared**. Reserve
+"unsatisfiable" for a build sub-agent's own escalation that the item cannot be
+built as written (3.1); a cap-reached halt is "gate not cleared", not
+"unsatisfiable".
 
 ### 3.5 Commit
 
