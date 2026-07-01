@@ -66,6 +66,7 @@ The coding layer: the skills you reach for while working in code. Writing it, re
 - **[`/test-planning`](./han-coding/test-planning.md).** Produce a prioritized test plan for a branch or directory. Dispatches `test-engineer` and `edge-case-explorer`, plus `concurrency-analyst` or `adversarial-security-analyst` when the files call for it.
 - **[`/investigate`](./han-coding/investigate.md).** Evidence-based investigation of bugs, failures, and unexpected behavior, with adversarial validation of the proposed fix.
 - **[`/coding-standard`](./han-coding/coding-standard.md).** Create and update coding standards from existing patterns or evidence-based research.
+- **[`/implement-work-items`](./han-coding/implement-work-items.md).** Drive a trusted `work-items.md` end to end: for each AFK item in dependency order, build with `/tdd`, verify against the project's own checks, review at full specialist coverage, fix to a quality gate, and commit one item per commit on a dedicated branch, unattended after a single confirmation. Halts the whole run on the first item it cannot finish cleanly, leaving completed items committed. The suite's first skill-to-skill orchestrator; needs Claude Code v2.1.172+ for the review fan-out.
 
 ## han-github
 
