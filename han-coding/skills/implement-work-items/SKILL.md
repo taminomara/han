@@ -3,7 +3,7 @@ name: implement-work-items
 description: >
   Drive a trusted work-items.md through an unattended build, verify, review,
   fix, and commit loop, one item at a time on a dedicated branch. Use when a set
-  of AFK-typed work items is already planned and you want each one built with
+  of fully-autonomous work items is already planned and you want each one built with
   tdd, independently verified against the project's own checks, reviewed at full
   specialist coverage, fixed to a quality gate, and committed without
   hand-invoking each skill per item. The run confirms a plan once, then either
@@ -129,12 +129,29 @@ Then validate, refusing on the first failure with the offending items named:
 
 - **Not empty.** The file has at least one buildable work item. An empty file or
   one with no buildable items is a startup refusal.
-- **Fields present.** Every item carries an `**Expected paths.**` block and a
-  `**Type.**` field. If either is missing on any item, refuse and tell the
-  operator to re-run the work-item producer or add the field.
-- **All AFK.** No item is typed `HITL`. Refuse any `HITL`-typed item: this core
-  drives only `AFK` items; tell the operator to remove or replace them, or wait
-  for the HITL follow-on.
+- **Fields present.** Every item carries an `**Expected paths.**` block and the
+  three per-item fields the producer records: `**Requires pre-work decisions.**`,
+  `**Suggested implementation.**`, and `**Suggested review.**` (these field names
+  are defined in the work-item template; read them verbatim). An item that omits
+  these fields but carries an old `**Type.**` field is a **pre-feature file**:
+  refuse and tell the operator to re-run `plan-work-items`, which produces the new
+  fields. An item missing them with no `**Type.**` is refused with the same re-run
+  remedy.
+- **All fully autonomous.** Each of `Suggested implementation` and `Suggested
+  review` records a skill or agent plus an `AFK` or `HITL` marker, and `Requires
+  pre-work decisions` is `yes` or `no`. An item is fully autonomous only when both
+  markers are `AFK` and `Requires pre-work decisions` is `no`. Refuse any item that
+  is not fully autonomous (a `HITL` implementation or review, a required pre-work
+  decision, or a bare `Suggested implementation` of `none`), naming those items:
+  this core drives only fully-autonomous items, so tell the operator to build them
+  by hand or wait for the human-in-the-loop follow-on.
+- **Supported combination.** Of the fully-autonomous items, this core drives only
+  the combination whose `Suggested implementation` is `han-coding:tdd` and whose
+  `Suggested review` is `han-coding:code-review`. Refuse any fully-autonomous item
+  whose combination differs, naming those items and giving this reason distinctly
+  from the not-fully-autonomous refusal: their skill or review is one this core does
+  not yet drive, so tell the operator to run the named skill directly (a follow-on
+  expands the supported set).
 - **Well-formed graph.** Build the dependency graph from each item's
   `**Depends on.**` field. Refuse on a duplicate item identifier, a `Depends on`
   that names an absent item, a self-dependency, or a cycle, naming each fault and
@@ -165,8 +182,9 @@ on and the base it branches from (Step 1.8), the verification configuration (the
 resolved commands, or that the run is
 **scope-check-only** because the project defines none, naming what will and will
 not be checked), and the planning-artifact set that will be committed first.
-Then list the items in run order, each named with its build skill
-(`han-coding:tdd`). Wait for the operator to **confirm** or **decline**.
+Then list the items in run order, each named with its recorded implementation
+skill and review (for a drivable run these are `han-coding:tdd` and
+`han-coding:code-review`). Wait for the operator to **confirm** or **decline**.
 
 On **decline**, stop and confirm that no branch was created and nothing was
 committed.
@@ -211,7 +229,8 @@ this loop for each item, owning the verification and the commit yourself.
 
 Dispatch a build sub-agent (general-purpose) through the `Agent` tool, passing
 the resolved `--model` as its `model` (the default `inherit` runs it on the
-operator's session model), instructing it to run `han-coding:tdd` on this item
+operator's session model), instructing it to run the item's recorded
+implementation skill (for a drivable run, `han-coding:tdd`) on this item
 and to build against
 the item's `References` and the committed spec or plan the work-items file names.
 Hand it the item, and copy the
@@ -251,7 +270,8 @@ known-broken code.
 When verification passed, dispatch one review sub-agent at depth 1 through the
 `Agent` tool, using a general-purpose sub-agent that retains the `Agent` tool so
 `han-coding:code-review` can fan out its specialist panel at depth 2. Direct it
-to run `han-coding:code-review` on the item's changes, giving it the item and the
+to run the item's recorded review (for a drivable run, `han-coding:code-review`)
+on the item's changes, giving it the item and the
 spec sections the item references so it judges the change against what the item asked
 for, and to persist the full review record at `.implement-work-items/reviews/<W-N>.md`.
 Copy the [review-verdict contract](./references/review-verdict-contract.md)
@@ -276,7 +296,8 @@ Otherwise run up to `--fix-cap` rounds, narrating each as `fix round N of <cap>`
 Each round:
 
 1. **Fix.** Dispatch a fresh fix sub-agent (general-purpose) through the `Agent`
-   tool with the resolved `--model`, instructing it to run `han-coding:tdd`. Give
+   tool with the resolved `--model`, instructing it to run the item's recorded
+   implementation skill (for a drivable run, `han-coding:tdd`). Give
    it the original build context (the item, its `References`, the spec sections)
    and the current cumulative diff (the working tree against the item's base
    commit, the commit at item start). When the round follows a review that

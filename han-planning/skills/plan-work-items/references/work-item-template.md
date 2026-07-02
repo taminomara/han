@@ -33,7 +33,11 @@ Each work item in `work-items.md` uses this template. Required fields appear in 
 - [ ] Criterion 1
 - [ ] Criterion 2
 
-**Type.** `AFK` or `HITL`. Required.
+**Requires pre-work decisions.** `yes` if a human decision (an architectural decision or a design gate) is required before work on this item starts, otherwise `no`. Required. `yes` can be accompanied by one clarifying sentence.
+
+**Suggested implementation.** The skill or agent that should build this item, and whether it can run unattended. Required. Choose it with [deliverable-skill-catalog.md](./deliverable-skill-catalog.md). Example: `` `han-coding:tdd`, AFK. ``.
+
+**Suggested review.** The skill or agent that should review this item, comes from deliverable-skill-catalog as well. Required. Example: `` `han-coding:code-review`, AFK. ``.
 
 **Expected paths.**
 - `<repo-root-relative path this work item creates or modifies>`. One path per bullet, never absolute or a cross-repository URL. A rename lists both the old and the new path. Required.
@@ -46,4 +50,5 @@ Each work item in `work-items.md` uses this template. Required fields appear in 
 - Heading line begins with `## ` followed by `<W-N>` (the prefix letters, a dash, then digits), then ` — ` (em-dash with surrounding spaces), then the title.
 - A work item body ends at the next `## ` heading or end of file.
 - Design-reference paths are relative to the `work-items.md` file (e.g., `ui-designs/<file>.png` when the screenshots live in the plan folder). Never use an absolute path or a cross-repository URL.
-- The `**Depends on.**` line uses the literal bold marker, comma-separates dependencies, and ends with `.` (the trailing period is part of the format, not a sentence terminator).
+- The `**Requires pre-work decisions.**`, `**Suggested implementation.**`, and `**Suggested review.**` lines use the literal bold marker and end with `.` (the trailing period is part of the format, not a sentence terminator).
+- The `**Depends on.**` line uses the literal bold marker, comma-separates dependencies, and ends with `.`.
