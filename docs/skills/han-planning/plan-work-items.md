@@ -12,8 +12,9 @@ Operator documentation for the `/plan-work-items` skill in the han plugin. This 
 
 ## Key concepts
 
-- **Vertical slice.** Each work item is a narrow but complete path through the relevant layers (schema, API, UI, tests). A completed work item is demoable or verifiable on its own: not a layer, not a stub.
-- **HITL and AFK.** Every work item is classified as HITL (requires a human sync: an architectural decision, a design review) or AFK (can be implemented and merged without one). The skill prefers AFK and prefers many thin work items over few thick ones.
+- **Vertical slice.** Each work item is a narrow but complete path through the relevant layers (schema, API, UI, tests). A completed work item is demoable or verifiable on its own: not a layer, not a stub. The skill prefers many thin work items over few thick ones.
+- **Suggested implementation and review.** For each work item the skill selects a suggested implementation skill and a suggested review, chosen from the deliverable-skill catalog by the item's deliverable nature (testable code to `tdd` reviewed by `code-review`, documentation to `project-documentation` reviewed by a content audit, a new skill to `skill-builder`, and so on). Each suggestion carries an `AFK` marker (the part can run unattended) or a `HITL` marker (the part needs a human). You can override either one per item.
+- **Derived autonomy.** AFK/HITL is no longer stored as a single field. A work item is fully autonomous only when its implementation and its review are both `AFK` and its separate `Requires pre-work decisions` field is `no`; otherwise it needs a human. From those signals the closing summary sorts every item into three buckets: driver-ready (a `tdd` build and a `code-review` review, both `AFK`, which [`/implement-work-items`](../han-coding/implement-work-items.md) can drive end to end), run-the-skill-yourself (both parts `AFK` but a combination the driver does not drive), and needs-a-human.
 - **Symbolic ID.** Each work item gets a stable identifier (`W-N`). IDs are for cross-referencing work items within the file and citing them in tickets, threads, and follow-up work. They are stable for the life of the file.
 - **One file, no repository awareness.** The output is exactly one `work-items.md`. The skill never splits work by repository, counts repositories, or reasons about cross-repository integration. The breakdown is driven only by the plan or context it is given.
 - **Dependencies.** A work item's `Depends on` line names other work items in the same file that must complete first, or `None`. Work items are written in dependency order.
@@ -55,8 +56,8 @@ Example prompts that work well:
 
 One file on disk plus an in-channel summary:
 
-- **`work-items.md`** in the resolved folder. The stakeholder-readable artifact. It opens with a title line and an intro paragraph that links the parent plan (or names the source context) and explains the `W-N` ID scheme. When a single reference artifact applies to more than one work item, a **Shared reference artifacts** preamble cites it once. Then one section per work item, in dependency order. Each work item carries: `Summary` (with an inline plan reference), `Description`, optional `Design references`, `References`, `Tests`, `Acceptance criteria`, `Type` (`AFK` or `HITL`, so an autonomous driver knows which items it can build unattended), `Expected paths` (the repo-root-relative files the item is expected to touch, which an autonomous driver checks changed files against), and `Depends on`.
-- An **in-channel summary** with the file path, a count of work items by type (HITL / AFK), and the next concrete action.
+- **`work-items.md`** in the resolved folder. The stakeholder-readable artifact. It opens with a title line and an intro paragraph that links the parent plan (or names the source context) and explains the `W-N` ID scheme. When a single reference artifact applies to more than one work item, a **Shared reference artifacts** preamble cites it once. Then one section per work item, in dependency order. Each work item carries: `Summary` (with an inline plan reference), `Description`, optional `Design references`, `References`, `Tests`, `Acceptance criteria`, `Requires pre-work decisions` (`yes` or `no`), `Suggested implementation` and `Suggested review` (each a skill or agent plus an `AFK` or `HITL` marker, so an autonomous driver knows which items it can build unattended), `Expected paths` (the repo-root-relative files the item is expected to touch, which an autonomous driver checks changed files against), and `Depends on`.
+- An **in-channel summary** with the file path, a count of how many items can run unattended versus how many need a human, the three-bucket sort (driver-ready, run-the-skill-yourself, needs-a-human), an install recommendation for any best-fit skill that is not installed, and the next concrete action.
 
 ## How to get the most out of it
 
@@ -65,11 +66,12 @@ One file on disk plus an in-channel summary:
 - **Pair with `/iterative-plan-review` upstream.** A highly-trusted, reviewed-and-battle-tested plan makes dividing it into work items much easier and the breakdown sharper. Do not break down a plan you do not yet trust.
 - **Pair with `/plan-a-phased-build` upstream when the work is large.** When the effort is big enough to ship in slices, phase it first, plan the implementation of a single phase, then run this skill against that phase's plan. Each work-items file then covers one phase.
 - **Pair with `/tdd` downstream.** Once the breakdown is written, `/tdd` implements a work item test-first. The work item's `Description`, `Tests`, and `Acceptance criteria` become the behavior test list.
+- **Pair with `/implement-work-items` downstream when every item is driver-ready.** When the breakdown's items are all a `tdd` build and a `code-review` review, both `AFK`, with no required pre-work decision, `/implement-work-items` builds, verifies, reviews, and commits the whole set unattended. For a mixed breakdown, run the driver-ready items through it and handle the rest yourself.
 - **Pair with `/work-items-to-issues` downstream when you track work on GitHub.** Once the breakdown is written, `/work-items-to-issues` publishes each item as a GitHub issue in its target repo. It needs the `han-github` plugin and the `gh` CLI.
 
 ## YAGNI (when applicable)
 
-YAGNI does not gate this skill's output. The work-items file is a structural decomposition of an already-committed implementation plan: the work item boundaries, HITL/AFK classification, and reference artifact links derive from what the plan already decided. This skill does not introduce new behavioral commitments or speculative infrastructure. YAGNI enforcement belongs upstream, in `/plan-implementation` and `/iterative-plan-review`, before the plan reaches this stage.
+YAGNI does not gate this skill's output. The work-items file is a structural decomposition of an already-committed implementation plan: the work item boundaries, the per-item skill selection and derived autonomy, and reference artifact links derive from what the plan already decided. This skill does not introduce new behavioral commitments or speculative infrastructure. YAGNI enforcement belongs upstream, in `/plan-implementation` and `/iterative-plan-review`, before the plan reaches this stage.
 
 If the plan you are decomposing has not yet been through a YAGNI sweep, run `/iterative-plan-review` first.
 
@@ -87,7 +89,7 @@ The skill's input is a trusted implementation plan, or whatever context describe
 
 **Resolving the output location.** The skill writes exactly one `work-items.md`. It goes in the user-specified folder, or the plan file's folder, or next to the source context, or, when none of those exist, a best-guess folder of two to four kebab-case words under an existing documentation root. It states which folder it chose and proceeds without waiting for confirmation. If a `work-items.md` already exists in the chosen folder, the skill does not overwrite it and does not stop to ask: it writes to a timestamp-suffixed name and states which file it wrote. The existing file is always preserved.
 
-**The breakdown.** `project-manager` receives the full plan content, the reference artifact inventory, and the skill's Rules verbatim, with a directive to draft vertical slices: each work item a narrow but complete path through the appropriate layers, demoable or verifiable on its own, classified HITL or AFK, preferring AFK and preferring many thin work items over few thick ones. It returns a numbered list and writes no files. The skill returns that list verbatim, assigns `W-N` IDs, prints the breakdown for visibility, and writes the file without waiting for approval.
+**The breakdown.** `project-manager` receives the full plan content, the reference artifact inventory, and the skill's Rules verbatim, with a directive to draft vertical slices: each work item a narrow but complete path through the appropriate layers, demoable or verifiable on its own, preferring many thin work items over few thick ones. For each item it selects a suggested implementation and a suggested review from the deliverable-skill catalog, records the `AFK` or `HITL` marker on each and the `Requires pre-work decisions` field, applies any operator override, and runs installed-skill detection so a best-fit skill that is not installed is reported rather than silently assigned. It returns a numbered list and writes no files. The skill returns that list verbatim, assigns `W-N` IDs, prints the breakdown for visibility, and closes with the three-bucket recommendation, writing the file without waiting for approval.
 
 **Incremental writing.** The skill writes the title and intro first, then appends each work item as it is finalized. Buffering the whole document in conversation memory and writing at the end is explicitly disallowed. If something interrupts the run, the work in progress is preserved on disk.
 
@@ -109,7 +111,7 @@ URL: https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary
 
 ### Mike Cohn: *User Stories Applied* (INVEST)
 
-Cohn's INVEST criteria (Independent, Negotiable, Valuable, Estimable, Small, Testable) inform the per-work-item shape. Each work item is independent enough to grab on its own, small enough to ship as a unit, and testable through its `Tests` and `Acceptance criteria` fields. The HITL/AFK split is the skill's read of the Independent criterion: an AFK work item can be merged without a human sync.
+Cohn's INVEST criteria (Independent, Negotiable, Valuable, Estimable, Small, Testable) inform the per-work-item shape. Each work item is independent enough to grab on its own, small enough to ship as a unit, and testable through its `Tests` and `Acceptance criteria` fields. The derived autonomy is the skill's read of the Independent criterion: a fully-autonomous item (both parts `AFK`, no required pre-work decision) can be built and merged without a human sync.
 
 URL: https://www.mountaingoatsoftware.com/books/user-stories-applied
 
@@ -123,7 +125,9 @@ URL: https://www.mountaingoatsoftware.com/books/user-stories-applied
 - [`/iterative-plan-review`](./iterative-plan-review.md). Pair upstream to harden a plan you do not yet trust before breaking it into work items.
 - [`/plan-a-phased-build`](./plan-a-phased-build.md). Pair upstream when the work is large enough to ship in phases. Phase first, plan one phase, then break that phase's plan into work items.
 - [`/tdd`](../han-coding/tdd.md). Pair downstream to implement a work item test-first.
+- [`/implement-work-items`](../han-coding/implement-work-items.md). Pair downstream to drive a set of driver-ready items (a `tdd` build and a `code-review` review, both `AFK`) to committed code unattended. Part of the `han-coding` plugin.
 - [`/work-items-to-issues`](../han-github/work-items-to-issues.md). Pair downstream to publish the work items as GitHub issues. Part of the `han-github` plugin.
 - [Work item template](../../../han-planning/skills/plan-work-items/references/work-item-template.md). The template the skill renders for each work item.
+- [Deliverable-skill catalog](../../../han-planning/skills/plan-work-items/references/deliverable-skill-catalog.md). The deliverable-nature map the skill uses to select each item's suggested implementation and review, plus the override, non-han, and not-installed rules.
 - [Work-items file format](../../../han-planning/skills/plan-work-items/references/work-items-file-format.md). The title, intro, and preamble structure of the output file.
 - [Reference artifact inventory](../../../han-planning/skills/plan-work-items/references/reference-artifact-inventory.md). The include list, exclude list, and screenshot-to-work-item mapping rules the skill applies in Step 4.

@@ -6,13 +6,13 @@ Operator documentation for the `/implement-work-items` skill in the han plugin. 
 
 ## TL;DR
 
-- **What it does.** Drives a trusted `work-items.md` end to end: for each item in dependency order it builds with `/tdd`, verifies against the project's own checks, reviews at full specialist coverage, fixes to a quality gate, and commits, one item per commit on a dedicated branch, unattended after a single confirmation.
-- **When to use it.** You have a set of already-planned, AFK-typed work items and you want them built, reviewed, and committed without hand-invoking `/tdd` and `/code-review` per item.
+- **What it does.** Drives a trusted `work-items.md` end to end: for each item in dependency order it builds with the item's recorded implementation skill, verifies against the project's own checks, reviews at full specialist coverage with the item's recorded review, fixes to a quality gate, and commits, one item per commit on a dedicated branch, unattended after a single confirmation. This core drives only the `/tdd` build plus `/code-review` review combination and refuses any other at startup.
+- **When to use it.** You have a set of already-planned, fully-autonomous work items whose implementation and review are `/tdd` and `/code-review`, and you want them built, reviewed, and committed without hand-invoking those skills per item.
 - **What you get back.** A dedicated branch with one clean commit per completed item, a completion summary, and a durable review record per item, or a legible five-part halt on the first item the run cannot finish cleanly, with the items completed so far left committed.
 
 ## Key concepts
 
-- **The per-item loop.** Each item runs a fixed build, verify, review, fix, commit loop. The driver dispatches the build to a `/tdd` sub-agent and the review to a `/code-review` sub-agent, but runs verification and every commit itself, so the sub-agents never commit and their "all green" is never trusted on faith.
+- **The per-item loop.** Each item runs a fixed build, verify, review, fix, commit loop. The driver dispatches the build to a sub-agent running the item's recorded implementation skill and the review to a sub-agent running its recorded review (for the combination this core drives, `/tdd` and `/code-review`), but runs verification and every commit itself, so the sub-agents never commit and their "all green" is never trusted on faith.
 - **Halt the whole run.** The core has no interactive recovery menu. The first item the driver cannot finish cleanly halts the entire run, leaving the completed items committed and the halting item's work in the tree. Every halt uses one five-part frame: status line, one-sentence reason, tree-state disclosure, supporting evidence, and what to do next.
 - **The scope check.** After building an item, the driver compares the changed files against that item's declared `Expected paths` (produced by `/plan-work-items`). A change outside the declared paths halts the run rather than being silently committed. Project-ignored files, generation or sync output, and the driver's own artifacts are excluded from the comparison.
 - **The planning-artifact commit.** The run's first commit is the work items file and the spec, plan, and research it references, carrying a marker trailer that lets a later invocation refuse to rebuild a branch that already carries a run. Each item's own code then lands as its own subsequent commit.
@@ -22,7 +22,7 @@ Operator documentation for the `/implement-work-items` skill in the han plugin. 
 
 **Invoke when:**
 
-- You have run `/plan-work-items` and hold a `work-items.md` whose items are all AFK-typed and dependency-ordered, and you want them driven to committed code unattended.
+- You have run `/plan-work-items` and hold a `work-items.md` whose items are all fully-autonomous, all a `/tdd` build reviewed by `/code-review`, and dependency-ordered, and you want them driven to committed code unattended.
 - You want each item independently verified against the project's own checks and reviewed at full specialist coverage before it is committed, not only built.
 - You want a legible, fail-closed stop when something cannot be finished, rather than a partial or silently-degraded run.
 
@@ -38,7 +38,7 @@ Run `/implement-work-items` in Claude Code.
 
 Give it:
 
-1. **A path to a `work-items.md`.** The file `/plan-work-items` produced. Every item must carry an `Expected paths` block and a `Type` marker, and every item must be `AFK`; the driver refuses to start otherwise.
+1. **A path to a `work-items.md`.** The file `/plan-work-items` produced. Every item must carry an `Expected paths` block plus the three per-item fields (`Requires pre-work decisions`, `Suggested implementation`, `Suggested review`), every item must be fully-autonomous (both suggestions `AFK`, no required pre-work decision), and every item's combination must be a `/tdd` build reviewed by `/code-review`. The driver runs one whole-run startup check and refuses before branching otherwise, with distinct messages for a needs-a-human item, an unsupported combination, and a pre-feature file that still carries the old `Type` field.
 2. **Optional inputs, all defaulted.** `--gate critical|warning` (the severity at and above which a review finding blocks; default `warning`), `--fix-cap N` (maximum fix rounds per item; default `3`), `--model M` (the model the build and fix sub-agents run on; default `inherit`, the operator's session model), `--branch NAME` (the run's branch; default `feat/<feature-dir>`), and `--verify "CMD"` (override the auto-detected verification commands).
 
 The driver runs read-only checks first, then shows a plan preview (the effective configuration, the verification mode, and the planning-artifact set) and waits for a single confirm or decline. On confirm it runs unattended: it either completes every item or halts on the first it cannot finish. Declining mutates nothing.
@@ -59,11 +59,11 @@ Committed code on a dedicated branch, not a report. Specifically:
 
 ## How to get the most out of it
 
-- **Pair it downstream of `/plan-work-items`.** The driver reads the `Expected paths` and `Type` fields that skill produces. Run [`/plan-work-items`](../han-planning/plan-work-items.md) first; if an item's paths were flagged low-confidence because the plan gave no file-level detail, sharpen them before the run so the scope check is meaningful.
+- **Pair it downstream of `/plan-work-items`.** The driver reads the `Expected paths`, `Suggested implementation`, and `Suggested review` fields that skill produces. Run [`/plan-work-items`](../han-planning/plan-work-items.md) first; if an item's paths were flagged low-confidence because the plan gave no file-level detail, sharpen them before the run so the scope check is meaningful.
 - **Use a real test suite to exercise the real gate.** The build, independent verification, and fix loop only get exercised on a project that defines verification commands and has a green suite. Point the driver at a repository with a real `pytest`/`npm test`/`go test` and so on. On a docs-only repository the run takes the scope-check-only path and never runs the verify or fix machinery.
 - **Know the platform prerequisite.** The review stage runs in a sub-agent that fans out `/code-review`'s specialist panel one level deeper. That needs **Claude Code v2.1.172 or later**; below it the run halts rather than degrading the review, because the core carries no reduced-coverage fallback.
 - **Grant the runner if verification will not run.** The driver's `allowed-tools` covers the common runners (`npm`, `pytest`, `go`, `cargo`, `make`, and so on). A project whose verify command falls outside that set surfaces as a tooling-unavailable halt; add a Bash grant in the project's CLAUDE.md or route the command through `make`.
-- **The build skill is `/tdd`, and only `/tdd`.** The core drives every item with `/tdd`; per-item skill selection is deliberately deferred. An item that needs a different or interactive build is not a fit for this core.
+- **The core drives one combination.** The driver reads each item's recorded implementation skill and review and dispatches them, but drives only the `/tdd` build plus `/code-review` review combination. An item whose implementation or review is anything else, or that needs a human before work starts, is refused at startup rather than driven.
 
 ## YAGNI
 
@@ -97,7 +97,7 @@ URL: https://code.claude.com/docs/en/sub-agents.md
 
 - [Plugin landing page](../../../README.md). The front door. Start here if you arrived from outside the docs tree.
 - [YAGNI](../../yagni.md). The evidence-based "You Aren't Gonna Need It" rule. The driver ships the simplest slice of a larger design; the deferrals follow this rule's format.
-- [`/plan-work-items`](../han-planning/plan-work-items.md). Produces the `work-items.md` this skill consumes, including the `Expected paths` and `Type` fields the driver reads. Run it first.
+- [`/plan-work-items`](../han-planning/plan-work-items.md). Produces the `work-items.md` this skill consumes, including the `Expected paths`, `Suggested implementation`, and `Suggested review` fields the driver reads. Run it first.
 - [`/tdd`](./tdd.md). The build skill the driver dispatches for every item, and for every fix round.
 - [`/code-review`](./code-review.md). The review skill the driver dispatches as its per-item gate; its panel and severity vocabulary are what the condensed verdict summarizes.
 - [Skill building guidance](../../../han-plugin-builder/skills/guidance/references/skill-building-guidance/). The progressive-disclosure, description-frontmatter, script-execution, and bash-permission rules this skill follows.
