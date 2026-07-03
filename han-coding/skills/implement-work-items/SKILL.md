@@ -1,17 +1,18 @@
 ---
 name: implement-work-items
 description: >
-  Drive a trusted work-items.md through an unattended build, verify, review,
-  fix, and commit loop, one item at a time on a dedicated branch. Use when a set
-  of fully-autonomous work items is already planned and you want each one built with
-  tdd, independently verified against the project's own checks, reviewed at full
-  specialist coverage, fixed to a quality gate, and committed without
-  hand-invoking each skill per item. The run confirms a plan once, then either
-  completes every item or halts on the first it cannot finish cleanly, leaving
-  the finished items committed. Does not produce or harden work items (use
-  plan-work-items). Does not build a single change test-first on its own (use
-  tdd). Does not review code without driving the loop (use code-review). Requires
-  Claude Code v2.1.172 or later for the review fan-out.
+  Drive a trusted work-items.md through a build, verify, review, fix, and commit
+  loop, one item at a time on a dedicated branch. Routes each item by its recorded
+  markers: builds it unattended in a sub-agent or in the foreground with you
+  steering, reviews it through one normalized verdict (code review, a non-code
+  review agent, or your own read), verifies every build itself, and commits per
+  item. Use when a planned work-items.md mixes items that run unattended with items
+  that need a human: a pre-work decision, an interactive build, or a human review.
+  The run confirms a plan once, then either completes every item or halts on the
+  first it cannot finish cleanly, leaving the finished items committed. Does not
+  produce or harden work items (use plan-work-items). Does not build a single
+  change test-first (use tdd). Does not review without driving the loop (use
+  code-review). Requires Claude Code v2.1.172 or later for the review fan-out.
 argument-hint: "[path to work-items.md] [--gate critical|warning] [--fix-cap N] [--model M] [--branch NAME] [--verify \"CMD\"]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent, Bash(git *), Bash(find *), Bash(claude --version), Bash(npm *), Bash(npx *), Bash(pnpm *), Bash(yarn *), Bash(pytest *), Bash(python3 *), Bash(go *), Bash(cargo *), Bash(make *), Bash(bundle *), Bash(rake *), Bash(mix *), Bash(mvn *), Bash(gradle *), Bash(dotnet *)
 ---
@@ -23,6 +24,22 @@ per completed work item. It is an orchestration skill that dispatches build and
 review sub-agents, runs the project's verification itself, and owns every
 commit. It never asks the sub-agents to commit. These constraints shape every
 step and override any instinct to move faster.
+
+## Execution modes
+
+The driver never calls the `Skill` tool. Each item routes by its recorded markers:
+
+- `Suggested implementation` (+ `AFK`/`HITL`): an `AFK` build dispatches an `Agent`
+  sub-agent; a `HITL` build or a bare `none` build is handed to you in the
+  foreground ([references/foreground-handoff-protocol.md](./references/foreground-handoff-protocol.md)).
+- `Suggested review` (+ `AFK`/`HITL`): an `AFK` review dispatches a sub-agent that
+  returns the normalized verdict; a `HITL` review is your own read
+  ([references/human-review-capture.md](./references/human-review-capture.md));
+  `none` runs no review.
+- `Requires pre-work decisions`: `yes` pauses for a decision before the build.
+
+The driver still verifies every build itself and owns every commit, whoever built
+the item.
 
 ## Project Context
 
@@ -54,11 +71,10 @@ inputs and their defaults:
 
 - `--gate` (default `warning`): the severity at and above which a review finding
   blocks the gate (any Critical or Warning by default).
-- `--fix-cap` (default `3`): the maximum fix rounds per item (consumed in W-4;
+- `--fix-cap` (default `3`): the maximum fix rounds per item (consumed in 3.5;
   previewed here).
 - `--model` (default `inherit`): the model the build and fix sub-agents run on.
-  `inherit` runs them on the operator's session model (there is no variable that
-  reads the session model; `inherit` is the value that selects it).
+  `inherit` runs them on the operator's session model.
 - `--branch` (default `feat/<feature-dir>`, where `<feature-dir>` is the
   basename of the folder holding the work-items file): the branch the per-item
   commits land on.
@@ -137,21 +153,12 @@ Then validate, refusing on the first failure with the offending items named:
   refuse and tell the operator to re-run `plan-work-items`, which produces the new
   fields. An item missing them with no `**Type.**` is refused with the same re-run
   remedy.
-- **All fully autonomous.** Each of `Suggested implementation` and `Suggested
-  review` records a skill or agent plus an `AFK` or `HITL` marker, and `Requires
-  pre-work decisions` is `yes` or `no`. An item is fully autonomous only when both
-  markers are `AFK` and `Requires pre-work decisions` is `no`. Refuse any item that
-  is not fully autonomous (a `HITL` implementation or review, a required pre-work
-  decision, or a bare `Suggested implementation` of `none`), naming those items:
-  this core drives only fully-autonomous items, so tell the operator to build them
-  by hand or wait for the human-in-the-loop follow-on.
-- **Supported combination.** Of the fully-autonomous items, this core drives only
-  the combination whose `Suggested implementation` is `han-coding:tdd` and whose
-  `Suggested review` is `han-coding:code-review`. Refuse any fully-autonomous item
-  whose combination differs, naming those items and giving this reason distinctly
-  from the not-fully-autonomous refusal: their skill or review is one this core does
-  not yet drive, so tell the operator to run the named skill directly (a follow-on
-  expands the supported set).
+- **Drivable.** Each of `Suggested implementation` and `Suggested review` records a
+  skill or agent plus an `AFK` or `HITL` marker, and `Requires pre-work decisions`
+  is `yes` or `no`. Every named implementation skill must be installed and
+  invocable. A bare `none` implementation needs no skill and is drivable
+  as a free-form foreground build. Abort the whole run at startup, naming
+  the item and the skill, when a named skill does not resolve.
 - **Well-formed graph.** Build the dependency graph from each item's
   `**Depends on.**` field. Refuse on a duplicate item identifier, a `Depends on`
   that names an absent item, a self-dependency, or a cycle, naming each fault and
@@ -179,12 +186,12 @@ happen in Step 2.2.
 Show the operator the run plan in plain language: the effective gate threshold,
 the fix-loop cap, the build/fix model, the branch the per-item commits will land
 on and the base it branches from (Step 1.8), the verification configuration (the
-resolved commands, or that the run is
-**scope-check-only** because the project defines none, naming what will and will
-not be checked), and the planning-artifact set that will be committed first.
-Then list the items in run order, each named with its recorded implementation
-skill and review (for a drivable run these are `han-coding:tdd` and
-`han-coding:code-review`). Wait for the operator to **confirm** or **decline**.
+resolved commands, or **scope-check-only** when the project defines none, naming
+what will and will not be checked), and the planning-artifact set committed first.
+Then list the items in run order, each named with its implementation skill, its
+review, and its **execution mode**: *unattended* (both phases `AFK`, no decision),
+*decision then unattended*, *foreground build*, or *human review*. Disclose once
+that the run has no mid-run stop. Wait for the operator to **confirm** or **decline**.
 
 On **decline**, stop and confirm that no branch was created and nothing was
 committed.
@@ -213,131 +220,105 @@ report exactly what failed and stop before processing any item.
 5. Initialize the **work-state file** `.implement-work-items/state.md`. It contains
    the run configuration (work-items path, branch, gate threshold, fix-loop cap,
    build/fix model, and the verification configuration or scope-check-only) followed
-   by each item's status. Initialize every item to `pending`. As the loop runs,
-   mark the active item `in-progress`, then `done` with its commit reference and
-   review-record path, or `halted` with the reason.
+   by each item's record: its status, its `scope-baseline` (the commit its scope
+   check diffs against), and its `fix-round` counter. Initialize every item to
+   `pending`. As the loop runs, mark the active item `in-progress` (or a finer
+   phase: `awaiting-decision`, `building-in-foreground`, `awaiting-review-feedback`),
+   then `done` with its commit reference or range and review-record path, or
+   `halted` with the reason. `scope-baseline` and `fix-round` persist across
+   foreground state catch-up and are never reset on a fix round.
 
-## Step 3: Per-Item Loop (Build, Verify, Review, Commit)
+## Step 3: Per-Item Loop (Decide, Build, Verify, Review, Fix, Commit)
 
-Process items one at a time in run order. Keep the run legible: narrate each item
-as it begins (the item, its position in the run order, and the phase starting),
-each sub-agent dispatch, and each verification command with a one-line result.
-Update `.implement-work-items/state.md` as the item moves through the loop. Drive
-this loop for each item, owning the verification and the commit yourself.
+Process items one at a time in run order. Narrate each item as it begins (the item,
+its position, the phase), each dispatch, and each verification command with a
+one-line result. Update `.implement-work-items/state.md` as the item moves through
+the loop. Own the verification and the commit yourself. At each foreground pause,
+signal that control is with the operator and put the action-needed prompt on the
+last line.
 
-### 3.1 Build
+### 3.1 Decide
 
-Dispatch a build sub-agent (general-purpose) through the `Agent` tool, passing
-the resolved `--model` as its `model` (the default `inherit` runs it on the
-operator's session model), instructing it to run the item's recorded
-implementation skill (for a drivable run, `han-coding:tdd`) on this item
-and to build against
-the item's `References` and the committed spec or plan the work-items file names.
-Hand it the item, and copy the
-[build-report contract](./references/build-report-contract.md) verbatim into the
-prompt. The sub-agent leaves its changes in the working tree and returns the
-compact report; it does not commit.
+If `Requires pre-work decisions` is `no`, the item's `scope-baseline` is its start
+commit; skip to Build. If `yes`, pause before any build, present what the item says
+must be decided, and wait. The operator records the decision where the item directs,
+or where you ask when the item is silent (default: the referenced spec or the item).
+Carry the decision into the build. When the recording edits a committed file, commit
+that edit and set the item's `scope-baseline` to that commit, so the decision edit
+is in neither the item's scope diff nor its commit. A rejected pre-decision commit
+halts (Halt Procedure) with a frame stating no build has started.
 
-Parse the report fail-closed against the contract. If parse fails (contract's
-halt conditions are met), apply Halt Procedure.
+### 3.2 Build
 
-### 3.2 Verify (independent)
+- **AFK build.** Dispatch a build sub-agent (general-purpose) through `Agent` with
+  the resolved `--model` (the default `inherit` runs it on the operator's session
+  model), instructing it to run the item's recorded implementation skill on this
+  item, to build against the item's `References` and the committed spec or plan, and
+  not to commit. Copy the
+  [build-report contract](./references/build-report-contract.md) verbatim; parse the
+  return fail-closed and apply the Halt Procedure on its halt conditions.
+- **HITL or `none` build.** Hand off to the operator per
+  [foreground-handoff-protocol.md](./references/foreground-handoff-protocol.md):
+  recommend a manual compaction, mark the boundary, wait for confirm-done, then catch
+  up on run state. There is no build report on this path.
 
-Do not trust the report's FINAL GATE. Verify the item independently, in two
-parts:
+### 3.3 Verify (independent)
 
-1. **Run the project's verification commands** yourself, one at a time (not
-   through the sub-agent). Distinguish a command that **runs and reports
-   failures** (a genuine test, lint, or build failure) from one that **fails to
-   execute** (a missing tool, a service down, a full disk): the latter is a
-   tooling-or-environment halt, not a code failure (Halt Procedure). In
-   scope-check-only mode there are no commands to run.
-2. **Scope check.** Compare the item's changed files (`git status` and `git diff`
-   against the item's base commit) to its `Expected paths`, treating each added,
-   modified, or deleted path (a rename is a delete plus an add, so an item that
-   renames a file must declare both paths). Exclude files the project ignores,
-   any code-generation or sync output produced by the build or verify steps,
-   and the driver's own `.implement-work-items/` artifacts. A build that changed
-   no files after exclusions, or a changed file outside the declared paths,
-   halts the run (Halt Procedure), naming the file.
+Verify the item yourself, whoever built it. Run the project's verification commands
+one at a time, distinguishing a command that **reports failures** from one that
+**fails to execute** (a tooling-or-environment halt, Halt Procedure). Scope-check the
+item's changed files (`git status` and `git diff` against the item's `scope-baseline`)
+against its `Expected paths` (a rename is a delete plus an add), excluding ignored
+files, code-generation or sync output, and `.implement-work-items/`. A build that
+changed nothing after exclusions, or a changed file outside the declared paths, halts
+(Halt Procedure), naming the file. A verification failure routes to Fix (3.5) without
+a review, so no review sees known-broken code. In scope-check-only mode there are no
+commands to run.
 
-If a verification command reported failures (part 1), do not continue to the
-review: route to the fix loop (3.4) directly, so the panel never reviews
-known-broken code.
+### 3.4 Review
 
-### 3.3 Review
+When verification passed, route by the review signal:
 
-When verification passed, dispatch one review sub-agent at depth 1 through the
-`Agent` tool, using a general-purpose sub-agent that retains the `Agent` tool so
-`han-coding:code-review` can fan out its specialist panel at depth 2. Direct it
-to run the item's recorded review (for a drivable run, `han-coding:code-review`)
-on the item's changes, giving it the item and the
-spec sections the item references so it judges the change against what the item asked
-for, and to persist the full review record at `.implement-work-items/reviews/<W-N>.md`.
-Copy the [review-verdict contract](./references/review-verdict-contract.md)
-verbatim into the prompt, and direct it to return only the condensed verdict.
+- **AFK review.** Dispatch one review sub-agent at depth 1 (general-purpose,
+  retaining `Agent` so `han-coding:code-review` can fan its panel out at depth 2),
+  instructing it to run the item's recorded review, giving it the reference material,
+  and copying the [review-verdict contract](./references/review-verdict-contract.md)
+  verbatim; direct it to return only the normalized verdict and persist the record at
+  `.implement-work-items/reviews/<W-N>.md`. Parse fail-closed; an untrustworthy
+  verdict halts (Halt Procedure). The operator may opt into a pause per
+  [human-review-capture.md](./references/human-review-capture.md).
+- **HITL review.** Capture the operator's read into the same verdict per
+  [human-review-capture.md](./references/human-review-capture.md), then catch up on
+  run state.
+- **`none` review.** No review and no gate.
 
-Parse the verdict fail-closed against the contract. If parse fails (contract's
-halt conditions are met), apply Halt Procedure.
+### 3.5 Fix to the gate (bounded loop)
 
-### 3.4 Fix to the gate (bounded loop)
+The item clears the gate when verification passed and the verdict reports no finding
+at or above the threshold; a `none`-review item clears on the verification pass
+alone. A cleared item goes to Commit (3.6). A `--fix-cap` of `0` halts on the first
+verification failure or gate-blocking finding, with that output as the evidence.
 
-The item clears the gate when verification passed and the review verdict reports
-no finding at or above the configured threshold; a cleared item goes straight to
-the commit (3.5).
+Otherwise run up to `--fix-cap` rounds (`fix-round` persists across state catch-up),
+narrating each as `fix round N of <cap>`. Each round re-enters at **Build (3.2)**,
+routed by the same build signal and **never re-running Decide**. Then
+**re-verify (3.3)**, and on a pass **re-review through the same review path (3.4)**;
+a `none`-review item re-verifies only and clears on the pass. A verification failure
+is a not-cleared round (loop to the next fix, no review); an out-of-path change or an
+untrustworthy verdict halts. On cap exhaustion, halt (Halt Procedure) with the residual
+findings or failing output as **gate not cleared** (reserve "unsatisfiable" for
+a build sub-agent's own escalation that the item cannot be built as written).
 
-Enter the fix loop when the initial verification reported failures, or the
-initial review returned a gate-blocking finding. A `--fix-cap` of `0` enters no
-round: halt immediately on that first verification failure or gate-blocking
-finding (the safe cap-zero behavior), with the residual findings or the failing
-output as the halt's supporting evidence.
+### 3.6 Commit
 
-Otherwise run up to `--fix-cap` rounds, narrating each as `fix round N of <cap>`.
-Each round:
-
-1. **Fix.** Dispatch a fresh fix sub-agent (general-purpose) through the `Agent`
-   tool with the resolved `--model`, instructing it to run the item's recorded
-   implementation skill (for a drivable run, `han-coding:tdd`). Give
-   it the original build context (the item, its `References`, the spec sections)
-   and the current cumulative diff (the working tree against the item's base
-   commit, the commit at item start). When the round follows a review that
-   returned findings, also give it the durable review record at
-   `.implement-work-items/reviews/<W-N>.md`; when the round follows a
-   verification failure, give it the failing verification output instead (no
-   review record exists on that path). Copy the
-   [build-report contract](./references/build-report-contract.md) verbatim; parse
-   the return fail-closed and apply the Halt Procedure on its halt conditions.
-2. **Re-verify.** Run the verification commands and the scope check as in 3.2. A
-   command that **fails to execute** halts as a tooling-or-environment problem
-   (Halt Procedure), not a not-cleared round. An **out-of-path change** halts
-   immediately, naming the file (Halt Procedure), not a not-cleared round. A
-   command that **reports failures** is a **not-cleared round**: loop to the next
-   fix without re-reviewing, so the panel never reviews known-broken code. A
-   **pass** advances to re-review. In scope-check-only mode there are no commands,
-   so re-verify can only pass or halt on an out-of-path change; it never produces
-   a verification-failure not-cleared round.
-3. **Re-review.** Dispatch the review sub-agent again as in 3.3. An
-   **untrustworthy verdict** halts immediately (Halt Procedure), not a
-   not-cleared round. A **clean verdict** clears the gate: commit the item (3.5).
-   **Gate-blocking findings** make it a **not-cleared round**: loop to the next
-   fix.
-
-If the cap is reached with the gate still not clear, halt (Halt Procedure) with
-the residual findings or failing verification output listed and reported as
-**gate not cleared**. Reserve
-"unsatisfiable" for a build sub-agent's own escalation that the item cannot be
-built as written (3.1); a cap-reached halt is "gate not cleared", not
-"unsatisfiable".
-
-### 3.5 Commit
-
-When the item clears the gate, commit it as one clean commit following the
-detected convention, staging only the item's own code changes explicitly by path
-(never `git add -A`) and never the driver's artifacts. Record the item `done` in
-the work-state file with the commit's short reference and the review-record path,
-report the commit reference to the operator, and advance to the next item. If the
-commit is rejected (a pre-commit hook, a lock), halt (Halt Procedure), leaving
-the verified, reviewed work in the tree.
+When the item clears, commit it as one clean commit following the detected
+convention, staging only the item's own changes by path (never `git add -A`), never
+the driver's artifacts. When the tree is clean because a foreground build committed
+the item's work, adopt those commits instead per
+[foreground-handoff-protocol.md](./references/foreground-handoff-protocol.md). Record
+the item `done` with its commit reference or range and the review-record path, report
+it, and advance. A rejected commit halts (Halt Procedure), leaving the verified,
+reviewed work in the tree.
 
 ### Halt Procedure
 
@@ -366,8 +347,8 @@ present the halt using this frame with five named parts, in order:
 
 ## Step 4: Completion Summary
 
-When every item is complete or the run has halted, report the completion
-summary: the branch name, each item's outcome (built and committed with its
-commit reference, or the one item that halted the run and why), the items not
-reached, and the next action for the operator (review and push the branch;
+When every item is complete or the run has halted, report the completion summary:
+the branch name, each item's execution mode and outcome (built and committed with
+its commit reference or range, or the item that halted the run and why), the items
+not reached, and the next action for the operator (review and push the branch;
 sharing the branch stays with the operator).

@@ -1,8 +1,9 @@
 # Build-report contract
 
-The driver dispatches each build and fix sub-agent through the `Agent` tool with
-a prompt that instructs the sub-agent to run `han-coding:tdd` and to return its
-result in the exact format below. The `Agent` path returns free-form text with
+The driver dispatches each `AFK` build and fix sub-agent through the `Agent` tool
+with a prompt that instructs the sub-agent to run the item's recorded implementation
+skill (for example `han-coding:tdd`) and to return its result in the exact format
+below. A foreground build produces no report and is not parsed here. The `Agent` path returns free-form text with
 no schema validation, so this contract is imposed by instruction and the driver
 parses it fail-closed: a return that is missing a required section, uses a
 status outside the fixed vocabulary, or omits evidence the change requires is

@@ -17,9 +17,9 @@ Each work item consists of two parts: implementation and review. For each part, 
 |---|---|---|
 | New or changed testable code | `han-coding:tdd`, AFK | `han-coding:code-review`, AFK |
 | Behavior-preserving restructuring of already-tested code | `han-coding:refactor`, HITL | `han-coding:code-review`, AFK |
-| A new Claude Code skill | `han-plugin-builder:skill-builder`, HITL | `han-plugin-builder:guidance`, AFK |
-| A new Claude Code agent | `han-plugin-builder:agent-builder`, HITL | `han-plugin-builder:guidance`, AFK |
-| Other work related to Claude Code plugins | `han-plugin-builder:guidance`, AFK | `han-plugin-builder:guidance`, AFK |
+| A new Claude Code skill | `han-plugin-builder:skill-builder`, HITL | manual read, HITL |
+| A new Claude Code agent | `han-plugin-builder:agent-builder`, HITL | manual read, HITL |
+| Other work related to Claude Code plugins | `han-plugin-builder:guidance`, AFK | manual read, HITL |
 | Authoring feature or system documentation | `han-core:project-documentation`, AFK | `han-core:information-architect` agent, AFK |
 | Editing feature or system documentation | `han-core:project-documentation`, AFK | `han-core:content-auditor` agent, AFK |
 | An architectural decision record | `han-core:architectural-decision-record`, HITL | manual read, HITL |
