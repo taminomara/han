@@ -19,7 +19,7 @@ actual content.
 Return exactly these named sections, each header on its own line, in this order:
 
 ```
-STATUS: <"built" = the item was implemented and the tdd gate is green. "blocked"
+STATUS: <"built" = the item was implemented and the implementation skill's gate is green. "blocked"
 = the item cannot be completed and you are escalating it in ESCALATION. No other
 value is valid.>
 
@@ -51,7 +51,7 @@ FINAL GATE:
 ESCALATION:
 <When STATUS is blocked: the blocker you could not resolve (the spec contradicts
 the item, the acceptance criteria are unsatisfiable, or the item cannot be built
-as written), with enough detail for the operator to act. When STATUS is built:
+as written), with enough detail for the user to act. When STATUS is built:
 the single word "none".>
 ```
 

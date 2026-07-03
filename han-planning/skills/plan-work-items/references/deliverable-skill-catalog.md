@@ -17,14 +17,14 @@ Each work item consists of two parts: implementation and review. For each part, 
 |---|---|---|
 | New or changed testable code | `han-coding:tdd`, AFK | `han-coding:code-review`, AFK |
 | Behavior-preserving restructuring of already-tested code | `han-coding:refactor`, HITL | `han-coding:code-review`, AFK |
-| A new Claude Code skill | `han-plugin-builder:skill-builder`, HITL | manual read, HITL |
-| A new Claude Code agent | `han-plugin-builder:agent-builder`, HITL | manual read, HITL |
-| Other work related to Claude Code plugins | `han-plugin-builder:guidance`, AFK | manual read, HITL |
+| A new Claude Code skill | `han-plugin-builder:skill-builder`, HITL | none, HITL |
+| A new Claude Code agent | `han-plugin-builder:agent-builder`, HITL | none, HITL |
+| Other work related to Claude Code plugins | `han-plugin-builder:guidance`, AFK | none, HITL |
 | Authoring feature or system documentation | `han-core:project-documentation`, AFK | `han-core:information-architect` agent, AFK |
 | Editing feature or system documentation | `han-core:project-documentation`, AFK | `han-core:content-auditor` agent, AFK |
-| An architectural decision record | `han-core:architectural-decision-record`, HITL | manual read, HITL |
-| A coding standard | `han-coding:coding-standard`, HITL | manual read, HITL |
-| A runbook | `han-core:runbook`, HITL | manual read, HITL |
+| An architectural decision record | `han-core:architectural-decision-record`, HITL | none, HITL |
+| A coding standard | `han-coding:coding-standard`, HITL | none, HITL |
+| A runbook | `han-core:runbook`, HITL | none, HITL |
 | No han skill fits | scan installed skills (see "Non-han skills"); if none fits, bare `none, HITL` |
 
 ### `han-coding:tdd`
@@ -54,7 +54,7 @@ User can be missing some skills or agents listed in table 1. Before committing t
 The operator can override the implementation skill, the review, and a non-han skill's declared autonomy for a named item, two ways:
 
 - **Invocation instruction.** A natural-language instruction in the invocation (for example, "use `skill-builder` for the new-skill item", or "my `deploy-notes` skill has an autonomous build"). Interpret it and apply.
-- **Pre-written marker.** A recognizable single-line bracketed annotation left in the source plan near the relevant section, carrying a skill and an optional review and non-han autonomy declaration (for example, `[implementation: skill-builder; review: manual read]`). Read it read-only; never modify the source plan.
+- **Pre-written marker.** A recognizable single-line bracketed annotation left in the source plan near the relevant section, carrying a skill and an optional review and non-han autonomy declaration (for example, `[implementation: skill-builder; review: none]`). Read it read-only; never modify the source plan.
 
 On an override:
 

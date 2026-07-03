@@ -19,9 +19,10 @@ parses on them.
 
 ## Reference material the dispatch supplies
 
-Every source gets the work item and the spec sections it references. A
-**content audit** additionally gets the **prior version of the edited document**
-(the reference it compares against); without it the verdict is unreliable.
+Every source gets the work item and the spec sections it references, plus the item's
+**scope-baseline commit** and its `Expected paths`, and is asked to judge scope (see
+"Scope"). A **content audit** additionally gets the **prior version of the edited
+document** (the reference it compares against); without it the verdict is unreliable.
 
 ## Required return format
 
@@ -39,7 +40,8 @@ FINDINGS (at and above the gate threshold: <critical | warning>):
 - <TASK-ID> (<tier>) <location>: <one-line claim>
 - <one line per finding at or above the threshold: task ID, normalized tier
   (Critical | Warning | Suggestion), location (see "Location"), claim. A security
-  finding shows its tier inline, e.g. "SEC-001 (Critical)".>
+  finding shows its tier inline, e.g. "SEC-001 (Critical)"; a scope finding uses a
+  `SCOPE-<n>` id with the offending path as its location.>
 <or the single line "none at or above the gate threshold" for a clean pass>
 
 BELOW THRESHOLD (counts only):
@@ -50,7 +52,7 @@ BELOW THRESHOLD (counts only):
 source lacks.>
 
 DURABLE RECORD: <repo-root-relative path to the full record you wrote,
-.implement-work-items/reviews/<W-N>.md, using the same task IDs. Required on every
+.implement-work-items/reviews/<W-N>-iter<fix-round>.md, using the same task IDs. Required on every
 verdict, including a clean one.>
 ```
 
@@ -65,6 +67,18 @@ FINDINGS:
 | `information-architect` | Blocks comprehension → Critical; Degrades → Warning; Friction → Suggestion; Polish → below threshold |
 | `content-auditor` | each Missing fact → Warning; Present and Correctly Removed are not findings; no Critical (no field to derive it from) |
 | human read | operator states the tier directly, confirmed against the threshold ([human-review-capture.md](./human-review-capture.md)) |
+
+## Scope
+
+Judge scope as part of every review. Compute the item's changed-file set from the
+scope-baseline commit — everything changed since it, committed or not:
+`git diff --name-only <scope-baseline>` plus any new untracked files, excluding
+`.implement-work-items/`. Compare it against the item's `Expected paths` and intent. A
+change that reaches beyond the item's work is a **scope finding** (`SCOPE-<n>`), tiered
+by how far it reaches — an unrelated one-line tweak is a Suggestion; a drive-by
+refactor or a different feature is a Warning or Critical. Expected paths are a hint, not
+a boundary: an unpredicted file is a finding only when it is genuinely unrelated work.
+Scope findings gate through the threshold like any other finding.
 
 ## Coverage
 
@@ -82,8 +96,8 @@ for prose. A prose finding needs no line number.
 ## Gate
 
 The item clears when FINDINGS is "none at or above the gate threshold". Any listed
-finding gates (or, at fix-cap zero, halts). A `none`-review item runs no review and
-clears on a verification pass alone.
+finding gates (or, at fix-cap zero, halts). A `none` review is a free-form human
+read, captured like a `HITL` review (see [human-review-capture.md](./human-review-capture.md)).
 
 ## Halt conditions
 
