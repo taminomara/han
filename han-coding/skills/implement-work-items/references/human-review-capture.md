@@ -13,7 +13,11 @@ dispatching a review sub-agent.
    finding.
 2. Capture each finding as a tier (Critical | Warning | Suggestion), a location
    (`file:line` for code, a heading or "document-wide" for prose), and a one-line
-   claim. If a field is missing, ask for it; do not guess.
+   claim. If a field is missing, ask for it; do not guess. If the user raises an
+   issue a fix round cannot resolve — the scope or approach must change for the
+   feature to work or be secure, an architectural problem, or an unresolvable RAID
+   item — capture it as the verdict's ESCALATION so the run halts for the decision;
+   otherwise ESCALATION is none.
 3. Before the user confirms, echo the captured findings back, each with its
    tier and whether it gates at the active threshold, and restate the threshold.
 4. Take a **Confirm done** signal. State that confirming closes the

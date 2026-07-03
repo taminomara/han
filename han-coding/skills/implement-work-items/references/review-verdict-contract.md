@@ -54,6 +54,11 @@ source lacks.>
 DURABLE RECORD: <repo-root-relative path to the full record you wrote,
 .implement-work-items/reviews/<W-N>-iter<fix-round>.md, using the same task IDs. Required on every
 verdict, including a clean one.>
+
+ESCALATION: <an issue a fix round cannot resolve because it needs a human decision
+— the scope or approach must change for the feature to work or to be secure, an
+unforeseen architectural problem, or an unresolvable RAID item — with enough detail
+to act; else the single word "none".>
 ```
 
 ## Severity mapping
@@ -107,3 +112,8 @@ Halt as untrustworthy (never a cleared gate, never a not-cleared fix round) when
 - COVERAGE missing, empty, or reporting that part of the review did not run.
 - FINDINGS missing, or a finding omits its tier (not evaluable against the threshold).
 - DURABLE RECORD missing, empty, or unreadable.
+- ESCALATION missing or empty.
+
+A non-`none` ESCALATION is a clean escalation, not an untrustworthy verdict: the
+driver halts for the human decision it names rather than opening a fix round, and
+surfaces the ESCALATION as the halt's supporting evidence.

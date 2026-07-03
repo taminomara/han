@@ -199,8 +199,9 @@ build marker:
   `--model`: when the item's implementation is a skill, dispatch `general-purpose`
   and instruct it to run that skill on this item; when it names an agent, dispatch
   that agent directly. Have it build against the item's `References` and the
-  committed spec or plan, and not commit. On a fix round, also give
-  it the previous iteration's residual findings. Copy the
+  committed spec or plan, and not commit. If work item required decisions, pass
+  resolution to the builder. On a fix round, also give it the previous iteration's
+  residual findings. Copy the
   [build-report contract](./references/build-report-contract.md) verbatim;
   parse the return fail-closed and apply the Halt Procedure on its halt conditions.
 - **HITL or `none` build.** Hand off to the user per
@@ -245,6 +246,10 @@ verdict required.
 
 - **Cleared:** Set item's state in `state.json` to `"commit"`, then leave the inner loop
   and go to Commit (3.4).
+- **Needs a human decision:** when the review verdict escalates an issue a fix round
+  cannot resolve (the scope or approach must change for the feature to work or be
+  secure, an unforeseen architectural problem, or an unresolvable RAID item), halt
+  through the Halt Procedure instead of looping.
 - **Not cleared:** bump the `fix-round` counter in `state.json`. If `fix-round` now
   exceeds `--fix-cap`, halt. Otherwise set its state to `"build"` and go to step
   **1. Build**, passing review findings or verification failure message to the builder.

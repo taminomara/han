@@ -49,10 +49,12 @@ FINAL GATE:
   the project's checks itself and trusts its own result over this section.>
 
 ESCALATION:
-<When STATUS is blocked: the blocker you could not resolve (the spec contradicts
-the item, the acceptance criteria are unsatisfiable, or the item cannot be built
-as written), with enough detail for the user to act. When STATUS is built:
-the single word "none".>
+<When STATUS is blocked: the blocker you could not resolve and that needs a human
+decision (the spec contradicts the item, the acceptance criteria are unsatisfiable,
+the item cannot be built as written, the scope or approach must change for the
+feature to work or to be secure, an unforeseen architectural problem, or an
+unresolvable RAID item), with enough detail for the user to act. When STATUS is
+built: the single word "none".>
 ```
 
 ## How the driver parses it (halt conditions)
