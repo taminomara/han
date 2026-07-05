@@ -43,7 +43,7 @@ Table 1 lists common cases, but doesn't define strict pairings between implement
 
 ### Editing plugin definitions, and other plugin work
 
-An edit to an existing skill, agent, or plugin file, and the "Other work related to Claude Code plugins" catch-all, both build through a `general-purpose` agent that drafts the change, with the applicable authoring guidance linked in the item's `References` (the guidance is reference material, never the implementer). The review is a human read, because these are executable plugin artifacts a structurally-broken edit would ship green. `general-purpose` is a built-in agent, exempt from the never-auto-`AFK` guardrail below.
+An edit to an existing skill, agent, or plugin file, and the "Other work related to Claude Code plugins" catch-all, both build through a `general-purpose` agent that drafts the change, with the applicable authoring guidance linked in the item's `References` (the guidance is reference material, never the implementer). The review is a human read, because these are executable plugin artifacts, so a structurally-broken edit would ship green. `general-purpose` is a built-in agent, exempt from the never-auto-`AFK` guardrail below.
 
 ### Audit passes
 
@@ -75,5 +75,5 @@ On an override:
 - Re-derive the item's implementation and review classification: from Table 1 for a han skill, or from the operator's declaration for a non-han skill (defaulting to `HITL`). A required pre-work decision the item already needs is unaffected by a skill override.
 - **Flag a mismatch** when the override's skill does not match the item's nature (for example, `tdd` on a non-testable deliverable, or any skill on a deliverable of a different kind). Honor it, because the operator has the final say, but flag it in the breakdown.
 - **An override naming an uninstalled skill** is treated like a not-installed best-fit: the item becomes bare and the override is kept as a recommendation, a distinct outcome from an honored mismatch.
-- **Refuse an override that produces an invalid marker combination.** The driver refuses `Expected paths: None` on a non-`audit` item, an `AFK` review on an `audit` or `None` item, and a `` `none`, AFK `` build. Do not write one: decline the offending field, restore the catalog-derived value, and name the declined override and the conflict in the breakdown, never transforming the item's `Type` to fit.
+- **Refuse an override that produces an invalid marker combination.** The driver refuses `Expected paths: None` on a non-`audit` item, an `AFK` review on an `audit` item or any item declaring `Expected paths: None`, and a `` `none`, AFK `` build. Do not write one: decline the offending field, restore the catalog-derived value, and name the declined override and the conflict in the breakdown, never transforming the item's `Type` to fit.
 - **Report how each override resolved** (applied to which item, unmatched, or ambiguous across items). Never drop an override silently.

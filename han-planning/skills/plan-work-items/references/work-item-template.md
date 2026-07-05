@@ -5,7 +5,7 @@ Each work item in `work-items.md` uses this template. Required fields appear in 
 ```
 ## <W-N> — <short descriptive name>
 
-**Type.** `deliverable` (default), `audit` (a checks-only pass), or `spike` (an investigation that records a finding). Required.
+**Type.** `deliverable` (default; builds and commits an artifact), `audit` (a checks-only pass), or `spike` (an investigation that records a finding). Required.
 
 **Summary.** One paragraph describing what this work item delivers. Include a plan reference inline (e.g., `See plan: [D-6](feature-implementation-plan.md#d-6-...)` or `See plan: D-3, D-7, and Work Unit 2`). The plan reference replaces a standalone "Work items addressed" field — do not add one.
 
@@ -29,7 +29,7 @@ Each work item in `work-items.md` uses this template. Required fields appear in 
 - Omit any bullet that does not apply. Do not link iteration histories, decision logs, review findings, team findings, facilitation summaries, or any other process artifact.
 
 **Checks.**
-- How the deliverable is checked, by its `Type`: code test levels for code (name the test type and the assertion); read-the-file conformance and dry-run checks for docs and skills; result confirmation for an `audit`. A no-output `audit` must be side-effect-free and safe to re-run.
+- How this item is checked: code test levels for code (name the test type and the assertion); read-the-file conformance and dry-run checks for docs and skills; for an `audit`, the checks it runs; for a `spike`, the finding's soundness. A no-output `audit` must be side-effect-free and safe to re-run.
 
 **Acceptance criteria.**
 - [ ] Criterion 1
@@ -42,8 +42,7 @@ Each work item in `work-items.md` uses this template. Required fields appear in 
 **Suggested review.** The skill or agent that should review this item, comes from deliverable-skill-catalog as well. Required. Example: `` `han-coding:code-review`, AFK. ``.
 
 **Expected paths.**
-- `<repo-root-relative path this work item creates or modifies>`. One path per bullet, never absolute or a cross-repository URL. A rename lists both the old and the new path. Required. Audit that produces no files
-can have `**Expected paths.** None.`
+- `<repo-root-relative path this work item creates or modifies>`. One path per bullet, never absolute or a cross-repository URL. A rename lists both the old and the new path. Required. An `audit` that produces no files declares `**Expected paths.** None.`
 
 **Depends on.** `<W-N>` (within this file), comma-separated for multiple, or `None.`
 ```
