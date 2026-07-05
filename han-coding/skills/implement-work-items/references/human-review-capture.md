@@ -10,7 +10,10 @@ dispatching a review sub-agent.
 1. Point the user at the item's change — everything since `scope-baseline`, committed
    or not — the spec sections it references, and the files outside `Expected paths`, so
    they judge scope as well as quality. A change beyond the item's work is a scope
-   finding.
+   finding. For a no-output item (`Expected paths: None`) there is no change to read:
+   ask the user to confirm the checks ran and the result is sound (the coverage
+   attestation is "operator confirmed result"), and treat any file left despite `None`
+   as a scope finding.
 2. Capture each finding as a tier (Critical | Warning | Suggestion), a location
    (`file:line` for code, a heading or "document-wide" for prose), and a one-line
    claim. If a field is missing, ask for it; do not guess. If the user raises an

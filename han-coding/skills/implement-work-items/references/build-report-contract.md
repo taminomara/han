@@ -19,15 +19,15 @@ actual content.
 Return exactly these named sections, each header on its own line, in this order:
 
 ```
-STATUS: <"built" = the item was implemented and the implementation skill's gate is green. "blocked"
-= the item cannot be completed and you are escalating it in ESCALATION. No other
-value is valid.>
+STATUS: <"built" = the item was implemented. "blocked" = the item cannot be
+completed and you are escalating it in ESCALATION. No other value is valid.>
 
 FILES:
 - <repo-root-relative path> (<created | modified | deleted>)
 - <one line per file changed; a rename is a delete of the old path plus an add of
   the new. List every file. The driver's own git inspection is authoritative for
-  the scope check; this list is your declaration and a cross-check.>
+  the scope check; this list is your declaration and a cross-check. When the item
+  declared `Expected paths: None`, an empty FILES list is the expected result.>
 
 RED-TO-GREEN EVIDENCE:
 <The observed test-failure-then-pass evidence. For new behavior: the test added,
@@ -65,7 +65,9 @@ run through the Halt Procedure, rather than committing or advancing:
 - Any of the five named sections is missing or empty.
 - STATUS is a value other than `built` or `blocked`.
 - STATUS is `built` but FILES lists no path (a build with no file changes; the
-  driver also confirms this against its own git inspection, after exclusions).
+  driver also confirms this against its own git inspection, after exclusions). This
+  does not apply when the item declared `Expected paths: None`: an empty FILES list
+  is then the expected result and clears.
 - RED-TO-GREEN EVIDENCE neither shows an observed failing run followed by a
   passing run nor declares "not applicable (untestable: <reason>)". A change with
   a testable surface (new behavior or a bug fix) must carry the evidence; only a
