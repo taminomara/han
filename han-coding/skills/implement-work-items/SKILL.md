@@ -115,9 +115,17 @@ on the first failure with the offending items named:
 - **Drivable.** Each of `Suggested implementation` and `Suggested review` records a
   skill or agent plus an `AFK` or `HITL` marker, and `Requires pre-work decisions`
   is `yes` or `no`. Every named implementation skill or sub-agent must be installed
-  and invocable. A bare `none` implementation needs no skill and is drivable
-  as a free-form foreground build; likewise a bare `none` review needs no skill
-  and is drivable as a free-form human read.
+  and invocable (`general-purpose` is a built-in agent, always available). A bare
+  `none` implementation needs no skill and is drivable as a free-form foreground
+  build; likewise a bare `none` review is a free-form human read. A `` `none`, AFK ``
+  build is a refusal: a bare `none` build is always foreground.
+- **Type and no-output guards.** Read each item's `Type` (absent means
+  `deliverable`, so older files drive unchanged); a present value outside
+  `deliverable`, `audit`, `spike` is a refusal. Keyed on that
+  `Type`: `Expected paths: None` on a non-`audit` item is a refusal (only an
+  audit may produce nothing), and an `AFK` review on an `audit` item or
+  any item declaring `Expected paths: None` is a refusal (its review is a human
+  confirmation).
 - **Well-formed graph.** Build the dependency graph from each item's
   `**Depends on.**` field. Halt on a duplicate item identifier, a `Depends on`
   that names an absent item, a self-dependency, or a cycle.
@@ -181,8 +189,9 @@ Process items one at a time in run order. For each item, run the following loop:
 ### 3.1 Prepare
 
 Read next item from work-items. Use `TaskUpdate` tool to set item's task status
-to `in_progress`. Save current commit `git log HEAD -n1 --format='format:%H'`
-as item's `"scope-baseline"`.
+to `in_progress`. Assert a clean working tree (only `.implement-work-items/`
+allowed); a prior no-output item's stray files halt here. Save current commit
+`git log HEAD -n1 --format='format:%H'` as item's `"scope-baseline"`.
 
 ### 3.2 Decide
 
@@ -199,7 +208,10 @@ build marker:
   `--model`: when the item's implementation is a skill, dispatch `general-purpose`
   and instruct it to run that skill on this item; when it names an agent, dispatch
   that agent directly. Have it build against the item's `References` and the
-  committed spec or plan, and not commit. If work item required decisions, pass
+  committed spec or plan, and not commit. For a `spike` or a no-output `audit`,
+  give it the item's `Expected paths` as the output target: a `spike` writes its
+  finding there, and a no-output `audit` is told an empty file set is the
+  expected result. If work item required decisions, pass
   resolution to the builder. On a fix round, also give it the previous iteration's
   residual findings. Copy the
   [build-report contract](./references/build-report-contract.md) verbatim;
@@ -256,7 +268,10 @@ verdict required.
 
 ### 3.4 Commit
 
-Commit the item as one clean commit following the detected convention, staging by
+For a no-output `audit` (`Expected paths: None`), do not commit: record it per
+[no-output-completion.md](./references/no-output-completion.md) (assert a clean tree,
+set `done-no-commit`, label the summary), then skip to the next item.
+Otherwise commit the item as one clean commit following the detected convention, staging by
 path the files changed since `scope-baseline` (never `git add -A`), never the driver's
 artifacts. Review cleared these as in scope and the tree was clean at item start, so
 nothing out-of-scope is left behind for the next item. When a foreground build already
@@ -281,7 +296,9 @@ After a successful commit, set item's state in `state.json` to `"done"`.
 
 When every item is complete, report the completion summary: the branch name,
 each item's execution mode and outcome (built and committed with its commit reference
-or range, or the item that halted the run and why), the items not reached,
+or range; a no-output `audit` recorded `done-no-commit`, named with its `Type`
+and a count per [no-output-completion.md](./references/no-output-completion.md); or the
+item that halted the run and why), the items not reached,
 and the next action for the user (review and push the branch;
 sharing the branch stays with the user).
 
@@ -308,4 +325,6 @@ present the halt using this frame with five named parts, in order:
    carry this run's commits (so the user commits or stashes the halting
    item's work and starts a fresh branch, or cherry-picks the completed items
    forward by hand); and name the branch and the commit range of the completed
-   items so the user can reference them.
+   items so the user can reference them (a no-output `audit` recorded
+   `done-no-commit` carries no commit and is not in that range; see
+   [no-output-completion.md](./references/no-output-completion.md)).

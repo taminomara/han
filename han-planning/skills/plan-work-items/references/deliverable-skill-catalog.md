@@ -9,7 +9,6 @@ Each work item consists of two parts: implementation and review. For each part, 
 1. **Classify the deliverable nature and pick the implementation and review skill** from Table 1.
 2. **Apply operator overrides** (see "Overrides").
 3. **Handle the non-han and not-installed cases** (see those sections).
-4. **Record the two fields** on the item. Separately set `Requires pre-work decisions` (`yes` when the item needs a human decision, an architectural decision or a design gate, before work can start).
 
 ## Table 1: deliverable nature to implementation and review
 
@@ -19,13 +18,16 @@ Each work item consists of two parts: implementation and review. For each part, 
 | Behavior-preserving restructuring of already-tested code | `han-coding:refactor`, HITL | `han-coding:code-review`, AFK |
 | A new Claude Code skill | `han-plugin-builder:skill-builder`, HITL | none, HITL |
 | A new Claude Code agent | `han-plugin-builder:agent-builder`, HITL | none, HITL |
-| Other work related to Claude Code plugins | `han-plugin-builder:guidance`, AFK | none, HITL |
+| Editing an existing skill, agent, or plugin definition | `general-purpose` agent, AFK | none, HITL |
+| Other work related to Claude Code plugins | `general-purpose` agent, AFK | none, HITL |
 | Authoring feature or system documentation | `han-core:project-documentation`, AFK | `han-core:information-architect` agent, AFK |
 | Editing feature or system documentation | `han-core:project-documentation`, AFK | `han-core:content-auditor` agent, AFK |
 | An architectural decision record | `han-core:architectural-decision-record`, HITL | none, HITL |
 | A coding standard | `han-coding:coding-standard`, HITL | none, HITL |
 | A runbook | `han-core:runbook`, HITL | none, HITL |
-| No han skill fits | scan installed skills (see "Non-han skills"); if none fits, bare `none, HITL` |
+| An audit pass (checks, no new deliverable) | named checks, AFK if automatable else HITL | none, HITL |
+| A spike (an investigation that records a finding) | route by question (see "Spikes") | none, HITL |
+| No han skill fits | scan installed skills (see "Non-han skills"); if none fits, bare "none, HITL" |
 
 ### `han-coding:tdd`
 
@@ -38,6 +40,18 @@ A work item whose deliverable spans two natures (for example, code plus its runb
 ### For more complex scenarios
 
 Table 1 lists common cases, but doesn't define strict pairings between implementation and review skills. If an item is best covered by a combination not listed in the table, you can use it, or add additional instructions for implementation and review stages.
+
+### Editing plugin definitions, and other plugin work
+
+An edit to an existing skill, agent, or plugin file, and the "Other work related to Claude Code plugins" catch-all, both build through a `general-purpose` agent that drafts the change, with the applicable authoring guidance linked in the item's `References` (the guidance is reference material, never the implementer). The review is a human read, because these are executable plugin artifacts a structurally-broken edit would ship green. `general-purpose` is a built-in agent, exempt from the never-auto-`AFK` guardrail below.
+
+### Audit passes
+
+An `audit` item runs checks and confirms a result. Its `Expected paths` name the report it writes, or `None` when it produces no artifact. A no-output audit must be **side-effect-free and safe to re-run**: the driver re-runs it from the first item on re-invocation, with no commit to skip it. Its review is a human result-confirmation.
+
+### Spikes
+
+A `spike` records a finding. Route its build by the question: `han-coding:investigate` for a named symptom with a codebase root cause, `han-core:research` for an open-ended question (the default), a `general-purpose` agent for a quick single-read probe. It names the finding file in `Expected paths` (never `None`). Its review is a human soundness read (recorded, non-empty, answers the question), independent of the build's `AFK`/`HITL`.
 
 ### Non-han skills
 
@@ -61,4 +75,5 @@ On an override:
 - Re-derive the item's implementation and review classification: from Table 1 for a han skill, or from the operator's declaration for a non-han skill (defaulting to `HITL`). A required pre-work decision the item already needs is unaffected by a skill override.
 - **Flag a mismatch** when the override's skill does not match the item's nature (for example, `tdd` on a non-testable deliverable, or any skill on a deliverable of a different kind). Honor it, because the operator has the final say, but flag it in the breakdown.
 - **An override naming an uninstalled skill** is treated like a not-installed best-fit: the item becomes bare and the override is kept as a recommendation, a distinct outcome from an honored mismatch.
+- **Refuse an override that produces an invalid marker combination.** The driver refuses `Expected paths: None` on a non-`audit` item, an `AFK` review on an `audit` or `None` item, and a `` `none`, AFK `` build. Do not write one: decline the offending field, restore the catalog-derived value, and name the declined override and the conflict in the breakdown, never transforming the item's `Type` to fit.
 - **Report how each override resolved** (applied to which item, unmatched, or ambiguous across items). Never drop an override silently.
