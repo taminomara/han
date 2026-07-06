@@ -182,26 +182,39 @@ committed.
 
 ### 2.2 Set up
 
-After the user confirms, mutate the repository, in this order. If any
-step fails (the branch cannot be created, the commit is rejected by a hook),
-report exactly what failed and stop before processing any item.
+After the user confirms, mutate the repository. If any step fails (the branch
+cannot be created, a commit is rejected by a hook), report exactly what failed
+and stop before processing any item.
 
-1. Create the dedicated branch off the base resolved in Step 1.6. If branch
+Detect the commit convention: read CLAUDE.md or `project-discovery.md` for a
+stated convention; default to Conventional Commits (`type(scope): subject`) when
+none is stated. Then fork on the Step 1.7 verdict.
+
+**On a fresh run,** in this order:
+
+1. Create the dedicated branch off the base resolved in Step 1.6. If the branch
    already exists, switch to it.
 2. Create the driver's artifact directory and make it self-ignoring: create
-   `.implement-work-items/` and write a `.gitignore` there whose only line is `*`.
-3. Detect the commit convention: read CLAUDE.md or `project-discovery.md` for a
-   stated convention; default to Conventional Commits (`type(scope): subject`)
-   when none is stated.
-4. If any planning artifacts (1.4) are uncommitted, commit them as the first
-   commit, staged explicitly by path.
-5. Initialize the **work-state file** `.implement-work-items/state.json`. For each
+   `.implement-work-items/` and write its `.gitignore` as two lines — `*` then
+   `!progress.md` — so `progress.md` is tracked while `state.json` and the review
+   records stay ignored.
+3. Write the **opening entry** to `.implement-work-items/progress.md`: the run's
+   effective configuration (gate threshold, fix-loop cap, build/fix model, branch,
+   verification configuration) and the work-items file's normalized
+   repo-root-relative path. Commit it together with any uncommitted planning
+   artifacts (1.4) as one commit, staged explicitly by path, following the detected
+   convention and carrying the trailer `Implement-Work-Items-Run: <normalized path>`.
+4. Initialize the **work-state file** `.implement-work-items/state.json`. For each
    item `N`, save its state and `fix-round` counter:
    `{"W-1": {"state": "pending", "fix-round": 0, "scope-baseline": null, "decision": null, "commit-range": null}, ...}`.
    If jq is available, you can use it to query or modify this file without full re-read:
    `cp -f state.json state.json.bak && jq '."W-1".state = "build"' state.json.bak > state.json`.
-6. Use `TaskCreate` to set up a task for each work item (visual help for user).
+5. Use `TaskCreate` to set up a task for each work item (visual help for user).
    Use template: `W-X of Y: title`.
+
+**On a resume,** switch to the existing run branch. Do not branch off the base,
+commit planning artifacts, or write an opening entry: the run's branch and record
+already exist.
 
 ## Step 3: Per-Item Loop
 
