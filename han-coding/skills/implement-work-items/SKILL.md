@@ -81,26 +81,7 @@ links in its preamble (the intro paragraph and any Shared reference artifacts
 section) as its context. Parse those links from the preamble. Source files
 the work items target are not included in context.
 
-### 1.5 Confirm a clean tree and green suite
-
-From the script's uncommitted-file list, treat the run's planning artifacts
-(1.4) and the driver's own `.implement-work-items/` directory as allowed. If any
-other file is uncommitted, halt and tell the user to commit or stash it
-first, otherwise extra files might be folded into the first commit.
-
-Where verification commands resolved, run them once now and confirm the suite is
-green. If it is red, halt: the driver cannot tell newly introduced breakage
-from pre-existing breakage, so name the remedy (get the suite green, or narrow
-the verification command to exclude the known-failing tests, then re-invoke). In
-scope-check-only mode there is no suite to run, so skip this check.
-
-### 1.6 Refuse a prior-run branch
-
-Check whether the target branch already exists and carries a prior run's commits.
-If the branch does not exist yet, or it carries no prior commits, this check passes.
-Otherwise, halt and direct the user to a fresh branch.
-
-### 1.7 Validate the work items
+### 1.5 Validate the work items
 
 Parse the work items from the file: each heading of the form `## <W-N>`
 begins an item whose body runs to the next heading. Then validate, halting
@@ -133,7 +114,7 @@ on the first failure with the offending items named:
 Build the run order as a topological sort of the graph, preserving the file's
 order wherever the graph allows it.
 
-### 1.8 Resolve the base branch
+### 1.6 Resolve the base branch
 
 Run `git fetch --all`, then resolve the base the run will branch from, to show
 in the preview. Prefer, in order of freshness: a local `main` or `master`;
@@ -141,6 +122,46 @@ then `origin/main`, `origin/master`, `upstream/main`, or `upstream/master`. Neve
 default to the current HEAD: the skill may be invoked from arbitrary git state.
 If none of those bases exist, or the intended base is genuinely ambiguous,
 ask the user which base to branch from before proceeding.
+
+### 1.7 Classify the invocation
+
+With the work-items path (1.2) and the base (1.6) resolved, classify this
+invocation. Run
+`${CLAUDE_SKILL_DIR}/scripts/scan-run-history.sh <work-items-path> <base-ref>`,
+passing the resolved work-items path repo-root-relative and the base from 1.6,
+and read its `classification:` line. Branch on it:
+
+- **fresh** — the branch carries no prior run commits. Proceed as a fresh run:
+  the clean-tree gate (1.8) applies in full, then setup (Step 2).
+- **resume** — the branch carries this run's progress record. Enter the
+  cross-session resume path: run the
+  [re-grounding routine](./references/re-grounding-routine.md), then **announce
+  the concrete next action** — the specific next item, the phase it resumes at,
+  and the disposition of any in-progress item — and **wait for the operator's
+  go-ahead before the first build, discard, or durable write.**
+- **refuse** — the branch carries commits but no run record for this file: a
+  foreign base. Halt and direct the user to a fresh branch.
+- **no-base** — the base did not resolve to a commit. Surface it and ask the
+  user which base to branch from before proceeding, rather than continuing.
+
+### 1.8 Confirm a clean tree and green suite
+
+On a **fresh** run, from the script's uncommitted-file
+list, treat the run's planning artifacts (1.4) and the driver's own
+`.implement-work-items/` directory as allowed. If any other file is uncommitted,
+halt and tell the user to commit or stash it first, otherwise extra files might
+be folded into the first commit.
+
+Where verification commands resolved, run them once now and confirm the suite is
+green. If it is red, halt: the driver cannot tell newly introduced breakage
+from pre-existing breakage, so name the remedy (get the suite green, or narrow
+the verification command to exclude the known-failing tests, then re-invoke). In
+scope-check-only mode there is no suite to run, so skip this check.
+
+On a **resume**, the single in-progress item's uncommitted work is the one
+allowed exception to this precondition: the gate does not refuse that expected
+dirty tree. Its green-suite re-check is re-established after that item's work is
+inspected.
 
 ## Step 2: Confirm the Plan, then Set Up
 
@@ -165,7 +186,7 @@ After the user confirms, mutate the repository, in this order. If any
 step fails (the branch cannot be created, the commit is rejected by a hook),
 report exactly what failed and stop before processing any item.
 
-1. Create the dedicated branch off the base resolved in Step 1.8. If branch
+1. Create the dedicated branch off the base resolved in Step 1.6. If branch
    already exists, switch to it.
 2. Create the driver's artifact directory and make it self-ignoring: create
    `.implement-work-items/` and write a `.gitignore` there whose only line is `*`.
