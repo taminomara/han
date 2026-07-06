@@ -27,7 +27,7 @@ dispatching a review sub-agent.
    review and evaluates the gate.
 5. Write the durable record at `.implement-work-items/reviews/<W-N>-iter<fix-round>.md`,
    even when clean ("none at or above the gate threshold").
-6. Re-ground before continuing.
+6. Re-ground: run [re-grounding-routine.md](./re-grounding-routine.md) before continuing.
 
 Each review round writes a fresh verdict and durable record. The fix agent reads
 only the current round, so a retracted finding is not re-chased.

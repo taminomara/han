@@ -16,9 +16,7 @@ the `Skill` tool; the user runs the skill in their own session.
 
 1. Suggest that the user either `/compact` current session or `/rewind` to the
    point where interactive build started, using the "summarize to here" option.
-2. Re-ground yourself: reload this skill if it seems truncated;
-   re-read `.implement-work-items/state.json` and other relevant files that you need;
-   run `git status`.
+2. Re-ground: run [re-grounding-routine.md](./re-grounding-routine.md).
 3. Continue at step **2. Verify** in the build/verify/review loop.
 
 ## Adopting the skill's own commits
