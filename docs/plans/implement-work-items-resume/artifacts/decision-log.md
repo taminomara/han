@@ -2,6 +2,8 @@
 
 This file records every decision settled while specifying the resume, halt-recovery, and re-grounding feature for the work-item driver (`implement-work-items`). Behavioral statements live in [../feature-specification.md](../feature-specification.md); this file captures the history, rationale, evidence, and rejected alternatives. Decisions D1–D13 were settled in the interview; D15–D21 were added or reshaped by the review team (see [team-findings.md](team-findings.md)).
 
+**Post-freeze sync note:** this log was written at commit `92fd266`, before the skill gained non-code `audit`/`spike` items and no-output completion (`done-no-commit`, no code commit). The behavioral spec was later reconciled with those item types by `iterative-plan-review` (see [review-findings.md](review-findings.md) and the spec's Review History). Where a decision here states that a done entry "references the item's code commit" (D2, D13, D16), the reconciled spec adds a **no-commit done outcome** for a no-output `audit`; these decisions stand as written for output-producing items.
+
 ## Trivial decisions
 
 - D14: Output folder — the spec and artifacts are written to `docs/plans/implement-work-items-resume/`, alongside the untouched prior over-scoped attempt at `docs/plans/autonomous-implementation-driver/`. — Referenced in spec: — (process decision, not a spec behavior).
