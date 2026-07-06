@@ -117,7 +117,7 @@ on the first failure with the offending items named:
   is `yes` or `no`. Every named implementation skill or sub-agent must be installed
   and invocable (`general-purpose` is a built-in agent, always available). A bare
   `none` implementation needs no skill and is drivable as a free-form foreground
-  build; likewise a bare `none` review is a free-form human read. A `` `none`, AFK ``
+  build; likewise a bare `none` review is a free-form human read. A `none`, AFK
   build is a refusal: a bare `none` build is always foreground.
 - **Type and no-output guards.** Read each item's `Type` (absent means
   `deliverable`, so older files drive unchanged); a present value outside

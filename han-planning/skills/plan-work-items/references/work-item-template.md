@@ -37,9 +37,9 @@ Each work item in `work-items.md` uses this template. Required fields appear in 
 
 **Requires pre-work decisions.** `yes` if a human judgment statable in a single sentence is required before work starts, otherwise `no`. A record-worthy decision instead becomes an ADR this item depends on; one needing investigation becomes a spike it depends on. Required. `yes` can be accompanied by one clarifying sentence.
 
-**Suggested implementation.** The skill or agent that should build this item, and whether it can run unattended. Required. Choose it with [deliverable-skill-catalog.md](./deliverable-skill-catalog.md). Example: `` `han-coding:tdd`, AFK. ``.
+**Suggested implementation.** The skill or agent that should build this item, and whether it can run unattended. Required. Choose it with [deliverable-skill-catalog.md](./deliverable-skill-catalog.md). Example: `han-coding:tdd`, AFK.
 
-**Suggested review.** The skill or agent that should review this item, comes from deliverable-skill-catalog as well. Required. Example: `` `han-coding:code-review`, AFK. ``.
+**Suggested review.** The skill or agent that should review this item, comes from deliverable-skill-catalog as well. Required. Example: `han-coding:code-review`, AFK.
 
 **Expected paths.**
 - `<repo-root-relative path this work item creates or modifies>`. One path per bullet, never absolute or a cross-repository URL. A rename lists both the old and the new path. Required. An `audit` that produces no files declares `**Expected paths.** None.`

@@ -61,7 +61,7 @@ A non-han skill's `AFK`/`HITL` are **declared by the operator**, defaulting to `
 
 ### Installed-skill detection
 
-User can be missing some skills or agents listed in table 1. Before committing to one, verify that it is installed. If not, fall back to an installed best-fit, and record uninstalled alternative next to it: ``none, HITL (or install and use `han-plugin-builder:skill-builder`, HITL)``.
+User can be missing some skills or agents listed in table 1. Before committing to one, verify that it is installed. If not, fall back to an installed best-fit, and record uninstalled alternative next to it: none, HITL (or install and use `han-plugin-builder:skill-builder`, HITL).
 
 ## Overrides
 
@@ -75,5 +75,5 @@ On an override:
 - Re-derive the item's implementation and review classification: from Table 1 for a han skill, or from the operator's declaration for a non-han skill (defaulting to `HITL`). A required pre-work decision the item already needs is unaffected by a skill override.
 - **Flag a mismatch** when the override's skill does not match the item's nature (for example, `tdd` on a non-testable deliverable, or any skill on a deliverable of a different kind). Honor it, because the operator has the final say, but flag it in the breakdown.
 - **An override naming an uninstalled skill** is treated like a not-installed best-fit: the item becomes bare and the override is kept as a recommendation, a distinct outcome from an honored mismatch.
-- **Refuse an override that produces an invalid marker combination.** The driver refuses `Expected paths: None` on a non-`audit` item, an `AFK` review on an `audit` item or any item declaring `Expected paths: None`, and a `` `none`, AFK `` build. Do not write one: decline the offending field, restore the catalog-derived value, and name the declined override and the conflict in the breakdown, never transforming the item's `Type` to fit.
+- **Refuse an override that produces an invalid marker combination.** The driver refuses `Expected paths: None` on a non-`audit` item, an `AFK` review on an `audit` item or any item declaring `Expected paths: None`, and a `none`, AFK build. Do not write one: decline the offending field, restore the catalog-derived value, and name the declined override and the conflict in the breakdown, never transforming the item's `Type` to fit.
 - **Report how each override resolved** (applied to which item, unmatched, or ambiguous across items). Never drop an override silently.
