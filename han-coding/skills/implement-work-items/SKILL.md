@@ -131,14 +131,10 @@ invocation. Run
 passing the resolved work-items path repo-root-relative and the base from 1.6,
 and read its `classification:` line. Branch on it:
 
-- **fresh** — the branch carries no prior run commits. Proceed as a fresh run:
-  the clean-tree gate (1.8) applies in full, then setup (Step 2).
-- **resume** — the branch carries this run's progress record. Enter the
-  cross-session resume path: run the
-  [re-grounding routine](./references/re-grounding-routine.md), then **announce
-  the concrete next action** — the specific next item, the phase it resumes at,
-  and the disposition of any in-progress item — and **wait for the operator's
-  go-ahead before the first build, discard, or durable write.**
+- **fresh** — the branch carries no prior run commits; drive it as a fresh run.
+- **resume** — the branch carries this run's progress record. Run the
+  [re-grounding routine](./references/re-grounding-routine.md) to reconstruct the
+  run state.
 - **refuse** — the branch carries commits but no run record for this file: a
   foreign base. Halt and direct the user to a fresh branch.
 - **no-base** — the base did not resolve to a commit. Surface it and ask the
@@ -165,6 +161,9 @@ inspected.
 
 ## Step 2: Confirm the Plan, then Set Up
 
+Fork on the Step 1.7 verdict: a **fresh** run does 2.1 then 2.2; a **resume**
+does 2.3.
+
 ### 2.1 Preview and confirm
 
 Show the user the run plan in plain language: the effective gate threshold,
@@ -188,9 +187,7 @@ and stop before processing any item.
 
 Detect the commit convention: read CLAUDE.md or `project-discovery.md` for a
 stated convention; default to Conventional Commits (`type(scope): subject`) when
-none is stated. Then fork on the Step 1.7 verdict.
-
-**On a fresh run,** in this order:
+none is stated. Then, in this order:
 
 1. Create the dedicated branch off the base resolved in Step 1.6. If the branch
    already exists, switch to it.
@@ -212,9 +209,74 @@ none is stated. Then fork on the Step 1.7 verdict.
 5. Use `TaskCreate` to set up a task for each work item (visual help for user).
    Use template: `W-X of Y: title`.
 
-**On a resume,** switch to the existing run branch. Do not branch off the base,
-commit planning artifacts, or write an opening entry: the run's branch and record
-already exist.
+### 2.3 Resume
+
+The re-grounding routine (Step 1.7) has reconstructed which items are done, in
+progress, or skipped and re-derived the dependency graph; work from that. Switch to
+the run branch — do not branch off the base, commit planning artifacts, or write an
+opening entry, since the branch and record already exist.
+
+Sync the task list to the reconstructed state: create a task per work item with
+`TaskCreate` and set each with `TaskUpdate` — done and skipped completed, the
+in-progress item in progress, the rest pending.
+
+Show the **resume summary**: the items done, the ones completed without a commit, the
+skipped ones, any in-progress item, the items remaining, and the restored run
+configuration and branch. Then **announce the concrete next action** — the specific
+next item, the phase it resumes at, and the disposition of any in-progress item — and
+**wait for the operator's go-ahead before the first build, discard, or durable
+write.** If the operator edited the tree before re-invoking, route to
+[Re-attempting after a fix](#re-attempting-after-a-fix).
+
+On the go-ahead, proceed from the first item that is neither done, skipped, nor
+blocked by a skipped dependency, and enter the Step 3 loop there. Done and skipped
+items are not rebuilt. A record in which every item is done — committed or completed
+without a commit — is an already-complete run: report it and start nothing.
+
+Before continuing past a clean between-items point, re-establish the verification
+baseline by re-running the resolved verification commands. A baseline that is now red — a
+done item regressed from between-session drift — is a distinct condition, not a floor to
+adopt: name the failing tests, note they were green when the done items committed, and
+offer a stop-or-abort choice.
+
+#### Resuming an in-progress item
+
+An item may carry a start-of-item entry with no terminal entry. Classify it by kind,
+foreground first, completing this inspection and any discard before re-establishing the
+baseline so leftover partial work cannot redden it:
+
+- **Foreground or HITL item.** Re-verify and re-review before any forward-reconcile.
+  Surface its commits and its uncommitted diff since the start-of-item entry as
+  recognition support, then offer to re-drive it or — if the operator confirms the shown
+  work is complete — resume at Step 3.3 **2. Verify**. Never discard its hand-built work.
+- **No-output `audit`.** Re-run the audit (constrained to side-effect-free checks) and
+  re-ask the operator to confirm, then record it done through Step 3.4 (the no-commit-done
+  outcome). Never forward-reconcile it from a clean tree: a clean tree does not prove the
+  confirmation happened.
+- **Output (AFK) item.** Check whether its code already landed — a gate-cleared commit
+  with the item-id trailer in the start-of-item-to-HEAD range, changed-file set in scope,
+  clean tree. If so, forward-reconcile: record the missing done entry (commit
+  `progress.md` per [durable-record-protocol.md](./references/durable-record-protocol.md))
+  and advance. If a commit in that range reaches beyond the item's scope (foreign, or a
+  foreground pre-gate commit), surface-and-ask. If nothing landed, re-run verification
+  against the in-progress tree: keep and re-review (Step 3.3 **3. Review**) when it passes
+  in scope, else rebuild from the start-of-item entry.
+- Any state not positively classified as safe → surface-and-ask.
+
+#### Ledger and history disagree
+
+When the durable record and the current state disagree, or a state cannot be positively
+classified as safe, default-deny: never proceed on a guessed base or report done an item
+whose commit is gone. Surface the specific divergence with a one-line plain-language cause
+(the unmatched entries and why — the integrity table in
+[durable-record-protocol.md](./references/durable-record-protocol.md) classifies each),
+and offer one uniform, consequence-labeled option set with the safe option marked:
+
+- **Abort to reconcile** (safe) — stop so the operator reconciles by hand.
+- **Restart the run** — supersedes the prior record, so a later resume reads only the new run.
+- **Proceed from the first unmatched item** — offered only where the driver can show it is
+  safe; withheld, surfacing-and-asking instead, when the resumption point would fall before
+  a dependency or the record is internally inconsistent.
 
 ## Step 3: Per-Item Loop
 
@@ -350,19 +412,49 @@ present the halt using this frame with five named parts, in order:
 2. **One-sentence reason.** The single condition that stopped the run, stated
    plainly.
 3. **Tree-state disclosure.** The uncommitted files belonging to the halting
-   item that remain in the working tree, and an explicit statement that the
-   items completed before the halt stay committed on the branch.
+   item that remain in the working tree; that the items completed before the halt
+   stay committed on the branch; and any no-output audits completed without a
+   commit, named separately rather than folded into the committed set.
 4. **Supporting evidence.** Which sub-agent or check raised it, the relevant
    spec or acceptance criteria, and the raw verification output or the residual
    findings. When the halt is review-gated, add a pointer to the durable review
    record at `.implement-work-items/reviews/<W-N>-iter<fix-round>.md`.
-5. **What to do next.** The run does not resume, so a re-invocation starts a
-   fresh run from the first item. Name a resolution suited to the halt kind
-   (amend the spec, fix the item, or build it by hand); state that a fresh
-   re-invocation must be on a clean tree and a branch that does not already
-   carry this run's commits (so the user commits or stashes the halting
-   item's work and starts a fresh branch, or cherry-picks the completed items
-   forward by hand); and name the branch and the commit range of the completed
-   items so the user can reference them (a no-output `audit` recorded
-   `done-no-commit` carries no commit and is not in that range; see
-   [no-output-completion.md](./references/no-output-completion.md)).
+5. **What to do next — the recovery menu.** Present the options below, filtered to
+   what the halting state allows, each option's consequence stated on its label:
+   - **Fix in place, then re-attempt** — the operator addresses the issue and the
+     driver re-attempts the item; see [Re-attempting after a fix](#re-attempting-after-a-fix).
+   - **Run more automated fix rounds** — a stated number of further rounds, re-entering
+     the fix loop (Step 3.3 **1. Build**) with no hand edits; offered only when the halt
+     was fix-cap-exceeded; within-session, so it does not survive a stop. Halts again if
+     the gate does not clear.
+   - **Skip this item, continue** — name the dependents the skip will strand before the
+     operator commits to it; on skip, return the working tree to the last clean committed
+     baseline (inspect and confirm before discarding, never discarding an interactive
+     item's hand-built work), add a skip entry and commit `progress.md` per
+     [durable-record-protocol.md](./references/durable-record-protocol.md), and continue
+     to the next item whose dependencies are met.
+   - **Stop the run (resumable)** — always present; all completed work is preserved
+     (output items committed; any no-output audits recorded without a commit, named
+     separately, per [no-output-completion.md](./references/no-output-completion.md)),
+     and the run resumes on a later invocation on the same file.
+
+   A rejected bookkeeping commit is a **marker-write failure**: surface it as its own
+   class, distinct from a code-commit failure (which routes through the fix loop, Step
+   3.4), and stop resumably — only **Stop the run** applies.
+
+### Re-attempting after a fix
+
+Show what changed since the item's start-of-item entry — the working tree, and the
+item's text if the item itself was edited — then offer two non-destructive paths, each
+labeled with what it does to the operator's edits:
+
+- **Re-check as-is** — re-verify and re-review the current tree with no build. Covers a
+  hand-edited code fix and an environment, dependency, or flake fix. Never rebuilds away
+  the operator's edits.
+- **Build further** — dispatch a build sub-agent that continues from the current tree
+  (never resetting the operator's edits), with the changed item and the residual findings
+  as context, then verify and review.
+
+A manual fix does not consume an automated fix-round. On clear, record the item done
+(Step 3.4) — or the no-commit-done outcome for a no-output `audit`; if it does not clear,
+return to the recovery menu.
