@@ -8,7 +8,8 @@ dispatching a review sub-agent.
 ## Capture
 
 1. Point the user at the item's change — everything since `scope-baseline`, committed
-   or not — the spec sections it references, and the files outside `Expected paths`, so
+   or not, excluding the driver's `.implement-work-items/` — the spec sections it
+   references, and the files outside `Expected paths`, so
    they judge scope as well as quality. A change beyond the item's work is a scope
    finding. For a no-output item (`Expected paths: None`) there is no change to read:
    ask the user to confirm the checks ran and the result is sound (the coverage
