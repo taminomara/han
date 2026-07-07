@@ -198,12 +198,12 @@ none is stated. Then fork on the Step 1.7 verdict.
    `.implement-work-items/` and write its `.gitignore` as two lines — `*` then
    `!progress.md` — so `progress.md` is tracked while `state.json` and the review
    records stay ignored.
-3. Write the **opening entry** to `.implement-work-items/progress.md`: the run's
-   effective configuration (gate threshold, fix-loop cap, build/fix model, branch,
-   verification configuration) and the work-items file's normalized
-   repo-root-relative path. Commit it together with any uncommitted planning
-   artifacts (1.4) as one commit, staged explicitly by path, following the detected
-   convention and carrying the trailer `Implement-Work-Items-Run: <normalized path>`.
+3. Write the **opening entry** to `.implement-work-items/progress.md` and commit it
+   per [durable-record-protocol.md](./references/durable-record-protocol.md). The
+   opening entry carries the run's effective configuration (gate threshold, fix-loop
+   cap, build/fix model, base, branch, verification configuration) and the work-items
+   file's normalized repo-root-relative path; co-commit it with any uncommitted planning
+   artifacts (1.4) as one commit, so a failed opening leaves an empty fresh branch.
 4. Initialize the **work-state file** `.implement-work-items/state.json`. For each
    item `N`, save its state and `fix-round` counter:
    `{"W-1": {"state": "pending", "fix-round": 0, "scope-baseline": null, "decision": null, "commit-range": null}, ...}`.
@@ -224,8 +224,12 @@ Process items one at a time in run order. For each item, run the following loop:
 
 Read next item from work-items. Use `TaskUpdate` tool to set item's task status
 to `in_progress`. Assert a clean working tree (only `.implement-work-items/`
-allowed); a prior no-output item's stray files halt here. Save current commit
-`git log HEAD -n1 --format='format:%H'` as item's `"scope-baseline"`.
+allowed); a prior no-output item's stray files halt here.
+
+Before any build, add a **start-of-item entry** for the item and commit `progress.md`
+per [durable-record-protocol.md](./references/durable-record-protocol.md). That commit
+is the item's changed-file-set baseline: record its hash as the item's `scope-baseline`
+in `state.json`. A rejected bookkeeping commit is a marker-write failure — see 3.4.
 
 ### 3.2 Decide
 
@@ -291,7 +295,7 @@ verification counts as passed. A failed verification blocks the gate on its own,
 verdict required.
 
 - **Cleared:** Set item's state in `state.json` to `"commit"`, then leave the inner loop
-  and go to Commit (3.4).
+  and go to **Record the item done** (3.4).
 - **Needs a human decision:** when the review verdict escalates an issue a fix round
   cannot resolve (the scope or approach must change for the feature to work or be
   secure, an unforeseen architectural problem, or an unresolvable RAID item), halt
@@ -300,31 +304,31 @@ verdict required.
   exceeds `--fix-cap`, halt. Otherwise set its state to `"build"` and go to step
   **1. Build**, passing review findings or verification failure message to the builder.
 
-### 3.4 Commit
+### 3.4 Record the item done
 
-For a no-output `audit` (`Expected paths: None`), do not commit: record it per
-[no-output-completion.md](./references/no-output-completion.md) (assert a clean tree,
-set `done-no-commit`, label the summary), then skip to the next item.
-Otherwise commit the item as one clean commit following the detected convention, staging by
-path the files changed since `scope-baseline` (never `git add -A`), never the driver's
-artifacts. Review cleared these as in scope and the tree was clean at item start, so
-nothing out-of-scope is left behind for the next item. When a foreground build already
-committed part or all of the item's work, keep those commits and commit only the
-uncommitted remainder, per
-[foreground-handoff-protocol.md](./references/foreground-handoff-protocol.md).
+When an item clears its gate, record it done in this order:
 
-If a pre-commit hook fails the commit, look at what it reported:
+1. **Code commit.** If the work item produced code, commit it as one clean commit
+   following the detected convention (staged by path since `scope-baseline`, never
+   `git add -A`, never `.implement-work-items/`, carrying `Implement-Work-Items-Item:
+   <W-N>`); a no-output `audit` produces none, so skip this step. When a foreground
+   build already committed part or all of the item's work, keep those commits and commit
+   only the uncommitted remainder (which carries the item-id trailer), per
+   [foreground-handoff-protocol.md](./references/foreground-handoff-protocol.md).
+2. **Progress entry.** Add a done entry (or, for a no-output `audit`, a no-commit-done
+   entry per [no-output-completion.md](./references/no-output-completion.md)) and commit
+   `progress.md` per [durable-record-protocol.md](./references/durable-record-protocol.md),
+   after any code commit.
+3. **Mark done.** Set the item's state in `state.json` to `"done"` (`"done-no-commit"`
+   for a no-output audit).
 
-- **Trivial and auto-fixable** — a formatter or auto-fixing linter rewrote files, or
-  the fix is a one-liner the orchestrator can make directly: apply it (re-stage the
-  hook's own edits, or run the project's formatter), then retry the commit once. If it
-  passes, continue.
-- **Anything else, or the retry still fails** — treat it as a gate not cleared: bump
-  the `fix-round` counter in `state.json`; if `fix-round` now exceeds `--fix-cap`, halt;
-  otherwise set its state to `"build"` and return to step **1. Build**, passing the
-  hook's output to the builder.
-
-After a successful commit, set item's state in `state.json` to `"done"`.
+Keep the code-commit and bookkeeping-commit failure paths separate. A rejected **code**
+commit is a gate not cleared: re-stage the formatter's own edits and retry the commit
+once; on anything else, or a still-failing retry, bump the `fix-round` counter in
+`state.json` and return to the Build step (3.3), passing the hook's output to the
+builder, halting once `fix-round` exceeds `--fix-cap`. A rejected **bookkeeping** commit
+is a marker-write failure: surface it and stop resumably through the Halt Procedure,
+never the fix loop.
 
 ## Step 4: Completion Summary
 

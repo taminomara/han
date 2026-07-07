@@ -14,9 +14,8 @@ context or that may be stale:
    of a skipped item is not picked up.
 3. **Re-read the working tree** (`git status`, and the diff since the in-progress
    item's `scope-baseline` where one is in flight).
-4. **Reload-instructions** (reusable sub-step): re-read the driver's own instructions —
-   this SKILL.md and any reference in flight — reloading any that read as truncated.
-   The commit-boundary self-check in Step 3 reuses this sub-step.
+4. **Reload-instructions**: re-read the driver's own instructions — this SKILL.md and
+   any reference in flight — reloading any that read as truncated.
 
 ## State store
 
