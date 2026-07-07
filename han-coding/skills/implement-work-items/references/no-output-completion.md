@@ -1,7 +1,7 @@
 # No-output completion
 
 An `audit` item that declared `Expected paths: None` and changed no files
-completes without a commit. This file holds the mechanics the driver's Step 3.4,
+completes without a code commit. This file holds the mechanics the driver's Step 3.4,
 Step 4, and Halt Procedure point to.
 
 ## Completing a no-output item
@@ -10,8 +10,10 @@ Step 4, and Halt Procedure point to.
    allowed). If a file was left despite `Expected paths: None`, the item did produce
    output: do not record it no-commit. Halt through the Halt Procedure with the stray
    file named, so it is never silently dropped or carried to the next item.
-2. Skip the commit. Set the item's state to `done-no-commit` in `state.json`, a
-   distinct terminal state so re-grounding never mistakes it for `pending`.
+2. Make no code commit. Record the no-commit-done entry to `progress.md` and commit it
+   per [durable-record-protocol.md](./durable-record-protocol.md), then set the item's
+   state to `done-no-commit` in `state.json` — a distinct terminal state so re-grounding
+   never mistakes it for `pending`.
 
 ## Reporting
 
