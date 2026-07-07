@@ -2,7 +2,7 @@
 
 ## Comparison Direction
 
-Current state: feature specification at `docs/plans/autonomous-driver-hitl-support/feature-specification.md` with its artifacts `artifacts/decision-log.md` and `artifacts/feature-technical-notes.md`. Desired state: (a) the happy-path flowchart provided in the prompt, and (b) the research report `docs/plans/per-item-skill-selection/research/reviewing-non-code-work-items.md`.
+Current state: feature specification at `docs/plans/autonomous-driver-hitl-support/feature-specification.md` with its artifacts `artifacts/decision-log.md` and `artifacts/feature-technical-notes.md`. Desired state: (a) the happy-path flowchart provided in the prompt, and (b) the research report `docs/plans/autonomous-driver-per-item-skill-selection/research/reviewing-non-code-work-items.md`.
 
 Default comparison direction used: current state toward desired state.
 

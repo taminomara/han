@@ -1,6 +1,6 @@
 # Feature Specification: Autonomous Driver — Core Loop
 
-A Han skill that takes a trusted set of work items and drives their implementation end to end, dispatching the building and the reviewing to sub-agents and committing each finished item, running fully unattended and halting the whole run on any item it cannot complete on its own. This is the first, deliberately narrow slice of the larger autonomous-implementation-driver design ([reference plan](../autonomous-implementation-driver/feature-specification.md)); the human-in-the-loop path, clean-stop, resume, compaction recovery, and the rich blocker menu are all deferred to follow-on features ([D1](artifacts/decision-log.md#d1-core-scope-and-outcome)).
+A Han skill that takes a trusted set of work items and drives their implementation end to end, dispatching the building and the reviewing to sub-agents and committing each finished item, running fully unattended and halting the whole run on any item it cannot complete on its own. This is the first, deliberately narrow slice of the larger autonomous-driver-overview design ([reference plan](../autonomous-driver-overview/feature-specification.md)); the human-in-the-loop path, clean-stop, resume, compaction recovery, and the rich blocker menu are all deferred to follow-on features ([D1](artifacts/decision-log.md#d1-core-scope-and-outcome)).
 
 ## Outcome
 
@@ -104,7 +104,7 @@ Given a trusted `work-items.md` and the committed spec or plan its items referen
 
 ## Deferred (YAGNI)
 
-Each item below is deferred not because it lacks evidence in the larger design, but because the operator has chosen to build this driver iteratively and ship the core loop first; every deferral names the follow-on feature that reopens it. The full rationale for each lives in the [reference plan](../autonomous-implementation-driver/feature-specification.md).
+Each item below is deferred not because it lacks evidence in the larger design, but because the operator has chosen to build this driver iteratively and ship the core loop first; every deferral names the follow-on feature that reopens it. The full rationale for each lives in the [reference plan](../autonomous-driver-overview/feature-specification.md).
 
 ### Human-in-the-loop items and interactive-skill items
 

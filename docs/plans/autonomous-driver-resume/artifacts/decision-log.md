@@ -6,7 +6,7 @@ This file records every decision settled while specifying the resume, halt-recov
 
 ## Trivial decisions
 
-- D14: Output folder — the spec and artifacts are written to `docs/plans/implement-work-items-resume/`, alongside the untouched prior over-scoped attempt at `docs/plans/autonomous-implementation-driver/`. — Referenced in spec: — (process decision, not a spec behavior).
+- D14: Output folder — the spec and artifacts are written to `docs/plans/autonomous-driver-resume/`, alongside the untouched prior over-scoped attempt at `docs/plans/autonomous-driver-overview/`. — Referenced in spec: — (process decision, not a spec behavior).
 
 ## Full decisions
 
@@ -56,7 +56,7 @@ This file records every decision settled while specifying the resume, halt-recov
 - **Question:** Which context-loss events must resume survive — only an explicit re-invocation, or also a mid-run auto-compaction with no re-invocation?
 - **Decision:** Recovery is driven only by the operator re-invoking the driver (a new session, or after fixing a halt) or steering it at the recovery menu. The driver carries no automatic mid-run compaction trigger; a mid-run auto-compaction that strands the run is recovered by re-invoking, and a truncated-but-proceeding driver is bounded by the commit-boundary self-check ([D18](#d18-commit-boundary-self-check)).
 - **Rationale:** A re-invocation reloads the full driver body and can re-ground from the durable record, covering both cases the operator asked for. Building an external trigger (a session-lifecycle hook plus a durable out-of-tree run-active marker) was the prior attempt's heaviest and most inconsistent machinery, and the operator chose to leave it out.
-- **Evidence:** User input (compaction decision). Prior attempt's re-grounding research (`docs/plans/autonomous-implementation-driver/research/re-grounding-after-compaction.md`) documents the hook-plus-git-config-marker design this declines.
+- **Evidence:** User input (compaction decision). Prior attempt's re-grounding research (`docs/plans/autonomous-driver-overview/research/re-grounding-after-compaction.md`) documents the hook-plus-git-config-marker design this declines.
 - **Rejected alternatives:**
   - Add a session-lifecycle hook plus a durable run-active marker so a mid-run compaction self-recovers — deferred (spec Deferred (YAGNI)) because re-invocation covers the asked-for cases far more simply.
 - **Linked technical notes:** —

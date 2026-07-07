@@ -7,7 +7,7 @@ Core Loop. Behavioral statements live in
 history, rationale, evidence, and rejected alternatives for each decision.
 
 This core loop is a deliberately narrow slice of the larger design in
-../../autonomous-implementation-driver/. Where a decision here is the descoped
+../../autonomous-driver-overview/. Where a decision here is the descoped
 counterpart of a reference-plan decision, the Evidence field cites that reference
 decision (e.g. "reference plan D3").
 -->
@@ -22,7 +22,7 @@ decision (e.g. "reference plan D3").
 
 - **Question:** What does this first slice of the driver do, for whom, and what does a successful run produce?
 - **Decision:** The skill takes a trusted `work-items.md` plus the committed spec or plan its items reference, and drives implementation end to end for **unattended, non-interactive items only** (building each item test-first, verifying it, reviewing it, fixing it to a gate, and committing it), offloading the build and the review to sub-agents. It runs fully unattended after a one-time plan confirmation and halts the whole run on any item it cannot complete on its own. The human-in-the-loop path, clean-stop, resume, compaction recovery, stall handling, and the operator-interactive blocker menu are out of scope for this core and are deferred to follow-on features.
-- **Rationale:** The full autonomous-implementation-driver design proved too broad to deliver as one feature. The operator has chosen an iterative build: ship the core loop first (the per-item build → verify → review → fix → commit cycle that is roughly 80% of the manual conducting work) under simplifying assumptions (no interruptions, no cancellation, no compaction, no stalls, and a trusted uncommitted work-state file), then layer the interaction, durability, and resilience surfaces in later features.
+- **Rationale:** The full autonomous-driver-overview design proved too broad to deliver as one feature. The operator has chosen an iterative build: ship the core loop first (the per-item build → verify → review → fix → commit cycle that is roughly 80% of the manual conducting work) under simplifying assumptions (no interruptions, no cancellation, no compaction, no stalls, and a trusted uncommitted work-state file), then layer the interaction, durability, and resilience surfaces in later features.
 - **Evidence:** Reference plan D1 (full scope and outcome) and its motivation (issue #96; the operator's manual-run feedback, a 7-item feature driven in 6 commits); operator direction in this planning session to plan only the core loop under the stated assumptions. `tdd` builds and tests but does not commit (`han-coding/skills/tdd/SKILL.md`); `code-review` audits changes (`han-coding/skills/code-review/SKILL.md`); `plan-work-items` produces the items (`han-planning/skills/plan-work-items/SKILL.md`).
 - **Rejected alternatives:**
   - Plan the full driver as one feature, rejected because it accumulated major findings across ~20 revisions and cannot be delivered as a single feature.

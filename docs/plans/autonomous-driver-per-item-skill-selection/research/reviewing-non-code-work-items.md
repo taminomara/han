@@ -189,8 +189,8 @@ The recommendation **stands with caveats**: the direction is sound and robust to
 | A12 | project-documentation content audit | `han-core/skills/project-documentation/SKILL.md:~82-90` | n/a | codebase | Step 6 dispatches content-auditor, restores Missing facts | corroborated |
 | A13 | project-documentation IA review | `han-core/skills/project-documentation/SKILL.md:~92-98` | n/a | codebase | Step 7 dispatches information-architect, applies edits | corroborated |
 | A14 | Deliverable-skill catalog | `han-planning/skills/plan-work-items/references/deliverable-skill-catalog.md:~14-28` | n/a | codebase | Proposed deliverable→(impl, review) mapping with AFK/HITL | contradicted by A16 (V1, V2, V4) |
-| A15 | Feature spec: three signals | `docs/plans/per-item-skill-selection/feature-specification.md:~1-8` | n/a | codebase | Three per-item autonomy signals replace the single Type marker | corroborated |
-| A16 | Feature spec: autonomy derivation | `docs/plans/per-item-skill-selection/feature-specification.md:~26` | n/a | codebase | ADR/coding-standard/runbook/refactor/builders "stop for a human mid-run" | corroborated (verified V1); contradicts A14 |
+| A15 | Feature spec: three signals | `docs/plans/autonomous-driver-per-item-skill-selection/feature-specification.md:~1-8` | n/a | codebase | Three per-item autonomy signals replace the single Type marker | corroborated |
+| A16 | Feature spec: autonomy derivation | `docs/plans/autonomous-driver-per-item-skill-selection/feature-specification.md:~26` | n/a | codebase | ADR/coding-standard/runbook/refactor/builders "stop for a human mid-run" | corroborated (verified V1); contradicts A14 |
 | A17 | skill-builder interview | `han-plugin-builder/skills/skill-builder/SKILL.md:~68-85` | n/a | codebase | Interview-driven, one question at a time (HITL build) | corroborated |
 | A18 | Driver description | `han-coding/skills/implement-work-items/SKILL.md:~3-8` | n/a | codebase | Unattended `tdd` + `code-review` loop | corroborated |
 | A19 | refactor is HITL | `han-coding/skills/refactor/SKILL.md:~26-56` | n/a | codebase | HITL via conditional scope-spread halt (not target-binding) | partially refuted (V6) |
@@ -296,7 +296,7 @@ The recommendation **stands with caveats**: the direction is sound and robust to
 
 ### A16: Feature spec autonomy derivation — recommendation-bearing
 
-- **Link / location:** `docs/plans/per-item-skill-selection/feature-specification.md:~26`
+- **Link / location:** `docs/plans/autonomous-driver-per-item-skill-selection/feature-specification.md:~26`
 - **Retrieved:** n/a
 - **Trust class:** codebase (trusted current-state anchor)
 - **Summary:** States that `tdd`, `project-documentation`, and `guidance` run unattended while `refactor`, `skill-builder`, `agent-builder`, `architectural-decision-record`, `runbook`, and `coding-standard` "stop for a human mid-run," and that review autonomy is derived per reviewer. Direct inspection of the skills confirms this over the catalog's AFK labels.

@@ -10,8 +10,8 @@
 
 - **Question:** Which of the larger driver design's deferred concerns does this chunk add to `implement-work-items`, and which stay deferred?
 - **Decision:** This chunk adds exactly the operator's flowchart plus review normalization: the pre-work-decision gate, the foreground interactive/free-form build, the human review, non-code AFK build-and-review support, in-session state catch-up after inline work, and the bounded fix loop that halts on exhaustion. Cross-session resume, mid-run clean-stop, compaction-survival re-grounding, the rich blocker menu, skip/defer, and repair-upstream stay deferred.
-- **Rationale:** The original `autonomous-implementation-driver` spec tried to scope all of these at once and became too complex and inconsistent; the operator is deliberately moving in small chunks. Keeping this chunk to the happy path plus the one hard problem (review-output consistency) is what keeps it buildable.
-- **Evidence:** user input; the shipped core loop (`han-coding/skills/implement-work-items/SKILL.md`) and its deferred list; the over-scoped reference plan (`docs/plans/autonomous-implementation-driver/feature-specification.md`).
+- **Rationale:** The original `autonomous-driver-overview` spec tried to scope all of these at once and became too complex and inconsistent; the operator is deliberately moving in small chunks. Keeping this chunk to the happy path plus the one hard problem (review-output consistency) is what keeps it buildable.
+- **Evidence:** user input; the shipped core loop (`han-coding/skills/implement-work-items/SKILL.md`) and its deferred list; the over-scoped reference plan (`docs/plans/autonomous-driver-overview/feature-specification.md`).
 - **Rejected alternatives:**
   - Pull resume and clean-stop into this chunk too — rejected because it re-creates the over-scoping that made the original plan unwieldy.
   - Defer review normalization to a later chunk — rejected because the operator explicitly wants the review-output inconsistency planned now.

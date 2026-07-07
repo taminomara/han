@@ -174,7 +174,7 @@ This is a single-threaded, one-item-at-a-time, local-git markdown driver: no con
 ### AFK-with-escalation dispatch instruction and escalate-and-resume
 
 - **Why deferred:** out of scope per spec D19 — an enhancement, not a prerequisite; the build-report contract does not gain a `blocked`-from-skill-gate path this feature, so an AFK spike gate halts recoverably rather than escalating cleanly.
-- **Reopen when:** the driver gains escalate-and-resume (the separate `implement-work-items-resume` feature).
+- **Reopen when:** the driver gains escalate-and-resume (the separate `autonomous-driver-resume` feature).
 - **Source:** spec D19; R1, edge-case-explorer.
 
 ### Automated test scaffolding and golden-file snapshots

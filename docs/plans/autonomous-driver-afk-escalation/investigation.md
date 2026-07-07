@@ -238,7 +238,7 @@ The spike's **review** is always `none, HITL` — a human soundness read, by pro
 
 ### E14: Design intent already names both promotion pieces and defers them (D19 / spec Out of Scope)
 
-- **Source:** `docs/plans/work-items-non-code-classification/artifacts/decision-log.md` (D19); `docs/plans/work-items-non-code-classification/feature-specification.md:104`
+- **Source:** `docs/plans/autonomous-driver-non-code-classification/artifacts/decision-log.md` (D19); `docs/plans/autonomous-driver-non-code-classification/feature-specification.md:104`
 - **Finding:**
   ```
   A build-dispatch instruction that maps a routed skill's operator-gates to a
@@ -302,7 +302,7 @@ The spike's **review** is always `none, HITL` — a human soundness read, by pro
 
 ### E20: The resume assumption is a real scoped follow-on, and this surface is explicitly deferred
 
-- **Source:** `docs/plans/autonomous-driver-core-loop/feature-specification.md:103,127-130`; `docs/plans/implement-work-items-resume/` (plan folder exists)
+- **Source:** `docs/plans/autonomous-driver-core-loop/feature-specification.md:103,127-130`; `docs/plans/autonomous-driver-resume/` (plan folder exists)
 - **Finding:**
   ```
   (l.103) The human-in-the-loop item path, interactive-skill items, the clean-stop
@@ -312,7 +312,7 @@ The spike's **review** is always `none, HITL` — a human soundness read, by pro
   (l.127) ### Resume across sessions and committed-ledger integrity
   (l.130) Reopen when: the follow-on feature that adds cross-session resume is planned ...
   ```
-- **Relevance:** Confirms the requester's "resume will land before merge" is a planned follow-on (there is already an `implement-work-items-resume` plan folder), so conditioning the effort estimate on it is grounded, not hypothetical. It also confirms that interactive-skill items and the blocker menu — the exact surface an `AFK`→`HITL` promotion belongs to — are a deliberately deferred follow-on, consistent with D19 (E14). The open question the validator probes is whether that resume design preserves a *mid-build* item position (so a resumed run re-dispatches the escalated spike rather than restarting from item 1).
+- **Relevance:** Confirms the requester's "resume will land before merge" is a planned follow-on (there is already an `autonomous-driver-resume` plan folder), so conditioning the effort estimate on it is grounded, not hypothetical. It also confirms that interactive-skill items and the blocker menu — the exact surface an `AFK`→`HITL` promotion belongs to — are a deliberately deferred follow-on, consistent with D19 (E14). The open question the validator probes is whether that resume design preserves a *mid-build* item position (so a resumed run re-dispatches the escalated spike rather than restarting from item 1).
 
 ## Validation Results
 
@@ -358,7 +358,7 @@ Two adversarial validators ran in parallel: one attacking the "happy-path AFK" c
 #### V6: Folding the answer back is a new recovery-menu interaction, not a wire-up; the answer is not persisted — PARTIALLY REFUTED
 
 - **Hypothesis:** Piece (b) lands in the resume path's existing plumbing.
-- **Investigation:** `implement-work-items-resume/feature-specification.md`'s "build further toward the item" carries a changed item and residual review findings — designed for code edits, not a question-answer. The `decision` state.json field is scoped to pre-work decisions; repurposing it would conflate. Per the resume spec's own treatment of within-session decisions, the answer is not durably recorded, so a cross-session resume re-asks.
+- **Investigation:** `autonomous-driver-resume/feature-specification.md`'s "build further toward the item" carries a changed item and residual review findings — designed for code edits, not a question-answer. The `decision` state.json field is scoped to pre-work decisions; repurposing it would conflate. Per the resume spec's own treatment of within-session decisions, the answer is not durably recorded, so a cross-session resume re-asks.
 - **Result:** Partially refuted.
 - **Impact:** Upgraded the resume-path change from "flagged, not owned" wire-up to a named third artifact; added the cross-session "re-ask" caveat (R5).
 
@@ -404,6 +404,6 @@ Two adversarial validators ran in parallel: one attacking the "happy-path AFK" c
 
 | Standard | Source | Applies To |
 |----------|--------|------------|
-| Producer↔driver marker vocabulary stays reconciled — every value the producer emits, the driver validates and routes the same way | `docs/plans/work-items-non-code-classification/feature-specification.md` (Coordinations) | The spike-dispatch instruction and any `ESCALATION` vocabulary change |
+| Producer↔driver marker vocabulary stays reconciled — every value the producer emits, the driver validates and routes the same way | `docs/plans/autonomous-driver-non-code-classification/feature-specification.md` (Coordinations) | The spike-dispatch instruction and any `ESCALATION` vocabulary change |
 | Writing voice — no em-dashes, direct second person, plainspoken | `docs/writing-voice.md` | All skill-text edits proposed above |
 | YAGNI applies to skill text and docs | `CLAUDE.md` (Conventions) | Keep the gate→blocked instruction to the gates that exist; do not pre-build terminal/resumable tagging unless the resume path consumes it |

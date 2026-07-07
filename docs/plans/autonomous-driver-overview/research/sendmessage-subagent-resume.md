@@ -1,6 +1,6 @@
 # Research: Can a sub-agent be resumed with context intact via `SendMessage`?
 
-Whether Claude Code's `SendMessage` tool — the mechanism the `Agent`/Task tool result points at for "continue this agent" — is a real, usable primitive for resuming a previously-spawned sub-agent without losing its context, and what it takes to enable it. Relevant to the autonomous-implementation-driver because the conductor would lean on exactly this primitive to hand findings back to a build sub-agent instead of dispatching a fresh one each time.
+Whether Claude Code's `SendMessage` tool — the mechanism the `Agent`/Task tool result points at for "continue this agent" — is a real, usable primitive for resuming a previously-spawned sub-agent without losing its context, and what it takes to enable it. Relevant to the autonomous-driver-overview because the conductor would lean on exactly this primitive to hand findings back to a build sub-agent instead of dispatching a fresh one each time.
 
 ## Summary
 

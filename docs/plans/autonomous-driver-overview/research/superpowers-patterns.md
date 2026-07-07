@@ -1,4 +1,4 @@
-# Research: What can the autonomous-implementation-driver borrow from superpowers (model derivation, scope gating, and more)?
+# Research: What can the autonomous-driver-overview borrow from superpowers (model derivation, scope gating, and more)?
 
 How the superpowers plugin (obra/superpowers, v6.0.3) derives the model for sub-agents and gates the scope/completion of a unit of work, plus other patterns worth borrowing for Han's planned autonomous work-item implementation driver. **Evidence mode: strict.**
 
