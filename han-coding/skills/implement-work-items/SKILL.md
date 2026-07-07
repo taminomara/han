@@ -382,7 +382,7 @@ When an item clears its gate, record it done in this order:
    `progress.md` per [durable-record-protocol.md](./references/durable-record-protocol.md),
    after any code commit.
 3. **Mark done.** Set the item's state in `state.json` to `"done"` (`"done-no-commit"`
-   for a no-output audit).
+   for a no-output audit), then use `UpdateTask` tool to mark task done.
 
 Keep the code-commit and bookkeeping-commit failure paths separate. A rejected **code**
 commit is a gate not cleared: re-stage the formatter's own edits and retry the commit
