@@ -378,7 +378,24 @@ finding at or above the threshold (scope findings included). In scope-check-only
 mode, verification counts as passed. A failed verification blocks the gate on its
 own, no verdict required.
 
-- **Cleared:** leave the inner loop and go to **Record the item done** (3.4).
+Before gating on a scope finding, resolve coherence spillover. A `SCOPE-<n>`
+finding on an **already-committed sibling file outside the item's expected paths**
+is a coherence-approval choice: surface the path(s) to the operator and offer
+**approve-as-intended** or **reject-as-scope-finding**.
+
+- On **approval**, record each path with
+  `${CLAUDE_SKILL_DIR}/scripts/write-run-record.sh block <record> coherence "<W-N>: <path>"`
+  and treat that finding as cleared. Later review rounds already receive the
+  approved paths and do not re-raise them, so the approval persists across rounds
+  and resume.
+- On **rejection**, it stays a scope finding routed through the normal not-cleared
+  fix loop.
+
+A scope finding that is not a coherence spillover — genuinely unrelated work, or a
+path the item's own expected paths predicted — is unaffected and gates as usual.
+
+- **Cleared:** address any below-threshold findings that genuinely matter (below),
+  then leave the inner loop and go to **Record the item done** (3.4).
 - **Needs a human decision:** when the review verdict escalates an issue a fix round
   cannot resolve (the scope or approach must change for the feature to work or be
   secure, an unforeseen architectural problem, or an unresolvable RAID item), halt
@@ -386,6 +403,28 @@ own, no verdict required.
 - **Not cleared:** bump the session fix-round counter. If it now exceeds `--fix-cap`,
   halt. Otherwise go to step **1. Build** for a fix round, passing the review
   findings or the verification-failure message to the builder.
+
+**Below-threshold judgement (on a clear, before 3.4).** The verdict carries only
+below-threshold counts; read the durable review record (its `DURABLE RECORD` path)
+for their detail. By your own judgement, address the ones that genuinely matter or
+deliberately leave the rest. For each finding, record its disposition at decision
+time with
+`${CLAUDE_SKILL_DIR}/scripts/write-run-record.sh block <record> below-threshold "<W-N>: <fixed|left> <id> (<why>)"`.
+
+Before committing any such fix, **re-run the available verification** (in
+scope-check-only mode, re-run the scope check). Then:
+
+- **Verification passes:** commit the fix as a fix-round iteration
+  (`Implement-Work-Items-Fixup: <W-N>`), per the 3.3 **1. Build** commit rules.
+- **Verification goes red:** do **not** commit the reddening fix BECAUSE a dirty,
+  failing tree must never reach the next dispatch. Either reset the working tree to
+  the item's last committed (gate-cleared) iteration, or route the finding into the
+  not-cleared fix loop (step **1. Build**); do not add rollback machinery beyond
+  that reset.
+
+A below-threshold finding that needs a scope or approach change a fix cannot make
+escalates through the Halt Procedure's recovery menu, never a silent fix or drop.
+When nothing below threshold is addressed, this is a no-op; go straight to 3.4.
 
 ### 3.4 Record the item done
 
