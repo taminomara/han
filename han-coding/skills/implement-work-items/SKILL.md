@@ -297,96 +297,100 @@ the running session and proceed. This runs once per item; skip it on a fix round
 
 ### 3.3 Build, verify, review loop
 
-**1. Build.** Set item's state in `state.json` to `"build"`, then route by the item's
-build marker:
+Per-item loop state — the loop phase and the fix-round counter — lives in the
+running session. Every build and fix iteration is committed; the driver never
+dispatches onto a dirty tree.
+
+**1. Build.** Route by the item's build marker.
 
 - **AFK build.** Dispatch a build sub-agent through `Agent` with the resolved
   `--model`: when the item's implementation is a skill, dispatch `general-purpose`
   and instruct it to run that skill on this item; when it names an agent, dispatch
-  that agent directly. Have it build against the item's `References` and the
-  committed spec or plan, and not commit. For a `spike` or a no-output `audit`,
-  give it the item's `Expected paths` as the output target: a `spike` writes its
-  finding there, and a no-output `audit` is told an empty file set is the
-  expected result. If work item required decisions, pass
-  resolution to the builder. On a fix round, also give it the previous iteration's
-  residual findings. Copy the
-  [build-report contract](./references/build-report-contract.md) verbatim;
-  parse the return fail-closed and apply the Halt Procedure on its halt conditions.
-- **HITL or `none` build.** Hand off to the user per
+  that agent directly. Construct the prompt by copying the **Shared baseline** plus
+  the **Build payload** from
+  [sub-agent-instructions.md](./references/sub-agent-instructions.md) verbatim,
+  substituting the run-scoped values (the item's implementation skill, the
+  accumulated corrections, and on a fix round the residual findings), and copy the
+  [build-report contract](./references/build-report-contract.md) verbatim. The
+  sub-agent does not commit. Parse the return fail-closed; apply the Halt Procedure
+  on its halt conditions.
+- **HITL or `none` build.** Hand off per
   [foreground-handoff-protocol.md](./references/foreground-handoff-protocol.md).
-  After interactive part finishes, re-ground and go to step **2. Verify**.
 
-**2. Verify.** Set item's state in `state.json` to `"verify"`, then verify
-builder's work: run the project's verification commands one at a time,
-distinguishing a command that **reports failures** from one that
-**fails to execute**.
+After the build (or the foreground edits) return, **commit the iteration**: stage
+by path since `scope-baseline` (never `git add -A`, never a `.implement-work-items/`
+path at any depth), carrying `Implement-Work-Items-Item: <W-N>` on the item's
+initial build commit and `Implement-Work-Items-Fixup: <W-N>` on a fix-round commit,
+per [durable-record-protocol.md](./references/durable-record-protocol.md). A no-output
+`audit` changes no files and has no iteration to commit.
 
-On red tests, go to step **4. Gate**. On test command failure, halt and inform
-the user of what went wrong.
+**2. Verify.** Verify the committed iteration by running the project's verification
+commands one at a time, distinguishing a command that **reports failures** from one
+that **fails to execute**.
 
-In scope-check-only mode there are no commands to run; skip this step and go to
-**3. Review**.
+On red tests, go to step **4. Gate**. On command failure, halt and inform the user
+of what went wrong. In scope-check-only mode there are no commands to run; skip this
+step and go to **3. Review**.
 
-**3. Review.** Set item's state in `state.json` to `"review"`, then route
-by the item's review marker:
+**3. Review.** Route by the item's review marker.
 
 - **AFK review.** Dispatch a review sub-agent: when the item's review is a skill
   (for example `han-coding:code-review`), dispatch `general-purpose` and instruct it
   to run that skill; when it names an agent (for example `han-core:content-auditor`
-  or `han-core:information-architect`), dispatch that agent directly. Have it review
-  the item's implementation and scope.
-  Give it the reference material, the scope-baseline commit hash, and the item's
-  expected paths, and copy the
-  [review-verdict contract](./references/review-verdict-contract.md) verbatim; it
-  computes the diff and judges scope itself.
-  Direct it to return only the normalized verdict and persist the record at
-  `.implement-work-items/reviews/<W-N>-iter<fix-round>.md`. Parse fail-closed;
-  an untrustworthy verdict halts. The user may opt into a pause per
+  or `han-core:information-architect`), dispatch that agent directly. Construct the
+  prompt by copying the **Shared baseline** plus the **Review payload** from
+  [sub-agent-instructions.md](./references/sub-agent-instructions.md) verbatim,
+  substituting the run-scoped values (the item's review skill, `scope-baseline`, the
+  expected paths, the already-approved coherence paths, and on a fix round the prior
+  committed iteration), and copy the
+  [review-verdict contract](./references/review-verdict-contract.md) verbatim. Direct
+  it to persist the record at `.implement-work-items/reviews/<W-N>-iter<fix-round>.md`
+  and return only the normalized verdict; parse fail-closed, and an untrustworthy
+  verdict halts. The user may opt into a pause per
   [human-review-capture.md](./references/human-review-capture.md).
 - **HITL or `none` review.** Capture the user's read into the same verdict per
   [human-review-capture.md](./references/human-review-capture.md).
-  After interactive part finishes, re-ground and go to step **4. Gate**.
 
-**4. Gate.** The item clears when verification passed and the verdict reports no finding
-at or above the threshold (scope findings included). In scope-check-only mode,
-verification counts as passed. A failed verification blocks the gate on its own, no
-verdict required.
+**4. Gate.** The item clears when verification passed and the verdict reports no
+finding at or above the threshold (scope findings included). In scope-check-only
+mode, verification counts as passed. A failed verification blocks the gate on its
+own, no verdict required.
 
-- **Cleared:** Set item's state in `state.json` to `"commit"`, then leave the inner loop
-  and go to **Record the item done** (3.4).
+- **Cleared:** leave the inner loop and go to **Record the item done** (3.4).
 - **Needs a human decision:** when the review verdict escalates an issue a fix round
   cannot resolve (the scope or approach must change for the feature to work or be
   secure, an unforeseen architectural problem, or an unresolvable RAID item), halt
   through the Halt Procedure instead of looping.
-- **Not cleared:** bump the `fix-round` counter in `state.json`. If `fix-round` now
-  exceeds `--fix-cap`, halt. Otherwise set its state to `"build"` and go to step
-  **1. Build**, passing review findings or verification failure message to the builder.
+- **Not cleared:** bump the session fix-round counter. If it now exceeds `--fix-cap`,
+  halt. Otherwise go to step **1. Build** for a fix round, passing the review
+  findings or the verification-failure message to the builder.
 
 ### 3.4 Record the item done
 
-When an item clears its gate, record it done in this order:
+The item's code is already committed as its iterations, so there is no separate clean
+commit. When an item clears its gate, record it done in this order:
 
-1. **Code commit.** If the work item produced code, commit it as one clean commit
-   following the detected convention (staged by path since `scope-baseline`, never
-   `git add -A`, never `.implement-work-items/`, carrying `Implement-Work-Items-Item:
-   <W-N>`); a no-output `audit` produces none, so skip this step. When a foreground
-   build already committed part or all of the item's work, keep those commits and commit
-   only the uncommitted remainder (which carries the item-id trailer), per
-   [foreground-handoff-protocol.md](./references/foreground-handoff-protocol.md).
-2. **Progress entry.** Add a done entry (or, for a no-output `audit`, a no-commit-done
-   entry per [no-output-completion.md](./references/no-output-completion.md)) and commit
-   `progress.md` per [durable-record-protocol.md](./references/durable-record-protocol.md),
-   after any code commit.
-3. **Mark done.** Set the item's state in `state.json` to `"done"` (`"done-no-commit"`
-   for a no-output audit), then use `UpdateTask` tool to mark task done.
+1. **Terminal entry.** Add the `done` entry (or, for a no-output `audit`, the
+   `no-commit-done` entry per
+   [no-output-completion.md](./references/no-output-completion.md)) with
+   `${CLAUDE_SKILL_DIR}/scripts/write-run-record.sh log <record> <done|no-commit-done> <W-N>`
+   and commit `progress.md` per
+   [durable-record-protocol.md](./references/durable-record-protocol.md). This
+   bookkeeping commit is the last write per item, after the item's code commits.
+2. **Mark done.** Update the session state and the task (`TaskUpdate`).
 
-Keep the code-commit and bookkeeping-commit failure paths separate. A rejected **code**
-commit is a gate not cleared: re-stage the formatter's own edits and retry the commit
-once; on anything else, or a still-failing retry, bump the `fix-round` counter in
-`state.json` and return to the Build step (3.3), passing the hook's output to the
-builder, halting once `fix-round` exceeds `--fix-cap`. A rejected **bookkeeping** commit
-is a marker-write failure: surface it and stop resumably through the Halt Procedure,
-never the fix loop.
+**Commit-failure rules.** Keep these two commit-failure classes distinct:
+
+- A rejected **AFK code-iteration** commit (a hook rejecting an AFK build or fix
+  output) is a gate not cleared: re-stage the formatter's own edits and retry the commit
+  once; on anything else, or a still-failing retry, treat it as not-cleared and return
+  to the Build step (3.3) as a fix round, passing the hook's output to the builder,
+  halting once the fix-round counter exceeds `--fix-cap`.
+- A rejected **bookkeeping** commit (the terminal entry), or a rejected commit of a
+  **foreground or `none` build's** iteration (the operator's own hand-edits), is a
+  marker-write / resumable stop: surface it through the Halt Procedure so the operator
+  addresses it, never the fix loop. Distinguish a clean-tree no-op from a hook rejection
+  via `git status --porcelain`.
 
 ## Step 4: Completion Summary
 
