@@ -16,10 +16,3 @@ context or that may be stale:
    item's `scope-baseline` where one is in flight).
 4. **Reload-instructions**: re-read the driver's own instructions — this SKILL.md and
    any reference in flight — reloading any that read as truncated.
-
-## State store
-
-- **Cross-session entry.** `state.json` is gitignored and does not travel with the
-  branch, so reconstruct it from the durable record. Treat any surviving `state.json`
-  as untrusted: rebuild it, never read it as authority.
-- **In-session entry.** The store is current; re-read it as-is.

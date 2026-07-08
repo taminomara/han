@@ -77,8 +77,9 @@ FINDINGS:
 
 Judge scope as part of every review. Compute the item's changed-file set from the
 scope-baseline commit — everything changed since it, committed or not:
-`git diff --name-only <scope-baseline>` plus any new untracked files, excluding
-`.implement-work-items/`. Compare it against the item's `Expected paths` and intent. A
+`git diff --name-only <scope-baseline>` plus any new untracked files, excluding any
+path with a `.implement-work-items/` segment at any depth. Compare it against the
+item's `Expected paths` and intent. A
 change that reaches beyond the item's work is a **scope finding** (`SCOPE-<n>`), tiered
 by how far it reaches — an unrelated one-line tweak is a Suggestion; a drive-by
 refactor or a different feature is a Warning or Critical. Expected paths are a hint, not
