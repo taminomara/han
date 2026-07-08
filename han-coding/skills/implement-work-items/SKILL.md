@@ -191,22 +191,15 @@ none is stated. Then, in this order:
 
 1. Create the dedicated branch off the base resolved in Step 1.6. If the branch
    already exists, switch to it.
-2. Create the driver's artifact directory and make it self-ignoring: create
-   `.implement-work-items/` and write its `.gitignore` as two lines — `*` then
-   `!progress.md` — so `progress.md` is tracked while `state.json` and the review
-   records stay ignored.
-3. Write the **opening entry** to `.implement-work-items/progress.md` and commit it
-   per [durable-record-protocol.md](./references/durable-record-protocol.md). The
-   opening entry carries the run's effective configuration (gate threshold, fix-loop
-   cap, build/fix model, base, branch, verification configuration) and the work-items
-   file's normalized repo-root-relative path; co-commit it with any uncommitted planning
+2. Create the run-artifact area inside the plan folder: `<plan-folder>/.implement-work-items/`,
+   where `<plan-folder>` is the directory holding the work-items file. The whole area is
+   tracked and travels with the branch.
+3. Write the **opening entry** with `${CLAUDE_SKILL_DIR}/scripts/write-run-record.sh init
+   <record> <gate> <fix-cap> <model> <base> <branch> <verify> <work-items>` and commit it per
+   [durable-record-protocol.md](./references/durable-record-protocol.md), where `<record>` is
+   `<plan-folder>/.implement-work-items/progress.md`. Co-commit it with any uncommitted planning
    artifacts (1.4) as one commit, so a failed opening leaves an empty fresh branch.
-4. Initialize the **work-state file** `.implement-work-items/state.json`. For each
-   item `N`, save its state and `fix-round` counter:
-   `{"W-1": {"state": "pending", "fix-round": 0, "scope-baseline": null, "decision": null, "commit-range": null}, ...}`.
-   If jq is available, you can use it to query or modify this file without full re-read:
-   `cp -f state.json state.json.bak && jq '."W-1".state = "build"' state.json.bak > state.json`.
-5. Use `TaskCreate` to set up a task for each work item (visual help for user).
+4. Use `TaskCreate` to set up a task for each work item (visual help for user).
    Use template: `W-X of Y: title`.
 
 ### 2.3 Resume
@@ -285,19 +278,22 @@ Process items one at a time in run order. For each item, run the following loop:
 ### 3.1 Prepare
 
 Read next item from work-items. Use `TaskUpdate` tool to set item's task status
-to `in_progress`. Assert a clean working tree (only `.implement-work-items/`
-allowed); a prior no-output item's stray files halt here.
+to `in_progress`. Assert a clean working tree, allowing only paths with a
+`.implement-work-items/` segment at any depth; a prior no-output item's stray files
+halt here.
 
-Before any build, add a **start-of-item entry** for the item and commit `progress.md`
-per [durable-record-protocol.md](./references/durable-record-protocol.md). That commit
-is the item's changed-file-set baseline: record its hash as the item's `scope-baseline`
-in `state.json`. A rejected bookkeeping commit is a marker-write failure — see 3.4.
+Before any build, add a **start-of-item entry** with
+`${CLAUDE_SKILL_DIR}/scripts/write-run-record.sh log <record> start-of-item <W-N>` and commit
+`progress.md` per [durable-record-protocol.md](./references/durable-record-protocol.md). That
+commit is the item's changed-file-set baseline, carrying the item's baseline trailer; recover
+the item's `scope-baseline` from it. A rejected bookkeeping commit is a marker-write failure —
+see 3.4.
 
 ### 3.2 Decide
 
 If `Requires pre-work decisions` is `yes`, pause before any build, present what the
-item says must be decided to the user. When user gives back the decision, save it
-to `state.json` and proceed. This runs once per item; skip it on a fix round.
+item says must be decided to the user. When user gives back the decision, hold it in
+the running session and proceed. This runs once per item; skip it on a fix round.
 
 ### 3.3 Build, verify, review loop
 
