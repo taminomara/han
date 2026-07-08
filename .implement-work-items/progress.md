@@ -11,3 +11,4 @@ Run config:
 - work items: docs/plans/autonomous-driver-first-run-hardening/work-items.md
 
 Log:
+- start-of-item: W-1
