@@ -21,8 +21,12 @@ parses on them.
 
 Every source gets the work item and the spec sections it references, plus the item's
 **scope-baseline commit** and its `Expected paths`, and is asked to judge scope (see
-"Scope"). A **content audit** additionally gets the **prior version of the edited
-document** (the reference it compares against); without it the verdict is unreliable.
+"Scope"). The dispatch also supplies the item's **already-approved coherence-edit
+paths**; the review must not re-raise any of those paths as a scope finding. On a
+fix round it additionally supplies the item's **prior committed iteration** as the
+diff reference (see "Prior-iteration diff"). A **content audit** additionally gets
+the **prior version of the edited document** (the reference it compares against);
+without it the verdict is unreliable.
 
 ## Required return format
 
@@ -48,8 +52,11 @@ BELOW THRESHOLD (counts only):
 - Suggestion: <N>
 - YAGNI: <N>
 - Security below threshold: <N>
-<counts only; full detail lives in the durable record. Report 0 for a class the
-source lacks.>
+<counts only. The durable record MUST carry the full detail behind these counts —
+one entry per below-threshold finding with its task ID, tier, location, and
+one-line claim, in the same shape as a FINDINGS line — so the driver can read that
+detail and decide which below-threshold findings genuinely matter. Report 0 for a
+class the source lacks.>
 
 DURABLE RECORD: <repo-root-relative path to the full record you wrote,
 .implement-work-items/reviews/<W-N>-iter<fix-round>.md, using the same task IDs. Required on every
@@ -85,6 +92,15 @@ by how far it reaches — an unrelated one-line tweak is a Suggestion; a drive-b
 refactor or a different feature is a Warning or Critical. Expected paths are a hint, not
 a boundary: an unpredicted file is a finding only when it is genuinely unrelated work.
 Scope findings gate through the threshold like any other finding.
+
+## Prior-iteration diff
+
+On a fix round the review also confirms what the fix changed. The **prior** reference
+is the item's immediately preceding committed iteration — the commit of the iteration
+before the latest one for this item. Diff the latest committed iteration against that
+prior reference (`git diff <prior> <latest>`) and confirm the change is the intended
+fix and nothing more. This confirmation is in addition to judging scope against the
+scope-baseline, which still runs against the full changed-file set.
 
 ## Coverage
 
