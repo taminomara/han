@@ -166,11 +166,16 @@ and read its `classification:` line. Branch on it:
 
 ### 1.8 Confirm a clean tree and green suite
 
-On a **fresh** run, from the script's uncommitted-file
-list, treat the run's planning artifacts (1.4) and the driver's own
-`.implement-work-items/` directory as allowed. If any other file is uncommitted,
-halt and tell the user to commit or stash it first, otherwise extra files might
-be folded into the first commit.
+On a **fresh** run the working tree must be clean before the first item. From the
+script's uncommitted-file list, the run's own just-produced planning artifacts
+(1.4) are the allowed exception: Step 2.2 stages exactly that content as the
+opening commit. Everything else uncommitted — a stray draft, an unrelated edit, a
+work item's own already-dirty expected-path file, or a prior run's stale
+`.implement-work-items/` area under the plan folder — is not the run's planning
+content, so folding it into the opening commit would misattribute it. For each,
+**offer to commit or stash it** so the tree is clean before starting; prefer
+**stash** for a work item's own already-dirty expected-path file, since committing
+it before that item's baseline detaches its content from the item that owns it.
 
 Where verification commands resolved, run them once now and confirm the suite is
 green. If it is red, halt: the driver cannot tell newly introduced breakage
@@ -194,7 +199,9 @@ Show the user the run plan in plain language: the effective gate threshold,
 the fix-loop cap, the build/fix model, the branch the per-item commits will land
 on and the base it branches from, the verification configuration (the resolved
 commands, or **scope-check-only** when the project defines none, naming what will
-and will not be checked), and the resolved planning-artifact set. Then list the
+and will not be checked), and the resolved planning-artifact set. Enumerate
+exactly what the opening commit (2.2) will stage — the run's planning content —
+so the operator can catch stale or unrelated content before confirming. Then list the
 items in run order, each named with its implementation (skill + `AFK`/`HITL`/`none`
 build marker), its review (skill/agent + `AFK`/`HITL`/`none` review marker), and
 whether it `Requires pre-work decisions`. Wait for the user
@@ -400,9 +407,14 @@ path the item's own expected paths predicted — is unaffected and gates as usua
   cannot resolve (the scope or approach must change for the feature to work or be
   secure, an unforeseen architectural problem, or an unresolvable RAID item), halt
   through the Halt Procedure instead of looping.
-- **Not cleared:** bump the session fix-round counter. If it now exceeds `--fix-cap`,
-  halt. Otherwise go to step **1. Build** for a fix round, passing the review
-  findings or the verification-failure message to the builder.
+- **Not cleared:** go to step **1. Build** for a fix round, passing the review
+  findings or the verification-failure message to the builder. The `--fix-cap`
+  counts **automated (AFK)** fix rounds only. On an AFK-build item, bump the
+  session fix-round counter for this automated round; if it now exceeds
+  `--fix-cap`, halt. An operator-directed hand fix does not consume the automated
+  budget (see [Re-attempting after a fix](#re-attempting-after-a-fix)), and a
+  fully hand-driven item — a `HITL` or `none` build, where the operator steers
+  every round — is not gated by the automated cap at all.
 
 **Below-threshold judgement (on a clear, before 3.4).** The verdict carries only
 below-threshold counts; read the durable review record (its `DURABLE RECORD` path)
