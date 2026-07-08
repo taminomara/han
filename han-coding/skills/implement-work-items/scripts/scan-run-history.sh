@@ -121,11 +121,33 @@ echo "classification: ${CLASS}"
 echo "commits-scanned: ${COMMIT_COUNT:-0}"
 
 # --- reconstruct per-item entry state from the committed ledger --------------
-LEDGER=$(git show HEAD:.implement-work-items/progress.md 2>/dev/null)
+# The ledger lives inside the plan folder, not at the repo root: derive its path
+# from `dirname` of the normalized work-items path (arg 1) so a run under a nested
+# plan folder reads its own ledger, not a stray root-anchored one. An empty or
+# root-level path leaves the plan folder empty, so the path is just the artifact
+# area itself.
+#
+# A normalized path that still starts with `..` (or is absolute) has no valid
+# in-repo plan folder: `normalize_path` preserves a leading `..`, so the derived
+# ledger would escape the repo tree and the working-tree `cat` fallback would
+# read a `.implement-work-items/progress.md` OUTSIDE the repo, disclosing its
+# Log-block item IDs. Treat that path as having no plan folder and confine to the
+# root-anchored ledger instead of reaching outside.
+PLAN_DIR="${NORM_PATH%/*}"
+[ "$PLAN_DIR" = "$NORM_PATH" ] && PLAN_DIR=""
+if [[ "$NORM_PATH" == /* || "$NORM_PATH" == .. || "$NORM_PATH" == ../* ]]; then
+  PLAN_DIR=""
+fi
+if [ -n "$PLAN_DIR" ]; then
+  LEDGER_PATH="$PLAN_DIR/.implement-work-items/progress.md"
+else
+  LEDGER_PATH=".implement-work-items/progress.md"
+fi
+LEDGER=$(git show "HEAD:$LEDGER_PATH" 2>/dev/null)
 if [ -z "$LEDGER" ]; then
   TOP=$(git rev-parse --show-toplevel 2>/dev/null)
-  if [ -n "$TOP" ] && [ -f "$TOP/.implement-work-items/progress.md" ]; then
-    LEDGER=$(cat "$TOP/.implement-work-items/progress.md")
+  if [ -n "$TOP" ] && [ -f "$TOP/$LEDGER_PATH" ]; then
+    LEDGER=$(cat "$TOP/$LEDGER_PATH")
   fi
 fi
 
@@ -138,9 +160,27 @@ done
 # Last entry wins per item; start-of-item always precedes its terminal entry.
 # The `- <token>: <id>` line grammar is a contract shared with the ledger writer;
 # a writer that changes it silently reconstructs zero items.
+#
+# Lifecycle entries are read ONLY within the `Log:` block: parsing starts at the
+# `Log:` header and stops at the first subsequent labeled block header (any
+# `^\S.*:$` line — `Corrections:`, `Coherence approvals:`, `Below-threshold
+# dispositions:`, or a future sibling) or EOF. A line in one of those blocks that
+# happens to share the `- <token>: <id>` shape must never count as a lifecycle
+# entry.
 declare -A ITEM_STATE
 ITEM_ORDER=()
+in_log=0
 while IFS= read -r line; do
+  if [ "$in_log" -eq 0 ]; then
+    # The `Log:` header opens the block; tolerate trailing whitespace so a stray
+    # space after the label does not silently reconstruct zero items.
+    [[ "$line" =~ ^Log:[[:space:]]*$ ]] && in_log=1
+    continue
+  fi
+  # A labeled block header (a non-indented `...:` line) ends the Log block.
+  if [[ "$line" =~ ^[^[:space:]].*:$ ]]; then
+    break
+  fi
   if [[ "$line" =~ ^-[[:space:]]+(start-of-item|no-commit-done|done|skip):[[:space:]]*([^[:space:]]+) ]]; then
     tok="${BASH_REMATCH[1]}"
     item="${BASH_REMATCH[2]}"
