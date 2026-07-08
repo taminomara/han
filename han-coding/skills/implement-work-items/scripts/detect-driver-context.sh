@@ -25,6 +25,26 @@ if command -v git &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null
   echo "uncommitted-start"
   git status --porcelain
   echo "uncommitted-end"
+  # Per-candidate base-resolution evidence: for each candidate in the fixed set
+  # that resolves, emit its behind/ahead against HEAD. This stays read-only —
+  # the `git fetch` that refreshes remote-tracking refs lives in the skill, not
+  # here; the detector only reports the status the skill hands it below. On a
+  # detached HEAD `branch` is `none` above, but the counts are still meaningful
+  # (candidate vs HEAD), so they are computed regardless.
+  #
+  # `git rev-list --left-right --count <ref>...HEAD` prints two counts:
+  # left = commits reachable from <ref> but not HEAD (behind), right = commits
+  # reachable from HEAD but not <ref> (ahead). `--end-of-options` pins each ref
+  # as an operand so a ref value can never be read as a git option.
+  for ref in main master origin/main origin/master upstream/main upstream/master; do
+    if git rev-parse --verify --quiet --end-of-options "${ref}^{commit}" >/dev/null 2>&1; then
+      if counts=$(git rev-list --left-right --count --end-of-options "${ref}...HEAD" 2>/dev/null); then
+        behind=${counts%%$'\t'*}
+        ahead=${counts##*$'\t'}
+        echo "candidate: ${ref} behind: ${behind} ahead: ${ahead}"
+      fi
+    fi
+  done
 else
   echo "git-available: false"
   echo "branch: none"
@@ -32,6 +52,11 @@ else
   echo "uncommitted-start"
   echo "uncommitted-end"
 fi
+
+# Fetch status. The detector never runs `git fetch` (it is read-only); the skill
+# performs the fetch and passes the outcome in IWI_FETCH_STATUS (`ok`/`failed`).
+# When the skill did not set it, the status is unknown.
+echo "fetch-status: ${IWI_FETCH_STATUS:-unknown}"
 
 # --- manifest-inferred commands ----------------------------------------------
 # First match wins per category. These are suggestions; the operator confirms.
