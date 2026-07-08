@@ -21,3 +21,4 @@ Log:
 - done: W-4
 - start-of-item: W-5
 - done: W-5
+- start-of-item: W-6
