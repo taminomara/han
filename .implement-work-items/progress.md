@@ -26,3 +26,4 @@ Log:
 - start-of-item: W-7
 - done: W-7
 - start-of-item: W-8
+- done: W-8
