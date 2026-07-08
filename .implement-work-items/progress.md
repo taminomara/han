@@ -16,3 +16,4 @@ Log:
 - start-of-item: W-2
 - done: W-2
 - start-of-item: W-3
+- done: W-3
