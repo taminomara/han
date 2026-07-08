@@ -116,12 +116,36 @@ order wherever the graph allows it.
 
 ### 1.6 Resolve the base branch
 
-Run `git fetch --all`, then resolve the base the run will branch from, to show
-in the preview. Prefer, in order of freshness: a local `main` or `master`;
-then `origin/main`, `origin/master`, `upstream/main`, or `upstream/master`. Never
-default to the current HEAD: the skill may be invoked from arbitrary git state.
-If none of those bases exist, or the intended base is genuinely ambiguous,
-ask the user which base to branch from before proceeding.
+Resolve the base the run will branch from. Never default to the current HEAD:
+the skill may be invoked from arbitrary git state.
+
+Run `git fetch --all` and note whether it completed; a failed or partial fetch
+means the ahead/behind counts may be stale. Set `IWI_FETCH_STATUS` to `ok` or
+`failed` accordingly, then re-run the detector and read its `candidate:` and
+`fetch-status:` lines so the counts reflect the post-fetch refs (the Step 1.3 run
+predates the fetch).
+
+Pick the default base from the first `candidate:` line that resolves, in this
+order of freshness: a local `main` or `master`; then `origin`/`upstream`
+`main`/`master`. Each `candidate:` line reports that ref's `behind:` and `ahead:`
+counts against the current branch.
+
+The recommend-and-confirm below is a **fresh-run** interaction; 1.7 classifies the
+invocation using this default base as its scan target. On a **resume**, the base
+is read from the recorded opening (Step 2.3), so skip this interaction. On a
+**fresh** run, key off the default base's counts:
+
+- **Current branch ahead** (`ahead` > 0, `behind` = 0): the base is missing commits
+  the current branch already carries. Surface the current branch as an alternative
+  base with both candidates' ahead/behind counts, **recommend** branching from the
+  current branch, and **confirm** before proceeding.
+- **Diverged** (`ahead` > 0 and `behind` > 0), or the **fetch did not complete**:
+  present the counts, note stale counts when the fetch failed, and ask which base to
+  use **without a recommendation**.
+- **Detached HEAD** (no current branch) or **no base resolves**: ask which base to
+  branch from.
+- **Not ahead** (`ahead` = 0, whether in sync or behind): the current branch adds
+  nothing the base lacks, so resolve the default base with no prompt.
 
 ### 1.7 Classify the invocation
 
