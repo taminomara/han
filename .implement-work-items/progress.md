@@ -18,3 +18,4 @@ Log:
 - start-of-item: W-3
 - done: W-3
 - start-of-item: W-4
+- done: W-4
