@@ -246,14 +246,12 @@ baseline so leftover partial work cannot redden it:
   re-ask the operator to confirm, then record it done through Step 3.4 (the no-commit-done
   outcome). Never forward-reconcile it from a clean tree: a clean tree does not prove the
   confirmation happened.
-- **Output (AFK) item.** Check whether its code already landed — a gate-cleared commit
-  with the item-id trailer in the start-of-item-to-HEAD range, changed-file set in scope,
-  clean tree. If so, forward-reconcile: record the missing done entry (commit
-  `progress.md` per [durable-record-protocol.md](./references/durable-record-protocol.md))
-  and advance. If a commit in that range reaches beyond the item's scope (foreign, or a
-  foreground pre-gate commit), surface-and-ask. If nothing landed, re-run verification
-  against the in-progress tree: keep and re-review (Step 3.3 **3. Review**) when it passes
-  in scope, else rebuild from the start-of-item entry.
+- **Output (AFK) item.** A start-of-item entry with no `done` entry is not done, whatever
+  committed iterations or a clean tree suggest: re-verify its latest committed iteration and
+  re-review it, re-entering the loop at Step 3.3 **2. Verify**, then gate — record it done on
+  a clear, else continue the fix loop. If nothing landed since the start-of-item entry,
+  rebuild from it. If a commit in the start-of-item-to-HEAD range reaches beyond the item's
+  scope (foreign, or a foreground pre-gate commit), surface-and-ask.
 - Any state not positively classified as safe → surface-and-ask.
 
 #### Ledger and history disagree
