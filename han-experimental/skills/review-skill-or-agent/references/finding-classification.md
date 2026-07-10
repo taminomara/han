@@ -1,7 +1,5 @@
 # Finding Classification
 
-This file holds two systems: (1) artifact **size classification** — the authoritative source for `{size}` (SKILL.md Step 3); and (2) the per-class **severity bands** (Step 5). Bloat findings are a separate pool, tiered in [bloat-classification.md](bloat-classification.md).
-
 ## Size classification of the artifact under review
 
 Default to **small**; escalate only when a signal below clearly holds; when a signal is borderline, stay smaller. A stated numeric threshold (a line count, a file count) is never itself borderline — "borderline" governs a measured value near but not at a cutoff, not the cutoff number.
@@ -10,6 +8,8 @@ Default to **small**; escalate only when a signal below clearly holds; when a si
 - **Small** — `SKILL.md` body under ~250 lines, 0–2 reference files, sequential flow, dispatches no agents of its own.
 - **Medium** — body ~250–450 lines, or 3–5 reference files, or the skill dispatches 1–2 agents itself.
 - **Large** — body over ~450 lines, or 6+ reference files, or the skill dispatches 3+ agents or runs a multi-mode branching flow.
+
+`has-scripts: true` is a soft nudge toward the larger of two adjacent bands (a script adds a resilience surface); it never escalates on its own.
 
 **Agent target** (single file, line count only — agents carry no reference tree):
 - **Small** — under ~150 lines, single role, no sub-agent dispatch.
@@ -26,7 +26,7 @@ Governs which corrective findings escalate to the bands below; bloat is excluded
 - **Medium** — escalate Critical and Warning; raise Suggestions only for directly-covered issues.
 - **Large** — all severities in scope.
 
-When uncertain about a severity, prefer the **lower** one. In a `whole-artifact` scope with nothing to compare against, treat findings conservatively (the whole file is in view, so do not manufacture severity from "newness").
+When uncertain about a severity, prefer the **lower** one. In a `whole-artifact` scope with nothing to compare against, treat findings conservatively — do not escalate on "newness".
 
 ## Per-class bands
 

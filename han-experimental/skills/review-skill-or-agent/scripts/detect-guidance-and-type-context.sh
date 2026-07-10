@@ -9,7 +9,9 @@ set -uo pipefail
 
 TARGET="${1:-}"
 
-emit() { printf '%s: %s\n' "$1" "$2"; }
+# Flatten any newline in the value so a crafted target cannot forge a second
+# key: value line.
+emit() { printf '%s: %s\n' "$1" "${2//$'\n'/ }"; }
 
 # --- 1. Resolve the target's structural type ------------------------------
 # skill    : a directory containing SKILL.md with skill-shaped frontmatter
@@ -17,9 +19,10 @@ emit() { printf '%s: %s\n' "$1" "$2"; }
 # mismatch : resembles a type by location but the structural test fails
 # neither  : not a skill or agent
 frontmatter_shape() {
-  # Reads the first frontmatter block of $1; echoes "skill", "agent", or "unknown".
+  # Reads only the leading --- frontmatter block of $1 (never the body);
+  # echoes "skill", "agent", or "unknown".
   local f="$1" head
-  head="$(sed -n '1,40p' "$f" 2>/dev/null)"
+  head="$(awk 'NR==1{if($0!="---")exit} NR>1{if($0=="---")exit; print}' "$f" 2>/dev/null)"
   if printf '%s' "$head" | grep -qE '^allowed-tools:'; then
     echo skill
   elif printf '%s' "$head" | grep -qE '^(tools|model):'; then
@@ -66,13 +69,14 @@ elif [ -f "$TARGET" ] && [ "${TARGET##*.}" = md ]; then
   esac
 fi
 
-emit target-path "${TARGET//$'\n'/ }"   # strip newlines so a crafted caller target cannot forge a key: value line
+emit target-path "$TARGET"
 emit target-type "$TYPE"
 emit structural-signal "$SIGNAL"
 
 # Cheap roster signals for the target: how many reference files it carries, and
-# whether it ships supporting scripts. The orchestrator reads the fuzzier signals
-# (interaction model, control-flow complexity) from the body itself.
+# whether it ships supporting scripts. The triage sub-agent (SKILL Step 3), not
+# the orchestrator, derives the fuzzier signals (interaction model, control-flow
+# complexity) from the body.
 if [ "$TYPE" = skill ]; then
   rc="$(find "$TARGET/references" -maxdepth 1 -type f 2>/dev/null | wc -l | tr -d ' ')"
   hs=false
@@ -128,7 +132,7 @@ fi
 if [ "$TYPE" = skill ]; then
   SUBTREE="$GUIDANCE_ROOT/skill-building-guidance"
   # Every file the review-checklist and finding-classification bands ground against, so a
-  # partial guidance install cannot report complete and leave a check ungrounded (SUGG-002).
+  # partial guidance install cannot report complete and leave a check ungrounded.
   REQUIRED="skill-description-frontmatter.md skill-description-length.md naming-conventions.md progressive-disclosure.md skill-reference-files.md writing-effective-instructions.md workflow-patterns.md allowed-tools-bash-permissions.md allowed-tools-AskUserQuestion.md security-restrictions.md agent-dispatch-namespacing.md graceful-degradation.md dynamic-project-discovery.md optional-git-repositories.md script-execution-instructions.md success-criteria-and-testing.md"
 else
   SUBTREE="$GUIDANCE_ROOT/agent-building-guidelines"

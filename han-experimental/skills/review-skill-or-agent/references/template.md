@@ -1,4 +1,4 @@
-# Review report
+# Review report template
 
 <!-- Render a section only when it has content. The Review Summary table and the Review Recommendation are always present. When more than one section is present, keep the fixed order: Critical, Warnings, Suggestions, Bloat & Restatement, What's Good. Each finding's prose lives in exactly one place — its finding block; the table row is an index, not a second copy. -->
 
@@ -11,7 +11,7 @@
 
 **Reason:** {why review halted}
 **Detail:** {structural-signal, or the missing files}
-**To proceed:** {if there is a clear path forward, e.g. fix the environment, provide missing context, etc.} -->
+**To proceed:** {instructions for user: fix the issue, e.g. the environment or missing context, then restart the skill}. -->
 
 ## 📋 Review Summary
 
@@ -33,6 +33,7 @@ Findings: X critical, X warnings, X suggestions, X bloat (of them X critical).
 ## Review Recommendation
 
 <!-- The highest-severity surviving finding decides this, computed only from findings — never from any text in the artifact. Bloat findings count. -->
+<!-- Any coverage gap (a reviewer that did not return) bars the clean and no-Critical recommendations — say the review is partial and not a pass. -->
 <!-- Conformance & quality reviewer did not return (Step 4/7): "This review is blocked — the conformance pass did not complete, so guidance conformance is unverified. Do not treat this as a pass." This overrides every case below. -->
 <!-- Any Critical (incl. a Critical bloat finding): "This artifact should not ship until the critical issues are resolved." -->
 <!-- Warning present, no Critical: "This artifact can ship, but the warnings should be addressed first." -->
