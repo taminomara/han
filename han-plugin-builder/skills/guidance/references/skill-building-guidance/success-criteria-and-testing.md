@@ -21,9 +21,11 @@ Testing rigor should match the skill's audience. A skill used by one person inte
 deployed across an organization. But every skill benefits from at least running through the triggering tests and a few
 functional scenarios.
 
-**Test against the model the skill targets.** Anthropic notes that smaller, faster models (Haiku) may need more
-detailed, explicit instructions than larger ones to follow a skill reliably, while a larger model can fill gaps a terse
-skill leaves. A skill that passes on Opus can still fail on Haiku. If a skill is meant to run on a faster tier (or to be
+**Test against the model the skill targets.** A smaller, faster model can behave differently on the same skill. Haiku
+5.5, for example, sometimes stops early on a long prompt at `low` effort and sometimes reports a code change done
+without checking it, where Opus checks its own work unprompted (see
+[Per-Model Authoring Guidance](../per-model-authoring.md#early-stops-and-scope-on-sonnet-55-and-haiku-55)). A skill that
+passes on Opus can still fail on Haiku. If a skill is meant to run on a faster tier (or to be
 dispatched into a Haiku subagent), run the triggering and functional tests on that tier, not just on your session's
 default. See
 [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices).

@@ -109,7 +109,8 @@ would call it.
 - **Trust the review pass.** The Step 6 conformance review fixes role-identity length, description budget,
   self-containment violations, and an over-broad tool set before you see them. That includes dropping the `Agent` tool
   unless the agent's own protocol dispatches sub-agents, since dispatch flows from skills to agents by default. It also
-  strips model-specific leftovers, such as a "think step by step" line, a pinned `effort` with no stated reason, or a
+  strips model-specific leftovers, such as a "think step by step" line, a `reasoning` field in the output format (which
+  any current model can refuse), a pinned `effort` with no stated reason, or a
   vague limit like "only report high-severity issues" in a review step, and checks that a research or analysis agent
   marks each claim it could not confirm.
 - **Wire up the caller.** An agent is dispatched by a skill. If the calling skill does not exist yet, the skill

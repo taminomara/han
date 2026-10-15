@@ -193,8 +193,9 @@ Cover at minimum:
 9. **Tests** (`success-criteria-and-testing.md`) — each use case maps to a triggering and functional test the user can
    run.
 10. **Model-specific leftovers** (`per-model-authoring.md`) — no "think step by step" or "think carefully" line; no
-    instruction to reproduce the model's reasoning in its reply; no pinned `effort` without a reason stated in the
-    body; and no vague limiting phrase in a review step. A limit passes when it names a bar the reader could check and
+    instruction to reproduce the model's reasoning in its reply, and no output format with a `reasoning`, `thinking`,
+    or `trace` field, a scratchpad section, or a running reasoning log; no pinned `effort` without a reason stated in
+    the body; and no vague limiting phrase in a review step. A limit passes when it names a bar the reader could check and
     asks for evidence on each item. "List only problems you'd block the merge for. For each one, give the file and
     line, why it's wrong, and how to show it fails." passes; "Only report high-severity issues." does not.
 

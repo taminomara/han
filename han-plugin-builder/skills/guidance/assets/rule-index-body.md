@@ -172,11 +172,12 @@ Process guidance for building and evolving a plugin over its lifetime.
   — The research-backed rationale for why tighter specialization lets a smaller model at lower effort match a larger one
   on narrow tasks, without raising the capability ceiling. Read when reasoning about the
   specialization-versus-model-tier trade-off across skills and agents.
-- [Per-Model Authoring Guidance](.claude/skills/plugin-guidance/references/per-model-authoring.md) — How Sonnet 5,
-  Opus 5, Opus 5.5, and Fable 5 differ in how they follow instructions, and how those differences change what you write:
-  the model-agnostic default for an unknown target, the opposite-direction instruction-style split, the verification and
-  re-check instructions to leave out, how to calibrate response length, narration, and scope, effort and thinking on
-  Opus 5.5, and the reasoning-echo refusal on Fable 5 and Opus 5.5. Read when writing or hardening a skill or agent and
+- [Per-Model Authoring Guidance](.claude/skills/plugin-guidance/references/per-model-authoring.md) — How the
+  Sonnet, Haiku, Opus, and Fable models (through the 5.5 releases and Fable 5.1) differ in how they follow instructions,
+  and how those differences change what you write: the model-agnostic default for an unknown target, the
+  opposite-direction instruction-style split, the verification instructions to leave out on Opus and keep on Sonnet 5.5
+  and Haiku 5.5, how to calibrate response length, narration, and scope, early stops on Sonnet 5.5 and Haiku 5.5, effort
+  and thinking on the 5.5 models, and the reasoning-echo refusal on every current model. Read when writing or hardening a skill or agent and
   tuning the instructions to a target model, not when choosing which model tier to run (see Specialization and Model
   Selection).
 

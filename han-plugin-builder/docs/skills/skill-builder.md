@@ -102,7 +102,8 @@ cases.
   is wrong for your case, say so; the skill resolves dependent decisions from your redirect.
 - **Trust the review pass, then run the tests.** The Step 6 conformance review fixes description length, naming,
   progressive-disclosure, and `allowed-tools` problems before you ever see them. It also strips model-specific leftovers,
-  such as a "think step by step" line, a pinned `effort` with no stated reason, or a vague limit like "only report
+  such as a "think step by step" line, a `reasoning` field in an output format (which any current model can refuse), a
+  pinned `effort` with no stated reason, or a vague limit like "only report
   high-severity issues" in a review step. After it lands, run the triggering and
   functional tests it hands you against the model tier the skill targets.
 - **Plan for iteration.** Plugin entities rarely land in one pass. Expect 3-5 iterations; the skill says so and invites
