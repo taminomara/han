@@ -37,7 +37,7 @@ these sections as Step 3.2 through Step 3.5.
 - Honor any agent the user named explicitly.
 - Extra agents named in the project config's `## Extra Agents` list join this candidate pool and compete under the same
   signal-based selection as the roster above, per
-  [../../references/config-rule.md](../../../references/config-rule.md): include one only when a signal in the file list
+  the config rule `han-core:load-han-config` surfaced: include one only when a signal in the file list
   matches its stated specialty, justify the inclusion in one line, and skip an entry that does not resolve to a
   dispatchable agent with a one-line note.
 - For each conditional agent included, justify in one line — name the file or signal that triggered inclusion.

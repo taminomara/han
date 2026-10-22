@@ -11,8 +11,7 @@ description:
 arguments: size
 argument-hint: "[size: small | medium | large | dynamic] [optional context about changes or areas to focus on]"
 allowed-tools:
-  Bash(git *), Bash(gh *), Bash(make *), Bash(npm *), Read, Write, Grep, Glob, Agent,
-  Bash(bash "${CLAUDE_PLUGIN_ROOT}/scripts/han-config-dir.sh")
+  Skill, Bash(git *), Bash(gh *), Bash(make *), Bash(npm *), Read, Write, Grep, Glob, Agent
 ---
 
 When running a code review, follow the process outlined here.
@@ -22,13 +21,8 @@ When running a code review, follow the process outlined here.
 - git installed: !`which git 2>/dev/null || echo "not installed"`
 - CLAUDE.md: !`find . -maxdepth 1 -name "CLAUDE.md" -type f`
 - project-discovery.md: !`find . -maxdepth 3 -name "project-discovery.md" -type f`
-- personal config directory: !`bash "${CLAUDE_PLUGIN_ROOT}/scripts/han-config-dir.sh" 2>/dev/null || echo "$HOME/.claude"`
-- project .han/config.md: !`cat .han/config.md 2>/dev/null || echo ""`
 
-As your first action, use the Read tool on `.han/config.md` inside the `personal config directory` path above. A read
-that returns no file is no personal configuration: continue silently. When that file or the `project .han/config.md`
-probe supplies content, apply it per [config-rule.md](../../references/config-rule.md), which governs precedence
-between the two files, relative-path resolution, and what to do with a file that reads but cannot be used.
+Resolve configuration with `han-core:load-han-config` if you have not already this run.
 
 ## Review Constraints
 
@@ -214,7 +208,7 @@ clearly require it. When a signal is borderline, stay at the smaller band. Use t
 argument), use it: a band value is the size and skips the signal-based classification, while `dynamic` forces the
 signal-based classification even when the project config sets a default band. If `$size` is empty and the project
 config supplies a band via `default-swarm-size` (per the config rule in
-[../../references/config-rule.md](../../references/config-rule.md)), use that band and skip the signal-based
+the config rule `han-core:load-han-config` surfaced), use that band and skip the signal-based
 classification. Otherwise classify from the signals above. Anywhere else in this skill body that mentions a "user
 override" of size, this argument is the override.
 
@@ -439,7 +433,7 @@ The review is a file, not a conversation message. Resolve where it goes, name it
 
 1. **A configured `output-directory`.** When the config read at the top of this skill supplied one, write the report
    beneath it. Relative-path resolution, `~` expansion, and precedence between the personal and project files are
-   governed by [config-rule.md](../../references/config-rule.md); do not re-derive them here.
+   governed by the config rule `han-core:load-han-config` surfaced; do not re-derive them here.
 2. **No configured value.** Write it to the `{output_directory}` Step 3 already resolved for the specialists' reports,
    BECAUSE splitting the report from the analysis it was built on makes a run's output harder to find, not easier.
 

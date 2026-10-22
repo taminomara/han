@@ -4,8 +4,10 @@ Han reads two optional configuration files, and you can use either one or both. 
 Claude Code configuration directory carries settings that follow you into every project. A project's own
 `.han/config.md` adjusts those settings for that project. Both control where skills write their markdown deliverables,
 which extra agents dispatching skills consider, the default swarm size the sizing-aware skills start at, and the
-writing-voice profile the readability skills apply. Every Han skill reads both files on every run, so the overrides take
-effect without depending on the model remembering to look. Someone with neither file sees no change of any kind.
+writing-voice profile the readability skills apply. Every Han skill reads both files on every run through one shared
+loader, `han-core:load-han-config`, so the overrides take effect without depending on the model remembering to look,
+and a skill that another skill invokes uses what the first one loaded instead of reading them again. Someone with
+neither file sees no change of any kind.
 
 > See also: [Plugin landing page](../README.md) · [Concepts](./concepts.md) · [Quickstart](./quickstart.md) ·
 > [All skills](./skills/README.md) · [All agents](./agents/README.md)
@@ -26,7 +28,8 @@ effect without depending on the model remembering to look. Someone with neither 
   ignored and which file it came from. A missing or empty file changes nothing and says nothing.
 - **The interpretation contract lives in
   [`han-core/references/config-rule.md`](../han-core/references/config-rule.md).** Every skill applies that one rule
-  file (vendored byte-identical into each plugin), so one pair of files resolves identically across the whole suite.
+  file, which `han-core:load-han-config` prints into each run's context, so one pair of files resolves identically
+  across the whole suite.
   This page is the operator-facing guide.
 
 ## Where each file goes
