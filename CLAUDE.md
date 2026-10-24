@@ -16,8 +16,8 @@ pre-planning knowledge-work skills — `research`, `gap-analysis`, and `issue-tr
 agent; depends on `han-communication` and `han-core` and is bundled by the `han` meta-plugin), `han-planning` (the
 planning skills you reach for before
 implementation: specifying with `plan-a-feature`, planning a restructure of existing code with `plan-a-change`,
-planning the build with `plan-implementation`, sequencing it with `plan-a-phased-build`, breaking it into work with `plan-work-items`, and stress-testing plans with
-`iterative-plan-review`, plus the `discussion-facilitator` agent that audits a planning discussion in progress;
+planning the build with `plan-implementation`, sequencing it with `plan-a-phased-build`, breaking it into work with `plan-work-items`, stress-testing plans with
+`iterative-plan-review`, and questioning a stalled approach with `reassess-approach`, plus the `discussion-facilitator` agent that audits a planning discussion in progress;
 depends on `han-communication` and `han-core` and is bundled by the `han` meta-plugin),
 `han-coding` (the coding skills
 you reach for while working in code: writing it with `tdd` and `refactor`, designing an interface contract with
@@ -110,7 +110,7 @@ han-plugin-builder skill:
 │   ├── skills/         # Research skill directories, each with SKILL.md + references/
 │   ├── docs/           # In-plugin long-form docs: docs/skills/{name}.md + docs/agents/research-analyst.md
 │   └── references/     # Cross-skill reference files vendored for han-research skills (yagni-rule.md, evidence-rule.md)
-├── han-planning/       # Planning plugin: plan-a-feature, plan-a-change, plan-implementation, plan-a-phased-build, plan-work-items, iterative-plan-review (the skills for planning before implementation) + the discussion-facilitator agent (depends on han-communication and han-core; bundled by the han meta-plugin)
+├── han-planning/       # Planning plugin: plan-a-feature, plan-a-change, plan-implementation, plan-a-phased-build, plan-work-items, iterative-plan-review, reassess-approach (the skills for planning before implementation) + the discussion-facilitator agent (depends on han-communication and han-core; bundled by the han meta-plugin)
 │   ├── README.md       # Light front door + scent-line skills and agent lists
 │   ├── .claude-plugin/
 │   │   └── plugin.json
