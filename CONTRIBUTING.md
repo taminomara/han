@@ -115,7 +115,7 @@ change goes before you scaffold anything. (For the user-facing version of this m
   `plan-work-items`, `iterative-plan-review`). A skill goes here when its job is specifying what a feature does,
   planning how to build it, sequencing the build, breaking it into work, or stress-testing a plan before implementation.
   It depends on `han-communication` and `han-core` and is bundled by the `han` meta-plugin.
-- **`han-coding`** carries the coding skills (`tdd`, `refactor`, `code-review`, `code-overview`,
+- **`han-coding`** carries the coding skills (`tdd`, `refactor`, `restructure`, `code-review`, `code-overview`,
   `architectural-analysis`, `automated-test-planning`, `manual-test-planning`, `investigate`, `coding-standard`). A skill goes here when its job is
   working directly in code: writing it, reviewing it, analyzing it, testing it, investigating it, or standardizing it.
   It depends on `han-communication` and `han-core` and is bundled by the `han` meta-plugin.
