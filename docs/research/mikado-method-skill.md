@@ -6,16 +6,17 @@ should share work with the skills Han already has, and where it should sit. Evid
 
 ## Summary
 
-Build a new skill that owns the Mikado graph and the discovery rounds, and hands each finished-out step to the
-`refactor` or `tdd` skill to carry out. The method is well described and stable: try the change the simple way, write
+Build a new skill that owns the Mikado graph and the discovery rounds, and hands each leaf (a step with no prerequisites
+of its own) to the `refactor` or `tdd` skill to carry out. The method is well described and stable: try the change the simple way, write
 down what breaks, undo the attempt, fix the blockers first, and commit each one only when the tests pass. Han already
 has skills that make one small change safely under passing tests, so the new skill should reuse them rather than build a
 third way to do that.
 
-The hardest part is undoing a deliberately wide attempt without losing anyone's work. Restoring files from git, the
-method practitioners use, is only safe under a short list of conditions the skill has to check, and nothing settles
-whether a throwaway copy of the code is the better choice. The loop itself is well-corroborated. The agent-specific
-design advice comes from a handful of 2026 blog posts and skill listings, and nothing measures whether any of it works.
+The hardest part is undoing a deliberately wide attempt without losing anyone's work. Restoring files from git is the
+undo practitioners use. It is only safe under a short list of conditions the skill has to check, and nothing settles
+whether a throwaway copy of the code is the better choice.
+
+The loop itself is well-corroborated. The agent-specific design advice comes from a handful of 2026 blog posts and skill listings, and nothing measures whether any of it works.
 
 - **Confidence:** Medium
 - **Web search:** used
@@ -190,7 +191,7 @@ Han's conventions add required work to any new skill (A22, A23, A26):
   spread or failed twice, the new skill records the blockers as new nodes and goes back to discovery.
 - **Trade-offs:** It reuses `refactor`'s tested undo and `tdd`'s test-first gate rather than duplicating them, and it
   carries new prerequisites back into the graph, which O2 cannot. It depends on `refactor` stopping cleanly with the
-  offending step undone and the blockers named; the earlier report found the scope stop does not undo the step today
+  offending step undone and the blockers named. The earlier report found the scope stop does not undo the step today
   (A25), so that has to change or the new skill has to undo it. `tdd`'s refactor step says "revert it" with no
   mechanism (A25), which matters for behavior-changing leaves. The overlap with `plan-a-change` for ordering work remains.
 - **Rests on:** (A3), (A14), (A17), (A18), (A20), (A24), (A25)
