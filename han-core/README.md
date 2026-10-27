@@ -13,8 +13,8 @@ kind of work rather than belonging to any one plugin's subject matter.
 
 The documentation skills live in `han-documentation`, the pre-planning research skills in `han-research`, the planning
 skills in `han-planning`, and the coding skills in `han-coding`; each depends on han-core. Install only this and you
-have the specialists, project discovery, and the pairing mode. `/pairing` gains its test-driven, refactoring, interface,
-and plan-review paths when the plugins carrying those skills are installed alongside it, and names the missing skill
+have the specialists, project discovery, and the pairing mode. `/pairing` gains its test-driven, refactoring, restructuring,
+interface, and plan-review paths when the plugins carrying those skills are installed alongside it, and names the missing skill
 rather than substituting when they are not.
 
 **Bundled.** Installed with the `han` meta-plugin. Depends on no other Han plugin.

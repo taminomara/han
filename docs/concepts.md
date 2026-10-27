@@ -244,7 +244,7 @@ plugins dispatch, the project-discovery skill, the `/pairing` collaborative work
 `/issue-triage`) plus the research-analyst agent. `han-planning` adds the planning skills you reach for before
 implementation (`/plan-a-feature`, `/plan-a-change`, `/plan-implementation`, `/plan-a-phased-build`,
 `/plan-work-items`, `/iterative-plan-review`, and `/reassess-approach`). `han-coding` adds the coding skills you reach for while working in code (`/tdd`, `/refactor`,
-`/design-an-api`, `/code-review`, `/code-overview`, `/code-walkthrough`, `/architectural-analysis`,
+`/restructure`, `/design-an-api`, `/code-review`, `/code-overview`, `/code-walkthrough`, `/architectural-analysis`,
 `/automated-test-planning`, `/manual-test-planning`, `/investigate`, and `/coding-standard`). `han-github` adds the GitHub skills, and `han-reporting` adds the reporting
 skills. All of these except `han-reporting` depend on `han-core`, so installing any of them brings the shared agents
 along; `han-reporting` depends only on `han-communication`.

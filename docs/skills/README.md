@@ -96,6 +96,9 @@ skill-and-agent split is fuzzy, read [Concepts](../concepts.md) first.
   through a test-gated loop that re-runs the full suite after every small step.
 - [`/research`](../../han-research/docs/skills/research.md) — Research an open-ended question across the codebase and the
   open web and end at an adversarially-validated recommendation, without committing the team to any artifact.
+- [`/restructure`](../../han-coding/docs/skills/restructure.md) — Restructure a codebase or a large area of it toward a
+  target layout, unit by unit through `/refactor` and `/tdd` with a commit and a logged decision for each, using the
+  Mikado Method to tease apart any unit too tangled to move in one step.
 - [`/runbook`](../../han-documentation/docs/skills/runbook.md) — Create or update a runbook for a single operational scenario,
   with a symptom-first template and a YAGNI preflight that requires real evidence before writing.
 - [`/skill-builder`](../../han-plugin-builder/docs/skills/skill-builder.md) — Build a new skill from scratch through an

@@ -57,6 +57,9 @@ use the skill. For what the skill does internally, read the skill definition at
   [`/plan-a-change`](../../../han-planning/docs/skills/plan-a-change.md) when the change spans several modules and the
   target structure is still open. This skill applies a named refactoring to a named target; that one settles what the
   target structure should be.
+- **Restructuring a whole area.** Use [`/restructure`](./restructure.md) when the change spans many files or modules
+  and you want it carried out unit by unit with a commit and a logged decision for each. It runs this skill for each
+  unit and uses the Mikado Method when a unit stops here because its scope spread.
 - **Fixing a bug.** A fix changes behavior, which this skill never does. Use
   [`/investigate`](./investigate.md) and then drive the fix in with [`/tdd`](./tdd.md).
 - **Mapping domain boundaries before restructuring along them.** Use

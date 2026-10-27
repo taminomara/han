@@ -55,7 +55,9 @@ and _how_ to use the skill. For what the skill does internally, read the skill d
   [`/reassess-approach`](./reassess-approach.md). It argues structurally different alternatives, including stopping,
   from the recorded findings; this skill plans the restructure once an alternative is chosen.
 - **Carrying out the change.** Use [`/refactor`](../../../han-coding/docs/skills/refactor.md) for a
-  behavior-preserving unit, or [`/tdd`](../../../han-coding/docs/skills/tdd.md) to build one test-first.
+  behavior-preserving unit, or [`/tdd`](../../../han-coding/docs/skills/tdd.md) to build one test-first. To plan and
+  carry out a whole-area restructure in one unattended run, use
+  [`/restructure`](../../../han-coding/docs/skills/restructure.md), which runs this skill for its plan.
 
 ## How to invoke it
 
@@ -216,6 +218,8 @@ safe.
 - [`/refactor`](../../../han-coding/docs/skills/refactor.md). Carries out a behavior-preserving change unit once the
   plan names its target and its refactoring.
 - [`/tdd`](../../../han-coding/docs/skills/tdd.md). Builds a behavior-changing change unit test-first.
+- [`/restructure`](../../../han-coding/docs/skills/restructure.md). Runs this skill to plan a whole-area restructure,
+  then carries out every unit through `/refactor` or `/tdd`, using the Mikado Method on any unit that stalls.
 - [`software-architect`](../../../han-core/docs/agents/software-architect.md). Proposes the target structure at Step 4,
   under the YAGNI and contract-pinning directives.
 - [`junior-developer`](../../../han-core/docs/agents/junior-developer.md). Reframes a question in plain terms before the
