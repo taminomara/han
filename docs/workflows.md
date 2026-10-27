@@ -26,6 +26,9 @@ flowchart TD
     research --> feature["/plan-a-feature"]
     feature --> impl["/plan-implementation"]
     impl --> review["/iterative-plan-review"]
+    review -.at the cap, not converged.-> reassess["/reassess-approach"]
+    impl -.at the cap, not converged.-> reassess
+    reassess -.re-specify.-> feature
     review --> items["/plan-work-items"]
     impl --> items
     items --> gh["/work-items-to-issues (GitHub)"]
@@ -49,6 +52,14 @@ flowchart TD
   [`/iterative-plan-review`](../han-planning/docs/skills/iterative-plan-review.md) →
   [`/plan-work-items`](../han-planning/docs/skills/plan-work-items.md).** Specify, plan the build, stress-test the plan,
   then break it into work. Skip the review pass when the plan is already trusted.
+- **[`/plan-implementation`](../han-planning/docs/skills/plan-implementation.md) or
+  [`/iterative-plan-review`](../han-planning/docs/skills/iterative-plan-review.md) →
+  [`/reassess-approach`](../han-planning/docs/skills/reassess-approach.md).** When either loop's multi-round run
+  (medium or large) reaches its cap without converging, it hands the plan and its findings to a fresh-context critic
+  that returns structurally different alternatives, including stopping, and asks you to choose. A small run ends with a
+  pointer to the skill instead. "Continue as is" sends the run on as before; a different
+  approach sends it back to `/plan-a-feature` or on to [`/plan-a-change`](../han-planning/docs/skills/plan-a-change.md).
+  You can also run it by hand on any plan or code path that keeps drawing findings.
 - **[`/plan-work-items`](../han-planning/docs/skills/plan-work-items.md) → publish.** Turn the work items into tickets
   where your team tracks them: [`/work-items-to-issues`](../han-github/docs/skills/work-items-to-issues.md) for GitHub,
   [`/work-items-to-jira`](../han-atlassian/docs/skills/work-items-to-jira.md) for Jira (opt-in `han-atlassian`), or
