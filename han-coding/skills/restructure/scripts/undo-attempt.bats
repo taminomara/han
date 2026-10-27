@@ -15,8 +15,8 @@ setup() {
   git config commit.gpgsign false
   printf 'build/\n' >.gitignore
   printf 'original\n' >tracked.txt
-  mkdir -p src
-  printf 'original\n' >src/module.txt
+  mkdir -p nested
+  printf 'original\n' >nested/module.txt
   git add -A
   git commit -qm "base"
   BASE=$(git rev-parse HEAD)
@@ -31,10 +31,10 @@ setup() {
 
 @test "restores a staged move back to its original path" {
   mkdir -p moved
-  git mv src/module.txt moved/module.txt
+  git mv nested/module.txt moved/module.txt
   run bash "$SCRIPT" "$BASE"
   [ "$status" -eq 0 ]
-  [ -f src/module.txt ]
+  [ -f nested/module.txt ]
   [ ! -e moved/module.txt ]
 }
 
@@ -66,11 +66,11 @@ setup() {
 
 @test "works when run from a subdirectory" {
   printf 'changed\n' >tracked.txt
-  printf 'new\n' >src/created.txt
-  run bash -c 'cd src && bash "$1" "$2"' _ "$SCRIPT" "$BASE"
+  printf 'new\n' >nested/created.txt
+  run bash -c 'cd nested && bash "$1" "$2"' _ "$SCRIPT" "$BASE"
   [ "$status" -eq 0 ]
   [ "$(cat tracked.txt)" = "original" ]
-  [ ! -e src/created.txt ]
+  [ ! -e nested/created.txt ]
 }
 
 @test "refuses and changes nothing when HEAD has moved" {

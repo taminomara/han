@@ -121,9 +121,9 @@ Each of these is a hard failure: report which one and end the run.
 2. `git status --porcelain` prints anything: the tree has uncommitted or untracked changes. Ask the person to commit or
    remove them and run again, BECAUSE an undo cannot tell their work from an attempt's.
 3. `git branch --show-current` prints nothing: HEAD is detached, and commits made there are easy to lose.
-4. No test command resolved after every fallback: the gate asks for one, and nothing below runs until it has one.
 
-Run the test command, and the type-check command where one exists. **Paste the runner's summary line** and record the
+If no test command resolved after every fallback, skip the baseline below: Step 3 asks for the command, and the
+baseline runs as soon as the person supplies it, before Step 4. Otherwise, run the test command, and the type-check command where one exists. **Paste the runner's summary line** and record the
 counts as the baseline. If anything is red, report the output and end the run, BECAUSE a restructure can only be proven
 behavior-preserving against a suite that was green to begin with.
 
@@ -134,7 +134,7 @@ Present everything the run will act on, then end the turn:
 - The goal, verbatim, and the area it covers.
 - The structure rules found, each with its source path, and any conflict between them and the goal.
 - The completion check and how many items it lists today.
-- The test, type-check, lint, and build commands, and the test roots.
+- The test, type-check, lint, and build commands, and the test roots. When no test command resolved, ask for one here.
 - The branch. If it is the repository's default branch, say so and recommend the person create a dedicated branch first.
 - The output folder.
 - The discovery round cap, five per stalled unit unless the person sets another.
@@ -231,7 +231,9 @@ It holds the discovery loop, what counts as broken, how to group failures into p
 `{folder}/artifacts/mikado-graph.md`, the conditions that make each undo safe, and the round cap.
 
 - Add a change-log entry for each discovery round, in the discovery-round format.
-- Carry out each leaf through items 1 to 4 of Step 7, as a unit of its own, then attempt its parent again.
+- Carry out each leaf through items 1 to 4 of Step 7, as a unit of its own, then attempt its parent again. A leaf that
+  stalls when carried out is not a leaf: undo it with `undo-attempt.sh`, and continue discovery with it as the node.
+  The rounds it takes count toward the same cap.
 - When the goal node is carried out and committed, return to Step 7 for the next unit.
 - When the round cap is reached, commit the graph, log the unit under "Units not done" with its graph section, mark
   every unit that depends on it as not started, and return to Step 7 for the next unit.
