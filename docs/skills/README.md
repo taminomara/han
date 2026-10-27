@@ -89,6 +89,9 @@ skill-and-agent split is fuzzy, read [Concepts](../concepts.md) first.
 - [`/readability-guidance`](../../han-communication/docs/skills/readability-guidance.md) — Surface the shared
   readability standard into a calling skill's own context so it drafts in voice and self-checks against one canonical
   copy.
+- [`/reassess-approach`](../../han-planning/docs/skills/reassess-approach.md) — Ask, in a fresh context, whether the
+  approach a plan or a piece of code commits to is still the right one, and get structurally different alternatives,
+  including stopping, with one recommendation.
 - [`/refactor`](../../han-coding/docs/skills/refactor.md) — Restructure existing code without changing its behavior
   through a test-gated loop that re-runs the full suite after every small step.
 - [`/research`](../../han-research/docs/skills/research.md) — Research an open-ended question across the codebase and the
