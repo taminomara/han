@@ -262,8 +262,8 @@ such as Claude, should be referenced here.
 - **[han-core/references/collaborative-stop-rule.md](./han-core/references/collaborative-stop-rule.md).** The shared
   contract behind `/pairing`: how a skill detects the collaborative flag, what a stop presents and in what order, when
   the pre-build ask fires and what makes a choice expensive to walk back, and what to do with the answer. Consumed by
-  `pairing` and by the skills that hand control back at their own boundaries — `tdd`, `refactor`, `design-an-api`,
-  `iterative-plan-review`, and `plan-implementation`. Vendored byte-identical into `han-coding/references/` and
+  `pairing` and by the skills that hand control back at their own boundaries — `tdd`, `refactor`, `restructure`,
+  `design-an-api`, `iterative-plan-review`, and `plan-implementation`. Vendored byte-identical into `han-coding/references/` and
   `han-planning/references/`; edit the canonical copy and re-sync the others.
 
 ### Writing voice
