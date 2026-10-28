@@ -107,6 +107,10 @@ _how_ to use the skill. For what the skill does internally, read the skill defin
   skill assumes the _what_ is settled and plans the _how_.
 - **Refining or stress-testing an already-written implementation plan.** Use `/iterative-plan-review` when the
   implementation plan exists and needs multiple review passes challenging assumptions and identifying overlap.
+- **Questioning whether the feature's approach is still the right one.** Use
+  [`/reassess-approach`](./reassess-approach.md) to get structurally different alternatives, including stopping, from a
+  fresh context. This skill hands off to it on its own when a medium or large run reaches its round cap without
+  converging.
 - **Investigating a bug or failure.** Use `/investigate` for evidence-based root-cause work.
 - **Analyzing existing architecture.** Use `/architectural-analysis` for assessing coupling, cohesion, data flow,
   concurrency, and SOLID alignment of an already-built module.
@@ -294,6 +298,14 @@ How the size is chosen:
   the cap counts chosen specialists rather than seats: counting seats would make medium indistinguishable from small.
 - **Round cap is the upper bound, not a target.** The loop exits when the deterministic stop rule fires or only
   user-input items remain. The round cap prevents runaway cycles.
+- **A hand-off when a medium or large run reaches its cap without converging.** When the team is still iterating at a
+  cap of two or three rounds, the skill no longer reports a facilitation plateau and moves on. A small run, capped at
+  one round, never hands off, because one round cannot show the approach is the problem; it names the skill in its
+  escalation pass instead. At medium or large it invokes [`/reassess-approach`](./reassess-approach.md) with
+  the specification and the iteration history, tags the result `approach` in the claim ledger, and puts it first among
+  the questions it escalates to you: the options as named candidates, the recommendation marked, the consequence of
+  staying on the current approach leading. Synthesis waits for your answer. "Continue as is" sends the run on to
+  synthesis as before; a different approach sends it back to `/plan-a-feature` or on to `/plan-a-change`.
 
 How to override the size:
 
@@ -458,7 +470,8 @@ The skill's loop (rounds of specialist review plus facilitation until convergenc
 for medium, 3 for large) draws on the broader iterative-and-incremental tradition. Craig Larman and Victor Basili
 documented this tradition, and it is embedded in every modern Agile framework. Iteration gives specialists the chance to
 update their input as new information lands from other specialists. The cap prevents runaway cycles when facilitation
-has plateaued.
+has plateaued, and a plateau at the cap now hands the approach itself to `/reassess-approach` rather than ending on a
+note.
 
 URL: https://ieeexplore.ieee.org/document/1204375
 
@@ -479,6 +492,8 @@ URL: https://ieeexplore.ieee.org/document/1204375
   `feature-specification.md` into a plain-language summary for non-technical stakeholders before this skill runs, so the
   implementation plan starts from a shape stakeholders have already greenlit.
 - [`/iterative-plan-review`](./iterative-plan-review.md). The complement for stress-testing the plan after it lands.
+- [`/reassess-approach`](./reassess-approach.md). The skill this one invokes when a medium or large run reaches its
+  round cap without converging, to put the approach itself in front of you before synthesis.
 - [`/design-an-api`](../../../han-coding/docs/skills/design-an-api.md). The narrower sibling for when the open question
   is the shape of one interface rather than how to deliver the whole feature.
   This skill produces the committable plan. `/iterative-plan-review` iterates on it.

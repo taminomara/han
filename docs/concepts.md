@@ -155,7 +155,7 @@ a strictly simpler version that satisfies the same evidence?_). Items without ev
 `## Deferred (YAGNI)` section in the artifact with a named _reopen-when_ trigger. Never silently dropped.
 
 YAGNI applies to the planning skills (`/plan-a-feature`, `/plan-a-change`, `/plan-implementation`,
-`/plan-a-phased-build`, `/iterative-plan-review`). It applies to review and standards (`/code-review` advisory-only, `/coding-standard`,
+`/plan-a-phased-build`, `/iterative-plan-review`, `/reassess-approach`). It applies to review and standards (`/code-review` advisory-only, `/coding-standard`,
 `/automated-test-planning`, `/architectural-decision-record`). It also applies to several agents
 (`discussion-facilitator`, `plan-synthesizer`,
 `junior-developer`, `software-architect`, `system-architect`, `test-engineer`, `edge-case-explorer`, `data-engineer`,
@@ -175,7 +175,8 @@ labeling). The vocabulary of trust classes (codebase, web, provided) and the cor
 and agent reads at runtime.
 
 Evidence applies to the research and investigation skills (`/research`, `/investigate`, `/gap-analysis`) and the
-planning and review skills (`/plan-a-feature`, `/plan-a-change`, `/plan-implementation`, `/iterative-plan-review`). It also applies to the
+planning and review skills (`/plan-a-feature`, `/plan-a-change`, `/plan-implementation`, `/iterative-plan-review`,
+`/reassess-approach`). It also applies to the
 conventions skills (`/coding-standard`, `/architectural-decision-record`), the operational skills (`/runbook`), and the
 agents that review artifacts (`discussion-facilitator`, `junior-developer`, `evidence-based-investigator`,
 `gap-analyzer`).
@@ -200,7 +201,7 @@ Readability applies to the reader-facing skills (`/research`, `/gap-analysis`, `
 `/issue-triage`, `/runbook`, `/architectural-decision-record`, `/code-overview`, `/investigate`, `/code-review`,
 `/architectural-analysis`, `/stakeholder-summary`, `/html-summary`, `/update-pr-description`, `/plan-a-feature`,
 `/plan-a-change`, `/plan-implementation`, `/plan-a-phased-build`, `/plan-work-items`, `/iterative-plan-review`,
-`/coding-standard`, and
+`/reassess-approach`, `/coding-standard`, and
 `/automated-test-planning`). A structured specification, plan, phased build, work-item list, coding standard, or test plan counts
 when a human reads it end to end. Skills whose output is code, or a structured artifact consumed only by downstream
 skills as machine input, are out of scope.
@@ -243,8 +244,8 @@ project-discovery skill, the `/pairing` collaborative working mode, and the cano
 `/runbook`). `han-research` adds the pre-planning knowledge-work skills (`/research`, `/gap-analysis`, and
 `/issue-triage`) plus the research-analyst agent. `han-planning` adds the planning skills you reach for before
 implementation (`/plan-a-feature`, `/plan-a-change`, `/plan-implementation`, `/plan-a-phased-build`,
-`/plan-work-items`, and `/iterative-plan-review`). `han-coding` adds the coding skills you reach for while working in code (`/tdd`, `/refactor`,
-`/design-an-api`, `/code-review`, `/code-overview`, `/code-walkthrough`, `/architectural-analysis`,
+`/plan-work-items`, `/iterative-plan-review`, and `/reassess-approach`). `han-coding` adds the coding skills you reach for while working in code (`/tdd`, `/refactor`,
+`/restructure`, `/design-an-api`, `/code-review`, `/code-overview`, `/code-walkthrough`, `/architectural-analysis`,
 `/automated-test-planning`, `/manual-test-planning`, `/investigate`, and `/coding-standard`). `han-github` adds the GitHub skills, and `han-reporting` adds the reporting
 skills. All of them depend on `han-core`, so installing any of them brings the shared agents along.
 
